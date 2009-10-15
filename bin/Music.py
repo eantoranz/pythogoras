@@ -3,7 +3,7 @@
 # Copyright 2009 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
-from math import *
+import math
 
 class MusicalNote:
 
@@ -27,14 +27,14 @@ class MusicalNote:
         self.index = index
 
     # Will return a tuple. index 0 is diatonic and index 1 is chromatic
-    def getDifference(self, note2):
+    def getDistance(self, note2):
         if self.index > note2.index:
-            temp = note2.getDifference(self)
+            temp = note2.getDistance(self)
             return [-temp[0], -temp[1]]
         if self.index == note2.index:
             # indexes are the same... have to compare the notes
             if self.note > note2.note:
-                temp = note2.getDifference(self)
+                temp = note2.getDistance(self)
                 return [-temp[0], -temp[1]]
             if self.note == note2.note:
                 # the difference is chromatic
@@ -85,26 +85,51 @@ class MusicalNote:
         chromatic += note2.alter - self.alter
 
         return [diatonic, chromatic]
+
+    def toString(self):
+        temp = None
+        if self.note == MusicalNote.NOTE_A:
+            temp = "A"
+        elif self.note == MusicalNote.NOTE_B:
+            temp = "B"
+        elif self.note == MusicalNote.NOTE_C:
+            temp = "C"
+        elif self.note == MusicalNote.NOTE_D:
+            temp = "D"
+        elif self.note == MusicalNote.NOTE_E:
+            temp = "E"
+        elif self.note == MusicalNote.NOTE_F:
+            temp = "F"
+        elif self.note == MusicalNote.NOTE_G:
+            temp = "G"
+        if self.alter != 0:
+            if self.alter > 0:
+                temp += (self.alter * "#")
+            else:
+                temp += (-self.alter * 'b')
+        temp += str(self.index)
+        return temp
         
-class Music:
-
-    FREQ_A4 = 440
-
-    @classmethod
-    def getDifferenceBetweenNotes(cls, note1, note2):
-        if (note1.index > note2.index):
-            return self.getDifferenceBetweenNotes()
-        chromatic = note1.alter - note2.alter
-        diatonic = 0
-        
-        
-
-    
-
 class TuningSystem:
 
-    def __init__(self):
-        print("Hi!")
+    FREQ_A4 = 440
+    A4 = MusicalNote(MusicalNote.NOTE_A, 0, 4)
+
+    def getFrequency(self, note):
+        return 0
 
 
+class TemperedSystem(TuningSystem):
+
+    instance = None
+
+    @classmethod
+    def getInstance(cls):
+        if (TemperedSystem.instance == None):
+            TemperedSystem.instance = TemperedSystem()
+        return TemperedSystem.instance
+
+    def getFrequency(self, note):
+        distance = TuningSystem.A4.getDistance(note)
+        return math.pow(2, float(distance[0] + distance[1]) / 12) * TuningSystem.FREQ_A4
     
