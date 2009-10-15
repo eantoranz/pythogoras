@@ -41,20 +41,46 @@ class MusicalNote:
                 return [0, note2.alter - self.alter]
 
         # self is a lower note, for sure
-        diatonic = 5 * (note2.index - self.index)
-        chromatic = 7 * (note2.index - self.index)
+        diatonic = 7 * (note2.index - self.index)
+        chromatic = 5 * (note2.index - self.index)
 
-        diatonic += (note2.note - self.note)
-        # let's count the difference of half notes between notes
-        if self.note > MusicalNote.NOTE_B:
+        if self.note == MusicalNote.NOTE_D:
             diatonic -= 1
-        if self.note > MusicalNote.NOTE_E:
-            diatonic -= 1
-        if note2.note > MusicalNote.NOTE_B:
+            chromatic -= 1
+        elif self.note == MusicalNote.NOTE_E:
+            diatonic -= 2
+            chromatic -= 2
+        elif self.note == MusicalNote.NOTE_F:
+            diatonic -= 3
+            chromatic -= 2
+        elif self.note == MusicalNote.NOTE_G:
+            diatonic -= 4
+            chromatic -= 3
+        elif self.note == MusicalNote.NOTE_A:
+            diatonic -= 5
+            chromatic -= 4
+        elif self.note == MusicalNote.NOTE_B:
+            diatonic -= 6
+            chromatic -= 5
+
+        if note2.note == MusicalNote.NOTE_D:
             diatonic += 1
-        if note2.note > MusicalNote.NOTE_E:
-            diatonic += 1
-        chromatic += note2.note - self.note
+            chromatic += 1
+        elif note2.note == MusicalNote.NOTE_E:
+            diatonic += 2
+            chromatic += 2
+        elif note2.note == MusicalNote.NOTE_F:
+            diatonic += 3
+            chromatic += 2
+        elif note2.note == MusicalNote.NOTE_G:
+            diatonic += 4
+            chromatic += 3
+        elif note2.note == MusicalNote.NOTE_A:
+            diatonic += 5
+            chromatic += 4
+        elif note2.note == MusicalNote.NOTE_B:
+            diatonic += 6
+            chromatic += 5
 
         chromatic += note2.alter - self.alter
 
