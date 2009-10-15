@@ -43,4 +43,11 @@ if diff != [2, 1]:
     print "6th comparisson is broken " + str(diff)
     sys.exit(1)
 
+note1 = MusicalNote(MusicalNote.NOTE_D, 1, 6)
+note2 = MusicalNote(MusicalNote.NOTE_G, -1, 4)
+diff = note1.getDifference(note2)
+if diff != [-11, -10]:
+    print "7th comparisson is broken " + str(diff)
+    sys.exit(1)
+
 print "All tests are OK"
