@@ -14,7 +14,7 @@ class Wave:
     counter = 0
 
     def __init__(self, freq, samplingRate = 44100, maxValue = 32000):
-        self.frep = freq
+        self.freq = freq
         self.samplingRate = samplingRate
         self.maxValue = maxValue
 
@@ -24,7 +24,7 @@ class Wave:
         self.counter = 0
 
     def getNextValue(self):
-        temp = math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * freq) * self.maxValue)
+        temp = math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue)
 
         self.counter+=1
         return temp
