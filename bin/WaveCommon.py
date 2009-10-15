@@ -4,3 +4,4 @@
 # Released under the terms of the Affero GPLv3
 
 from Wave import Wave
+from Music import *
