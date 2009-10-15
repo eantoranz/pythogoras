@@ -24,7 +24,7 @@ class Wave:
         self.counter = 0
 
     def getNextValue(self):
-        temp = math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate) * self.maxValue)
+        temp = math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * freq) * self.maxValue)
 
         self.counter+=1
         return temp

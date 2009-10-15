@@ -132,4 +132,24 @@ class TemperedSystem(TuningSystem):
     def getFrequency(self, note):
         distance = TuningSystem.A4.getDistance(note)
         return math.pow(2, float(distance[0] + distance[1]) / 12) * TuningSystem.FREQ_A4
-    
+
+class PythagoreanSystem(TuningSystem):
+
+    instance = None
+
+    DIATONIC_NUMERATOR = 256
+    DIATONIC_DENOMINATOR = 243
+
+    CHROMATIC_NUMERATOR = 243 * 9
+    CHROMATIC_DENOMINATOR = 256 * 8
+
+    @classmethod
+    def getInstance(cls):
+        if (PythagoreanSystem.instance == None):
+            PythagoreanSystem.instance = PythagoreanSystem()
+        return PythagoreanSystem.instance
+
+    def getFrequency(self, note):
+        distance = TuningSystem.A4.getDistance(note)
+        return TuningSystem.FREQ_A4 * math.pow(PythagoreanSystem.DIATONIC_NUMERATOR, distance[0]) / math.pow(PythagoreanSystem.DIATONIC_DENOMINATOR, distance[0]) \
+            * math.pow(PythagoreanSystem.CHROMATIC_NUMERATOR, distance[1]) / math.pow(PythagoreanSystem.CHROMATIC_DENOMINATOR, distance[1])

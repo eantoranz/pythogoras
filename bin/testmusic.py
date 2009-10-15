@@ -51,41 +51,78 @@ if diff != [-11, -10]:
     sys.exit(1)
 
 tempered = TemperedSystem.getInstance()
+pythagorean = PythagoreanSystem.getInstance()
 note1 = MusicalNote(MusicalNote.NOTE_A, 0, 4)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_B, -1, 4)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_B, 0, 4)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_C, 0, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_C, 1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_D, -1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_D, 0, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_D, 1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_E, -1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_E, 0, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_E, 1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_F, 0, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_F, 1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_G, -1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_G, 0, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_A, -2, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_A, -1, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 note1 = MusicalNote(MusicalNote.NOTE_A, 0, 5)
-print "Frequency of " + note1.toString() + " is " + str(tempered.getFrequency(note1))
+print "Frequency of " + note1.toString() + " is "
+print "\tTemp: " + str(tempered.getFrequency(note1))
+print "\tPyth: " + str(pythagorean.getFrequency(note1))
 
 print "All tests are OK"
