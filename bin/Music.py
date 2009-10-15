@@ -54,6 +54,7 @@ class MusicalNote:
             diatonic += 1
         if note2.note > MusicalNote.NOTE_E:
             diatonic += 1
+        chromatic += note2.note - self.note
 
         chromatic += note2.alter - self.alter
 
