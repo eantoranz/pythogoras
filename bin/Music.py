@@ -153,3 +153,48 @@ class PythagoreanSystem(TuningSystem):
         distance = TuningSystem.A4.getDistance(note)
         return TuningSystem.FREQ_A4 * math.pow(PythagoreanSystem.DIATONIC_NUMERATOR, distance[0]) / math.pow(PythagoreanSystem.DIATONIC_DENOMINATOR, distance[0]) \
             * math.pow(PythagoreanSystem.CHROMATIC_NUMERATOR, distance[1]) / math.pow(PythagoreanSystem.CHROMATIC_DENOMINATOR, distance[1])
+
+class JustSystem(TuningSystem):
+
+    rates = [[1, 1], # JUST FIRST
+        [64, 61], # AUGMENTED FIRST
+        [9, 8], # MAJOR_SECOND
+        [8, 7], # AUGMENTED SECOND
+        [5, 4], # MAJOR THIRD
+        [4, 3], # JUST_FOURTH
+        [128, 91], # AUGMENTED_FOURTH
+        [3, 2], # JUST_FIFTH
+        [8, 5], # AUGMENTED_FIFTH
+        [7, 4], # MAJOR_SIXTH
+        [16, 9], # MINOR_SEVENTH
+        [61, 32]] # MAJOR_SEVENTH
+
+    def __init__(self, note, alteration):
+        # right now, can only use major scales to tune
+        self.note = note
+        self.alteration = alteration
+        self.baseNote = MusicalNote(note, alteration, 4)
+        pytha = PythagoreanSystem.getInstance()
+        # find the frequency of the base sound between C4 and B4
+        self.baseFreq = pytha.getFrequency(self.baseNote)
+        print "base freq for tuning system is " + str(self.baseFreq)
+
+    def getFrequency(self, note):
+        # calculate the distance between the base sound and the note that was provided
+        distance = self.baseNote.getDistance(note)
+        # let's sum up both types of semitones to start working
+        distance = distance[0] + distance[1]
+        if distance == 0:
+            # nothing else to do
+            return self.baseFreq
+        freq = self.baseFreq
+        if distance > 0:
+            while distance >= 12:
+                freq *= 2
+                distance -= 12
+        else:
+            while distance < 0:
+                freq /= 2
+                distance += 12
+        rate = JustSystem.rates[distance]
+        return freq * rate[0] / rate[1]
