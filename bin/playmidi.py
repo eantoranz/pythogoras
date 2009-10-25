@@ -21,6 +21,11 @@ class EventListNode:
     def addEvent(self, event):
         self.events.append(event)
 
+    def getDuration(self):
+        if self.nextNode == None:
+            return None
+        return self.nextNode.time - self.time
+
 class EventList:
     """
     List of events ordered by time
@@ -63,31 +68,55 @@ class EventList:
     def printEvents(self):
         node = self.firstNode
         while node != None:
-            print "Time: " + str(node.time)
+            sys.stderr.write("Time: " + str(node.time) + "\n")
             for event in node.events:
-                print "\t" + str(event)
+                sys.stderr.write("\t" + str(event) + "\n")
             node = node.nextNode
+
+class MidiPlayer:
+
+    def __init__(self, eventList, samplingRate = 44100, maxValue = 10000):
+        self.tracks = []
+        self.eventList = eventList
+        self.samplingRate = samplingRate
+        self.maxValue = maxValue
+
+    def play(self):
+        midiTicksPerSecond = 400 # don't know how to calculate this at the time
+
+        sampleCounter = 0
+        currentNode = self.eventList.firstNode
+        while currentNode != None:
+            eventDuration = currentNode.getDuration()
+            
+            
+            currentNode = currentNode.nextNode
+        
+        sys.stderr.write("Finished writing output\n")
+
 
 def main(argv):
     inputfile = argv[1]
-    print "reading file " + inputfile
+    sys.stderr.write("reading file " + inputfile + "\n")
     midiFile = MidiFile()
     midiFile.open(inputfile)
     midiFile.read()
     midiFile.close()
-    print "File successfully read!"
-    print "There are " + str(len(midiFile.tracks)) + " tracks in the file"
+    sys.stderr.write("File successfully read!\n")
+    sys.stderr.write("There are " + str(len(midiFile.tracks)) + " tracks in the file\n")
     index = 0
     for track in midiFile.tracks:
         index += 1
-        print "Track " + str(index) + " has " + str(len(track.events)) + " events"
+        sys.stderr.write("Track " + str(index) + " has " + str(len(track.events)) + " events\n")
 
-    print "Let's process all the events"
+    sys.stderr.write("Let's process all the events\n")
     eventList = EventList()
     for track in midiFile.tracks:
         for event in track.events:
             eventList.addEvent(event)
-    eventList.printEvents()
+
+    # let's reproduce the file
+    MidiPlayer(eventList).play()
 
 if __name__ == "__main__":
     main(sys.argv)
