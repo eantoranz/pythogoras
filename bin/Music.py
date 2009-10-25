@@ -157,17 +157,17 @@ class PythagoreanSystem(TuningSystem):
 class JustSystem(TuningSystem):
 
     rates = [[1, 1], # JUST FIRST
-        [64, 61], # AUGMENTED FIRST
+        [16, 15], # AUGMENTED FIRST
         [9, 8], # MAJOR_SECOND
         [8, 7], # AUGMENTED SECOND
         [5, 4], # MAJOR THIRD
         [4, 3], # JUST_FOURTH
-        [128, 91], # AUGMENTED_FOURTH
+        [32, 23], # AUGMENTED_FOURTH
         [3, 2], # JUST_FIFTH
         [8, 5], # AUGMENTED_FIFTH
         [7, 4], # MAJOR_SIXTH
         [16, 9], # MINOR_SEVENTH
-        [61, 32]] # MAJOR_SEVENTH
+        [15, 8]] # MAJOR_SEVENTH
 
     def __init__(self, note, alteration):
         # right now, can only use major scales to tune
