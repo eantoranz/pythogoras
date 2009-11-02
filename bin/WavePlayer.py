@@ -7,7 +7,7 @@
 import sys
 from Wave import Wave
 
-class SoundPlayer:
+class WavePlayer:
 
     def __init__(self, samplingRate = 44100, debug = False):
         self.samplingRate = samplingRate
@@ -40,11 +40,25 @@ class SoundPlayer:
 
 if __name__ == "__main__":
     import math
-    counter = 0
-    wave = Wave(440)
-    player = SoundPlayer()
-    while counter < 44100:
-        height = wave.getNextValue()
-        player.play(height, height)
-
-        counter += 1
+    import sys
+    argc = len(sys.argv)
+    leftChannel = None
+    rightChannel = None
+    if argc == 1:
+        print "Have to provide either a single frequency to play or a frequency for each channel (left first)"
+        sys.exit(1)
+    elif argc == 2:
+        # Provided a single frequency for both channels
+        leftChannel = Wave(float(sys.argv[1]))
+    else:
+        leftChannel = Wave(float(sys.argv[1]))
+        rightChannel = Wave(float(sys.argv[2]))
+    
+    player = WavePlayer()
+    while True:
+        leftHeight = leftChannel.getNextValue()
+        if rightChannel == None:
+            rightHeight = leftHeight
+        else:
+            rightHeight = rightChannel.getNextValue()
+        player.play(leftHeight, rightHeight)

@@ -7,8 +7,6 @@ Released under the terms of the Affero GPLv3
 """
 
 from midi import *
-import pygame
-from pygame.bufferproxy import BufferProxy
 import sys
 
 class EventListNode:
@@ -77,12 +75,28 @@ class EventList:
 
 class MidiPlayer:
 
-    def __init__(self, bufferProxy, eventList, samplingRate = 44100, maxValue = 10000):
-        self.bufferProxy = bufferProxy
+    def __init__(self, eventList, samplingRate = 44100, maxValue = 10000):
         self.tracks = []
         self.eventList = eventList
         self.samplingRate = samplingRate
         self.maxValue = maxValue
+
+    def getNote(self, midiEvent):
+        """
+        Return the note for a given midi event
+        0 = C0
+        """
+        pitch = midiEvent.pitch
+        index = midiEvent % 12
+        alter = pitch - index * 12
+        if alter == 0:
+            return MusicalNote(MusicalNote.NOTE_C, 0, index)
+        elif alter == 1:
+           return MusicalNote(MusicalNote.NOTE_C, 1, index)
+        elif alter == 2:
+            return MusicalNote(MusicalNote.NOTE_D, 0, index)
+        elif alter == 3:
+            return MusicalNote(MusicalNote.NOTE_D, 1, index)
 
     def play(self):
         midiTicksPerSecond = 400 # don't know how to calculate this at the time
@@ -107,25 +121,7 @@ class MidiPlayer:
         sys.stderr.write("Finished writing output\n")
 
 
-from inspect import *
-
 def main(argv):
-    for member in getmembers(pygame):
-        try:
-            print member
-        except:
-            None
-    for member in getmembers(BufferProxy):
-        print member
-    pyBuffer = BufferProxy()
-    #pyBuffer.__setattr__("length", 1000)
-    print "Buffer size: " + str(pyBuffer.length);
-    pyBuffer.write("hello", 0)
-
-    sys.stderr.write("Initializing sound engine (pygame)\n")
-    pygame.mixer.pre_init(44100)
-    pygame.mixer.init(44100)
-    sys.stderr.write("Initialization finished\n")
     inputfile = argv[1]
     sys.stderr.write("reading file " + inputfile + "\n")
     midiFile = MidiFile()
@@ -147,12 +143,8 @@ def main(argv):
 
     # let's reproduce the file
     sys.stderr.write("Starting to play file\n")
-    midiPlayer = MidiPlayer(pyBuffer, eventList)
-    pySound = pygame.mixer.Sound(pyBuffer)
-    pyChannel = pySound.play()
-    while pyChannel.get_busy():
-        time.sleep(100)
-    pygame.mixer.quit()
+    midiPlayer = MidiPlayer(eventList)
+    midiPlayer.play()
     sys.stderr.write("Finished playing\n")
 
 if __name__ == "__main__":
