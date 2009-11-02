@@ -7,6 +7,7 @@ Released under the terms of the Affero GPLv3
 """
 
 from midi import *
+from Music import *
 import sys
 
 class EventListNode:
@@ -97,6 +98,22 @@ class MidiPlayer:
             return MusicalNote(MusicalNote.NOTE_D, 0, index)
         elif alter == 3:
             return MusicalNote(MusicalNote.NOTE_D, 1, index)
+        elif alter == 4:
+            return MusicalNote(MusicalNote.NOTE_E, 0, index)
+        elif alter == 5:
+            return MusicalNote(MusicalNote.NOTE_F, 0, index)
+        elif alter == 6:
+            return MusicalNote(MusicalNote.NOTE_F, 1, index)
+        elif alter == 7:
+            return MusicalNote(MusicalNote.NOTE_G, 0, index)
+        elif alter == 8:
+            return MusicalNote(MusicalNote.NOTE_G, 1, index)
+        elif alter == 9:
+            return MusicalNote(MusicalNote.NOTE_A, 0, index)
+        elif alter == 10:
+            return MusicalNote(MusicalNote.NOTE_B, -1, index)
+        elif alter == 11:
+            return MusicalNote(MusicalNote.NOTE_B, 0, index)
 
     def play(self):
         midiTicksPerSecond = 400 # don't know how to calculate this at the time
@@ -122,10 +139,43 @@ class MidiPlayer:
 
 
 def main(argv):
-    inputfile = argv[1]
-    sys.stderr.write("reading file " + inputfile + "\n")
+    argc = len(argv)
+    if (argc == 1):
+        print "In order to play a file, you can provide the system you want to use to play it"
+        print "Pythagorean: specify a p and optionally the base frequency of A4"
+        print "\tEx: playmidi.py p 442 midi-file.mid"
+        print "Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F)."
+        print "\tOptionally set the base freq of the base note of the key"
+        print "\tEx: playmidi.py j Bb midi-file.mid"
+        print "\tEx: playmidi.py j A 442 midi-file.mid"
+        print "If you want to use tempered system, don't specify anything. Optionally the freq of A4"
+        print "\tEx: playmidi.py 441 midi-file.mid"
+        sys.exit(1)
+
+    system = None
+    fileName = None
+
+    if argv[1] == "p":
+        system = argv
+        # pythagorean
+        # was the frequency for A4 specified?
+        baseFreq = 440
+        try:
+            baseFreq = int(argv[2])
+            if argc >= 3:
+                fileName = argv[3]
+        except:
+            # probably frequency wasn't provided
+            fileName = argv[2]
+        # Let's create the tuning system
+        system = PythagoreanSystem(baseFreq)
+    if fileName == None:
+        print "Didn't provide any file name to play"
+        sys.exit(1)
+    
+    sys.stderr.write("reading file " + fileName + "\n")
     midiFile = MidiFile()
-    midiFile.open(inputfile)
+    midiFile.open(fileName)
     midiFile.read()
     midiFile.close()
     sys.stderr.write("File successfully read!\n")
