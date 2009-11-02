@@ -33,6 +33,7 @@ class EventList:
     """
     def __init__(self):
         self.firstNode = None
+        self.trackNumber = 0 # number of tracks
 
     def addEvent(self, event):
         if event.type == "DeltaTime":
@@ -65,6 +66,9 @@ class EventList:
             # found a node for the given time
             None
         node.addEvent(event)
+        # Number of tracks
+        if event.track.index > self.trackNumber:
+            self.trackNumber = event.track.index
 
     def printEvents(self):
         node = self.firstNode
@@ -78,6 +82,10 @@ class MidiPlayer:
 
     def __init__(self, eventList, samplingRate = 44100, maxValue = 10000):
         self.tracks = []
+        i = 0
+        while i <= eventList.trackNumber: # TODO is there another way to do this?
+            self.tracks.append(None)
+            i += 1
         self.eventList = eventList
         self.samplingRate = samplingRate
         self.maxValue = maxValue
@@ -127,7 +135,7 @@ class MidiPlayer:
             for event in currentNode.events:
                 if event.type == "NOTE_ON":
                     track = event.track.index
-                    sys.stderr.write("Track: " + str(track)+ "\n")
+                    #sys.stderr.write("Track: " + str(track)+ "\n")
                     if event.velocity == 0:
                         self.tracks[track] = None
                     else:
