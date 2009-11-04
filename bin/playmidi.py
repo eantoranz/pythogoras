@@ -8,6 +8,7 @@ Released under the terms of the Affero GPLv3
 
 from midi import *
 from Music import *
+from Wave import Wave
 import sys
 
 class EventListNode:
@@ -78,13 +79,29 @@ class EventList:
                 sys.stderr.write("\t" + str(event) + "\n")
             node = node.nextNode
 
+class TrackPlayer:
+    """
+    Will play a note that's provided to it
+    """
+
+    def __init__(self, system):
+        self.system = system
+        self.wave = None
+
+    def play(self, musicalNote):
+        self.wave = Wave(self.system.getFrequency(musicalNote))
+
+    def getNextValue(self):
+        return self.wave.getNextValue()
+
 class MidiPlayer:
 
-    def __init__(self, eventList, samplingRate = 44100, maxValue = 10000):
+    def __init__(self, eventList, tuningSystem, samplingRate = 44100, maxValue = 10000):
+	self.tuningSystem = tuningSystem
         self.tracks = []
         i = 0
         while i <= eventList.trackNumber: # TODO is there another way to do this?
-            self.tracks.append(None)
+            self.tracks.append(TrackPlayer(tuningSystem))
             i += 1
         self.eventList = eventList
         self.samplingRate = samplingRate
@@ -96,8 +113,8 @@ class MidiPlayer:
         0 = C0
         """
         pitch = midiEvent.pitch
-        index = midiEvent % 12
-        alter = pitch - index * 12
+        index = pitch / 12
+        alter = pitch % 12
         if alter == 0:
             return MusicalNote(MusicalNote.NOTE_C, 0, index)
         elif alter == 1:
@@ -134,12 +151,13 @@ class MidiPlayer:
             # what does each track play for this event?
             for event in currentNode.events:
                 if event.type == "NOTE_ON":
-                    track = event.track.index
+                    # have to play something on a track
+                    self.tracks[event.track.index].play(self.getNote(event))
                     #sys.stderr.write("Track: " + str(track)+ "\n")
-                    if event.velocity == 0:
-                        self.tracks[track] = None
-                    else:
-                        self.tracks[track] = None # TODO Have to get the note from the pitch
+                    #if event.velocity == 0:
+                        #self.tracks[track] = None
+                    #else:
+                        #self.tracks[track] = None # TODO Have to get the note from the pitch
             
             currentNode = currentNode.nextNode
         
@@ -201,7 +219,7 @@ def main(argv):
 
     # let's reproduce the file
     sys.stderr.write("Starting to play file\n")
-    midiPlayer = MidiPlayer(eventList)
+    midiPlayer = MidiPlayer(eventList, system)
     midiPlayer.play()
     sys.stderr.write("Finished playing\n")
 
