@@ -22,9 +22,12 @@ class WavePlayer:
         else:
             self.volume=volume
 
-    def play(self, leftChannel, rightChannel):
+    def play(self, leftChannel, rightChannel = None):
         leftChannel *= int(self.volume)
-        rightChannel *= int(self.volume)
+        if rightChannel != None:
+            rightChannel *= int(self.volume)
+        else:
+            rightChannel = leftChannel
 
         if self.debug:
             sys.stderr.write("Left: " + str(leftChannel) + " Right: " + str(rightChannel) + "\n")

@@ -9,6 +9,7 @@ Released under the terms of the Affero GPLv3
 from midi import *
 from Music import *
 from Wave import Wave
+from WavePlayer import WavePlayer
 import sys
 
 class EventListNode:
@@ -89,9 +90,17 @@ class TrackPlayer:
         self.wave = None
 
     def play(self, musicalNote):
-        self.wave = Wave(self.system.getFrequency(musicalNote))
+        if musicalNote == None:
+            self.mute()
+        else:
+            self.wave = Wave(self.system.getFrequency(musicalNote))
+
+    def mute(self):
+        self.wave = None
 
     def getNextValue(self):
+        if self.wave == None:
+            return 0
         return self.wave.getNextValue()
 
 class MidiPlayer:
@@ -141,10 +150,11 @@ class MidiPlayer:
             return MusicalNote(MusicalNote.NOTE_B, 0, index)
 
     def play(self):
+        wavePlayer = WavePlayer()
         midiTicksPerSecond = 400 # don't know how to calculate this at the time
 
-        sampleCounter = 0
         currentNode = self.eventList.firstNode
+        soundingTracks = 0 # Number of tracks that are sounding
         while currentNode != None:
             eventDuration = currentNode.getDuration()
 
@@ -152,13 +162,30 @@ class MidiPlayer:
             for event in currentNode.events:
                 if event.type == "NOTE_ON":
                     # have to play something on a track
-                    self.tracks[event.track.index].play(self.getNote(event))
-                    #sys.stderr.write("Track: " + str(track)+ "\n")
-                    #if event.velocity == 0:
-                        #self.tracks[track] = None
-                    #else:
-                        #self.tracks[track] = None # TODO Have to get the note from the pitch
-            
+                    if event.velocity == 0:
+                        # the note has to be muted
+                        self.tracks[event.track.index].play(None)
+                        soundingTracks-=1
+                    else:
+                        # this is the note to play on this track
+                        self.tracks[event.track.index].play(self.getNote(event))
+                        soundingTracks+=1
+
+            # Let's play
+            limit = int(currentNode.getDuration() / midiTicksPerSecond * 44100)
+            sampleCounter = 0
+            while sampleCounter < limit:
+                if soundingTracks == 0:
+                    playValue = 0
+                else:
+                    accumulator = 0
+                    for track in self.tracks:
+                        accumulator += track.getNextValue()
+                    playValue = int(accumulator / soundingTracks)
+                
+                wavePlayer.play(playValue)
+                sampleCounter += 1
+
             currentNode = currentNode.nextNode
         
         sys.stderr.write("Finished writing output\n")
@@ -167,15 +194,16 @@ class MidiPlayer:
 def main(argv):
     argc = len(argv)
     if (argc == 1):
-        print "In order to play a file, you can provide the system you want to use to play it"
-        print "Pythagorean: specify a p and optionally the base frequency of A4"
-        print "\tEx: playmidi.py p 442 midi-file.mid"
-        print "Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F)."
-        print "\tOptionally set the base freq of the base note of the key"
-        print "\tEx: playmidi.py j Bb midi-file.mid"
-        print "\tEx: playmidi.py j A 442 midi-file.mid"
-        print "If you want to use tempered system, don't specify anything. Optionally the freq of A4"
-        print "\tEx: playmidi.py 441 midi-file.mid"
+        sys.stderr.write("In order to play a file, you can provide the system you want to use to play it\n")
+        sys.stderr.write("Pythagorean: specify a p and optionally the base frequency of A4\n")
+        sys.stderr.write("\tEx: playmidi.py p 442 midi-file.mid\n")
+        sys.stderr.write("Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).\n")
+        sys.stderr.write("\tOptionally set the base freq of the base note of the key\n")
+        sys.stderr.write("\tEx: playmidi.py j Bb midi-file.mid\n")
+        sys.stderr.write("\tEx: playmidi.py j A 442 midi-file.mid\n")
+        sys.stderr.write("If you want to use tempered system, don't specify anything. Optionally the freq of A4\n")
+        sys.stderr.write("\tEx: playmidi.py 441 midi-file.mid\n")
+        sys.stderr.flush()
         sys.exit(1)
 
     system = None
@@ -196,7 +224,8 @@ def main(argv):
         # Let's create the tuning system
         system = PythagoreanSystem(baseFreq)
     if fileName == None:
-        print "Didn't provide any file name to play"
+        sys.stderr.write("Didn't provide any file name to play\n")
+        sys.stderr.flush()
         sys.exit(1)
     
     sys.stderr.write("reading file " + fileName + "\n")
