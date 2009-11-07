@@ -232,6 +232,33 @@ def main(argv):
             fileName = argv[2]
         # Let's create the tuning system
         system = PythagoreanSystem(baseFreq)
+    elif argv[1] == "j":
+        # Just.... have to provide the key note
+        keyNoteStr = argv[2].lower()
+        keyNote = None
+        if keyNoteStr[0] == "a":
+            keyNote = MusicalNote.NOTE_A
+        elif keyNoteStr[0] == "b":
+            keyNote = MusicalNote.NOTE_B
+        elif keyNoteStr[0] == "c":
+            keyNote = MusicalNote.NOTE_C
+        elif keyNoteStr[0] == "d":
+            keyNote = MusicalNote.NOTE_D
+        elif keyNoteStr[0] == "e":
+            keyNote = MusicalNote.NOTE_E
+        elif keyNoteStr[0] == "f":
+            keyNote = MusicalNote.NOTE_F
+        elif keyNoteStr[0] == "g":
+            keyNote = MusicalNote.NOTE_F
+        if keyNote == None:
+            sys.stderr.write("Didn't provide a valid base key note\n")
+            sys.exit(1)
+        if len(keyNoteStr) > 1:
+            # Also we have an alteration
+            sys.stderr.write("Have alteration\n")
+            sys.exit(1)
+        system = JustSystem(keyNote, 0)
+        fileName = argv[3]
     else:
         # Tempered System
         try:
