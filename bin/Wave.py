@@ -29,6 +29,9 @@ class Wave:
         self.counter+=1
         return temp
 
+    def getFrequency(self):
+        return self.freq
+
 class ChangingWave(Wave):
 
     def __setFrequency(self, newFreq):

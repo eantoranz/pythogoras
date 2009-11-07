@@ -123,6 +123,12 @@ class TemperedSystem(TuningSystem):
 
     instance = None
 
+    def __init__(self, baseFreq = None):
+        if baseFreq == None:
+            self.baseFreq = TuningSystem.FREQ_A4
+        else:
+            self.baseFreq = baseFreq
+
     @classmethod
     def getInstance(cls):
         if (TemperedSystem.instance == None):
@@ -131,7 +137,7 @@ class TemperedSystem(TuningSystem):
 
     def getFrequency(self, note):
         distance = TuningSystem.A4.getDistance(note)
-        return math.pow(2, float(distance[0] + distance[1]) / 12) * TuningSystem.FREQ_A4
+        return math.pow(2, float(distance[0] + distance[1]) / 12) * self.baseFreq
 
 class PythagoreanSystem(TuningSystem):
 

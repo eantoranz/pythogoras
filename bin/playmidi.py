@@ -103,6 +103,12 @@ class TrackPlayer:
             return 0
         return self.wave.getNextValue()
 
+    def getFrequency(self):
+        if self.wave == None:
+            return None
+        else:
+            return self.wave.getFrequency()
+
 class MidiPlayer:
 
     def __init__(self, eventList, tuningSystem, samplingRate = 44100, maxValue = 10000):
@@ -155,24 +161,27 @@ class MidiPlayer:
 
         currentNode = self.eventList.firstNode
         soundingTracks = 0 # Number of tracks that are sounding
-        while currentNode != None:
+        while currentNode != None and currentNode.nextNode != None:
             eventDuration = currentNode.getDuration()
 
             # what does each track play for this event?
+            sys.stderr.write("Tick " + str(currentNode.time) + "\n")
             for event in currentNode.events:
                 if event.type == "NOTE_ON":
                     # have to play something on a track
                     if event.velocity == 0:
                         # the note has to be muted
+                        sys.stderr.write("\tMuting " + str(self.tracks[event.track.index].getFrequency()) + " Htz\n")
                         self.tracks[event.track.index].play(None)
                         soundingTracks-=1
                     else:
                         # this is the note to play on this track
                         self.tracks[event.track.index].play(self.getNote(event))
+                        sys.stderr.write("\tStarting " + str(self.tracks[event.track.index].getFrequency()) + " Htz\n")
                         soundingTracks+=1
 
             # Let's play
-            limit = int(currentNode.getDuration() / midiTicksPerSecond * 44100)
+            limit = int(currentNode.getDuration() * 44100 / midiTicksPerSecond)
             sampleCounter = 0
             while sampleCounter < limit:
                 if soundingTracks == 0:
@@ -223,6 +232,16 @@ def main(argv):
             fileName = argv[2]
         # Let's create the tuning system
         system = PythagoreanSystem(baseFreq)
+    else:
+        # Tempered System
+        try:
+            baseFreq = int(argv[1])
+            system = TemperedSystem(baseFreq)
+            fileName = argv[2]
+        except:
+            system = TemperedSystem.getInstance()
+            fileName = argv[1]
+
     if fileName == None:
         sys.stderr.write("Didn't provide any file name to play\n")
         sys.stderr.flush()
