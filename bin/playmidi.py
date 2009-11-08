@@ -196,7 +196,7 @@ class MidiPlayer:
                 sampleCounter += 1
 
             currentNode = currentNode.nextNode
-        
+        sys.stdout.flush()        
         sys.stderr.write("Finished writing output\n")
 
 
