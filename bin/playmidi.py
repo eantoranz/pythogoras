@@ -236,6 +236,7 @@ def main(argv):
         # Just.... have to provide the key note
         keyNoteStr = argv[2].lower()
         keyNote = None
+        alteration = 0
         if keyNoteStr[0] == "a":
             keyNote = MusicalNote.NOTE_A
         elif keyNoteStr[0] == "b":
@@ -255,9 +256,23 @@ def main(argv):
             sys.exit(1)
         if len(keyNoteStr) > 1:
             # Also we have an alteration
-            sys.stderr.write("Have alteration\n")
-            sys.exit(1)
-        system = JustSystem(keyNote, 0)
+            alterChar = keyNoteStr[1]
+            difference = 0
+            if alterChar == 'b':
+                difference = -1
+            elif alterChar == '#':
+                difference = 1
+            else:
+                sys.stderr.write("Invalid alteration char. Use b or #\n")
+                sys.exit(1)
+            i = 1
+            while i < len(keyNoteStr):
+                if keyNoteStr[i] != alterChar:
+                    sys.stderr.write("Changed alteration char at index " + str(i + 1) + "\n")
+                    sys.exit(1)
+                alteration += difference
+                i+=1
+        system = JustSystem(keyNote, alteration)
         fileName = argv[3]
     else:
         # Tempered System
