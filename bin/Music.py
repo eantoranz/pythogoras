@@ -4,6 +4,7 @@
 # Released under the terms of the Affero GPLv3
 
 import math
+import sys
 
 class MusicalNote:
 
@@ -168,13 +169,13 @@ class JustSystem(TuningSystem):
     rates = [[1, 1], # JUST FIRST
         [16, 15], # AUGMENTED FIRST
         [9, 8], # MAJOR_SECOND
-        [8, 7], # AUGMENTED SECOND
+        [6, 5], # AUGMENTED SECOND
         [5, 4], # MAJOR THIRD
         [4, 3], # JUST_FOURTH
         [32, 23], # AUGMENTED_FOURTH
         [3, 2], # JUST_FIFTH
         [8, 5], # AUGMENTED_FIFTH
-        [7, 4], # MAJOR_SIXTH
+        [5, 3], # MAJOR_SIXTH
         [16, 9], # MINOR_SEVENTH
         [15, 8]] # MAJOR_SEVENTH
 
@@ -186,7 +187,7 @@ class JustSystem(TuningSystem):
         pytha = PythagoreanSystem.getInstance()
         # find the frequency of the base sound between C4 and B4
         self.baseFreq = pytha.getFrequency(self.baseNote)
-        print "base freq for tuning system is " + str(self.baseFreq)
+        sys.stderr.write("base freq for tuning system is " + str(self.baseFreq) + "\n")
 
     def getFrequency(self, note):
         # calculate the distance between the base sound and the note that was provided
