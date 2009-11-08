@@ -128,7 +128,7 @@ class MidiPlayer:
         0 = C0
         """
         pitch = midiEvent.pitch
-        index = pitch / 12
+        index = pitch / 12 - 1
         alter = pitch % 12
         if alter == 0:
             return MusicalNote(MusicalNote.NOTE_C, 0, index)
