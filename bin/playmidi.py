@@ -161,11 +161,12 @@ class MidiPlayer:
 
         currentNode = self.eventList.firstNode
         soundingTracks = 0 # Number of tracks that are sounding
+        totalCounter = 0
         while currentNode != None and currentNode.nextNode != None:
             eventDuration = currentNode.getDuration()
 
             # what does each track play for this event?
-            sys.stderr.write("Tick " + str(currentNode.time) + "\n")
+            sys.stderr.write("Tick " + str(currentNode.time) + " (" + str(float(totalCounter) / self.samplingRate) + " seg)\n")
             for event in currentNode.events:
                 if event.type == "NOTE_ON":
                     # have to play something on a track
@@ -196,6 +197,7 @@ class MidiPlayer:
                 sampleCounter += 1
 
             currentNode = currentNode.nextNode
+            totalCounter += sampleCounter
         sys.stdout.flush()        
         sys.stderr.write("Finished writing output\n")
 
