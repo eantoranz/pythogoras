@@ -11,6 +11,7 @@ from Music import *
 from Wave import Wave
 from WavePlayer import WavePlayer
 import sys
+import math
 
 class EventListNode:
     """
@@ -89,18 +90,35 @@ class TrackPlayer:
         self.system = system
         self.wave = None
 
+        self.samplesToMute = None
+
     def play(self, musicalNote):
         if musicalNote == None:
             self.mute()
         else:
             self.wave = Wave(self.system.getFrequency(musicalNote))
+            self.samplesToMute = None
 
-    def mute(self):
-        self.wave = None
+    def mute(self, samplesToMute = None):
+        if samplesToMute == None:
+            # mute inmediately
+            self.volume=0
+            if self.wave != None:
+                self.wave.setVolume(0)
+        else:
+            self.samplesToMute = samplesToMute
+            # What is the rate for each volume decrease to apply?
+            self.volume=1
+            self.decrementRate = math.exp(math.log(0.01) / samplesToMute)
 
     def getNextValue(self):
         if self.wave == None:
             return 0
+        if self.samplesToMute != None:
+            self.samplesToMute -= 1
+            # The volume?
+            self.volume*=self.decrementRate
+            self.wave.setVolume(self.volume)
         return self.wave.getNextValue()
 
     def getFrequency(self):
@@ -164,6 +182,7 @@ class MidiPlayer:
         totalCounter = 0
         while currentNode != None and currentNode.nextNode != None:
             eventDuration = currentNode.getDuration()
+            muteSent = False
 
             # what does each track play for this event?
             sys.stderr.write("Tick " + str(currentNode.time) + " (" + str(float(totalCounter) / self.samplingRate) + " seg)\n")
@@ -185,6 +204,15 @@ class MidiPlayer:
             limit = int(currentNode.getDuration() * 44100 / midiTicksPerSecond)
             sampleCounter = 0
             while sampleCounter < limit:
+                if (limit - sampleCounter) * 20 / self.samplingRate < 1 and not muteSent:
+                    # Have to send a mute signal to the tracks that will be muted
+                    muteSent = True
+                    if currentNode.nextNode != None:
+                        for event in currentNode.nextNode.events:
+                            if event.type == "NOTE_ON" and event.velocity==0:
+                                # Have to mute this track
+                                self.tracks[event.track.index].mute(limit - sampleCounter);
+
                 if soundingTracks == 0:
                     playValue = 0
                 else:

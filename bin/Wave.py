@@ -17,6 +17,7 @@ class Wave:
         self.freq = freq
         self.samplingRate = samplingRate
         self.maxValue = maxValue
+        self.volume=1
 
         self.resetCounter()
 
@@ -24,13 +25,21 @@ class Wave:
         self.counter = 0
 
     def getNextValue(self):
-        temp = int(math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue))
+        temp = int(math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue) * self.volume)
 
         self.counter+=1
         return temp
 
     def getFrequency(self):
         return self.freq
+
+    def setVolume(self, volume):
+        if volume > 1:
+            self.volume = 1
+        elif volume < 0:
+            self.volume = 0
+        else:
+            self.volume=volume
 
 class ChangingWave(Wave):
 
