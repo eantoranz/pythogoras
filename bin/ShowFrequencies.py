@@ -29,13 +29,12 @@ def main(argv):
         # pythagorean
         # was the frequency for A4 specified?
         baseFreq = 440
-        try:
+        if argc > 2:
             baseFreq = int(argv[2])
-            if argc >= 3:
-                fileName = argv[3]
-        except:
+        else:
             # probably frequency wasn't provided
-            fileName = argv[2]
+            baseFreq = 440
+
         # Let's create the tuning system
         system = PythagoreanSystem(baseFreq)
     elif argv[1] == "j":
@@ -81,10 +80,10 @@ def main(argv):
         system = JustSystem(keyNote, alteration)
     elif argv[1] == 't':
         # Tempered System
-        try:
+        if argc > 2:
             baseFreq = int(argv[2])
             system = TemperedSystem(baseFreq)
-        except:
+        else:
             system = TemperedSystem.getInstance()
 
     for note in [ MusicalNote.NOTE_C, MusicalNote.NOTE_D, MusicalNote.NOTE_E, MusicalNote.NOTE_F, MusicalNote.NOTE_G, MusicalNote.NOTE_A, MusicalNote.NOTE_B ]:
