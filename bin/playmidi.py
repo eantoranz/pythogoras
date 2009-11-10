@@ -86,9 +86,10 @@ class TrackPlayer:
     Will play a note that's provided to it
     """
 
-    def __init__(self, system):
+    def __init__(self, system, samplingRate = 44100):
         self.system = system
         self.wave = None
+        self.samplingRate = samplingRate
 
         self.samplesToMute = None
 
@@ -96,7 +97,7 @@ class TrackPlayer:
         if musicalNote == None:
             self.mute()
         else:
-            self.wave = Wave(self.system.getFrequency(musicalNote))
+            self.wave = Wave(self.system.getFrequency(musicalNote), self.samplingRate)
             self.samplesToMute = None
 
     def mute(self, samplesToMute = None):
@@ -134,7 +135,7 @@ class MidiPlayer:
         self.tracks = []
         i = 0
         while i <= eventList.trackNumber: # TODO is there another way to do this?
-            self.tracks.append(TrackPlayer(tuningSystem))
+            self.tracks.append(TrackPlayer(tuningSystem, samplingRate))
             i += 1
         self.eventList = eventList
         self.samplingRate = samplingRate
@@ -174,7 +175,7 @@ class MidiPlayer:
             return MusicalNote(MusicalNote.NOTE_B, 0, index)
 
     def play(self):
-        wavePlayer = WavePlayer()
+        wavePlayer = WavePlayer(self.samplingRate)
         midiTicksPerSecond = 400 # don't know how to calculate this at the time
 
         currentNode = self.eventList.firstNode
@@ -201,7 +202,7 @@ class MidiPlayer:
                         soundingTracks+=1
 
             # Let's play
-            limit = int(currentNode.getDuration() * 44100 / midiTicksPerSecond)
+            limit = int(currentNode.getDuration() * self.samplingRate / midiTicksPerSecond)
             sampleCounter = 0
             while sampleCounter < limit:
                 if (limit - sampleCounter) * 20 / self.samplingRate < 1 and not muteSent:
@@ -339,7 +340,7 @@ def main(argv):
 
     # let's reproduce the file
     sys.stderr.write("Starting to play file\n")
-    midiPlayer = MidiPlayer(eventList, system)
+    midiPlayer = MidiPlayer(eventList, system, 11025)
     midiPlayer.play()
     sys.stderr.write("Finished playing\n")
 

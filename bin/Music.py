@@ -110,6 +110,9 @@ class MusicalNote:
                 temp += (-self.alter * 'b')
         temp += str(self.index)
         return temp
+
+    def __repr__(self):
+        return self.toString()
         
 class TuningSystem:
 
