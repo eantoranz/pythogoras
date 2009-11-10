@@ -55,7 +55,7 @@ def main(argv):
         elif keyNoteStr[0] == "f":
             keyNote = MusicalNote.NOTE_F
         elif keyNoteStr[0] == "g":
-            keyNote = MusicalNote.NOTE_F
+            keyNote = MusicalNote.NOTE_G
         if keyNote == None:
             sys.stderr.write("Didn't provide a valid base key note\n")
             sys.exit(1)
@@ -77,6 +77,7 @@ def main(argv):
                     sys.exit(1)
                 alteration += difference
                 i+=1
+        # TODO Get the base frequency if provided by the user
         system = JustSystem(keyNote, alteration)
     elif argv[1] == 't':
         # Tempered System

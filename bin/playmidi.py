@@ -281,7 +281,7 @@ def main(argv):
         elif keyNoteStr[0] == "f":
             keyNote = MusicalNote.NOTE_F
         elif keyNoteStr[0] == "g":
-            keyNote = MusicalNote.NOTE_F
+            keyNote = MusicalNote.NOTE_G
         if keyNote == None:
             sys.stderr.write("Didn't provide a valid base key note\n")
             sys.exit(1)
