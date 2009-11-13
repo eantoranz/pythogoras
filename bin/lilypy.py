@@ -257,9 +257,29 @@ class LilypondStaff:
             raise Exception("Don't know how to read non-relative staffs")
         # Let's read the relative note
         self.lastReferenceNote = self.readNote(tokens[tokenIndex+3], True)
-        tokenIndex+=3
+
+        # Now a { must come
+        if tokens[tokenIndex+4].word != "{":
+            tokens[tokenIndex + 4].raiseException("Unexpected staff opening");
+
+        # Now we start processing the things that come inside of the staff
+        tokenIndex+=4
+        while True:
+            token = tokens[tokenIndex]
+            if token.word == '}':
+                # Closing staff
+                break
+            if token.word == '\\cleff':
+                # setting the key
+                tokenIndex += 1
+            elif token.word == '\\key':
+                tokenIndex += 2
+            else:
+                print "Token inside of staff" + token.toString()
+
+            tokenIndex += 1
         
-        return tokenIndex + 1
+        return tokenIndex
 
 class LilypondAnalyser:
 
@@ -269,7 +289,7 @@ class LilypondAnalyser:
         self.staffs = []
 
     def readTokens(self, lines):
-        lineCounter = 0
+        lineCounter = 1
         for line in lines:
             lineCounter += 1
             token = "" # Starting a line, word is empty
@@ -299,7 +319,7 @@ class LilypondAnalyser:
         self.readTokens(aFile.readlines())
         nestedElements = []
         tokenIndex = -1
-        while tokenIndex < len(self.tokens):
+        while tokenIndex+1 < len(self.tokens):
             tokenIndex+=1
             token = self.tokens[tokenIndex]
             if token.word == "\n":
