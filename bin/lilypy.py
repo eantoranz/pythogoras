@@ -129,6 +129,59 @@ class LilypondHeader:
             temp += "Title: <" + self.title + ">"
         return temp
 
+    def getHeaderFromTokens(self, tokens, headerIndex, nestedElements):
+        """
+            Get the content of the header. headerIndex specifies the position of the \header word
+        """
+        if len(nestedElements) != 0:
+            raise Exception("Unexpected \\header")
+        if tokens[headerIndex + 1] != "{":
+            raise Exception("Have to open header with '{'")
+        
+        # analysing header
+        nestedElements.append("header")
+        tokenIndex = headerIndex+2
+        while tokenIndex < len(tokens):
+            token = tokens[tokenIndex]
+            if token != "\n":
+                if token == "\\title":
+                    # user wants to set the title
+                    if tokens[tokenIndex + 1] == "=" and tokens[tokenIndex + 2] != "\n":
+                        # all that's following is the title till the line closes
+                        title = ""
+                        tokenIndex += 2
+                        while tokens[tokenIndex] != "\n":
+                            if len(title) > 0:
+                                title += " "
+                            title += tokens[tokenIndex]
+                            tokenIndex += 1
+                        # Got to the end of the line
+                        self.setTitle(title)
+                    else:
+                        raise Exception("Unexpected title definition")
+                elif token == "}":
+                    break
+                else:
+                    raise Exception("Unexpected token in header: " + token)
+            tokenIndex+=1
+        if tokenIndex >= len(tokens):
+            raise Exception("Unexpected end of file")
+        nestedElements.remove("header")
+        return tokenIndex # Closing } index
+        
+
+class LilypondStaff:
+    """
+        A Staff on a Lilypond script
+    """
+
+    def __init__(self):
+        self.key = None
+        self.cleff = None
+        self.notes = []
+        self.lastReferenceNote = None # When working with \relative
+        self.relative = False # Don't know how to read non relative parts, but anyway
+
 class LilypondAnalyser:
 
     def __init__(self):
@@ -155,50 +208,6 @@ class LilypondAnalyser:
                     # any other character
                     token += char
 
-    def getHeaderFromTokens(self, nestedElements, headerIndex):
-        """
-            Get the content of the header. headerIndex specifies the position of the \header word
-        """
-        if len(nestedElements) != 0:
-            raise Exception("Unexpected \\header")
-        if self.header != None:
-            raise Exception("Header had already been defined")
-        if self.tokens[headerIndex + 1] != "{":
-            raise Exception("Have to open header with '{'")
-        
-        # analysing header
-        nestedElements.append("header")
-        tokenIndex = headerIndex+2
-        possibleHeader = LilypondHeader()
-        while tokenIndex < len(self.tokens):
-            token = self.tokens[tokenIndex]
-            if token != "\n":
-                if token == "\\title":
-                    # user wants to set the title
-                    if self.tokens[tokenIndex + 1] == "=" and self.tokens[tokenIndex + 2] != "\n":
-                        # all that's following is the title till the line closes
-                        title = ""
-                        tokenIndex += 2
-                        while self.tokens[tokenIndex] != "\n":
-                            if len(title) > 0:
-                                title += " "
-                            title += self.tokens[tokenIndex]
-                            tokenIndex += 1
-                        # Got to the end of the line
-                        possibleHeader.setTitle(title)
-                    else:
-                        raise Exception("Unexpected title definition")
-                elif token == "}":
-                    break
-                else:
-                    raise Exception("Unexpected token in header: " + token)
-            tokenIndex+=1
-        if tokenIndex >= len(self.tokens):
-            raise Exception("Unexpected end of file")
-        self.header = possibleHeader
-        nestedElements.remove("header")
-        return tokenIndex # Closing } index
-        
 
     def analyseFile(self, aFile):
         """
@@ -209,7 +218,10 @@ class LilypondAnalyser:
         tokenIndex = 0
         for token in self.tokens:
             if token == "\\header":
-                tokenIndex = self.getHeaderFromTokens(nestedElements, tokenIndex) + 1
+                if self.header != None:
+                    raise Exception("Header had already been set")
+                self.header = LilypondHeader()
+                tokenIndex = self.header.getHeaderFromTokens(self.tokens, tokenIndex, nestedElements) + 1
 
             tokenIndex+=1
 
