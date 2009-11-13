@@ -17,10 +17,11 @@ class MusicalNote:
     NOTE_F = 6
     NOTE_G = 7
 
-    def __init__(self, note, alter, index):
+    def __init__(self, note, alter, index, duration):
         self.note = note
         self.alter = alter
         self.index = index
+        self.duration = duration
 
     # Will return a tuple. index 0 is diatonic and index 1 is chromatic
     def getDistance(self, note2):
@@ -104,6 +105,7 @@ class MusicalNote:
             else:
                 temp += (-self.alter * 'b')
         temp += str(self.index)
+        temp += "<" + str(self.duration) + ">"
         return temp
 
     def __repr__(self):
@@ -129,18 +131,13 @@ class LilypondHeader:
             temp += "Title: <" + self.title + ">"
         return temp
 
-    def getHeaderFromTokens(self, tokens, headerIndex, nestedElements):
+    def getHeaderFromTokens(self, tokens, openingIndex):
         """
-            Get the content of the header. headerIndex specifies the position of the \header word
+            Get the content of the header. headerIndex specifies the position of the opening {
+            Will return the position of the closing }
         """
-        if len(nestedElements) != 0:
-            raise Exception("Unexpected \\header")
-        if tokens[headerIndex + 1] != "{":
-            raise Exception("Have to open header with '{'")
-        
         # analysing header
-        nestedElements.append("header")
-        tokenIndex = headerIndex+2
+        tokenIndex = openingIndex + 1
         while tokenIndex < len(tokens):
             token = tokens[tokenIndex]
             if token != "\n":
@@ -166,7 +163,6 @@ class LilypondHeader:
             tokenIndex+=1
         if tokenIndex >= len(tokens):
             raise Exception("Unexpected end of file")
-        nestedElements.remove("header")
         return tokenIndex # Closing } index
         
 
@@ -180,13 +176,80 @@ class LilypondStaff:
         self.cleff = None
         self.notes = []
         self.lastReferenceNote = None # When working with \relative
+        self.lastDuration = 1 # Asume we start with a "Redonda"
         self.relative = False # Don't know how to read non relative parts, but anyway
+
+    def readNote(self, token, absolute = False):
+        """ Have to return a single note from a given token """
+        note=token[0]
+        if note == "a":
+            note=MusicalNote.NOTE_A
+        elif note == "b":
+            note=MusicalNote.NOTE_B
+        elif note == "c":
+            note=MusicalNote.NOTE_C
+        elif note == "d":
+            note=MusicalNote.NOTE_D
+        elif note == "e":
+            note=MusicalNote.NOTE_E
+        elif note == "f":
+            note=MusicalNote.NOTE_F
+        elif note == "g":
+            note=MusicalNote.NOTE_G
+        else:
+            raise Exception("Unknown note: " + token[0])
+
+        # TODO have to get the alteration.... but won't do it right now
+
+        # Index, let's count the 's or ,s
+        if absolute:
+            index = 0
+        else:
+            index=self.lastReferenceNote.index;
+            # TODO If it's relative, there are more calculations to make to know the index
+
+        charIndex=1
+        if charIndex < len(token):
+            if token[charIndex] == ',':
+                difference = -1
+            elif token[charIndex] == '\'':
+                difference = 1
+        if difference != 0:
+            while charIndex < len(token) and token[charIndex]:
+                if token[charIndex] not in ",\'":
+                    break; # finished
+                if difference == -1 and token[charIndex] != ',' or difference == 1 and token[charIndex] != '\'':
+                    raise Exception("Unexpected " + token[charIndex])
+                index+=difference
+                charIndex+=1
+
+        # Got to the end of the index.... how about the duration?
+        if charIndex >= len(token):
+            # Got to the end of the note... have to use the previous duration
+            return MusicalNote(note, 0, index, self.lastDuration)
+        # One duration must follow
+        
+        
+        
+
+    def getStaffFromTokens(self, tokens, tokenIndex):
+        """ Nothing yet """
+        if tokens[tokenIndex+1] != '=':
+            raise Exception("Unexpected Staff definition")
+        if tokens[tokenIndex+2] != '\\relative':
+            raise Exception("Don't know how to read non-relative staffs")
+        # Let's read the relative note
+        self.lastReferenceNote = self.readNote(tokens[tokenIndex+3], True)
+        tokenIndex+=3
+        
+        return tokenIndex + 1
 
 class LilypondAnalyser:
 
     def __init__(self):
         self.header = None
         self.tokens = []
+        self.staffs = []
 
     def readTokens(self, lines):
         for line in lines:
@@ -215,15 +278,31 @@ class LilypondAnalyser:
         """
         self.readTokens(aFile.readlines())
         nestedElements = []
-        tokenIndex = 0
-        for token in self.tokens:
+        tokenIndex = -1
+        while tokenIndex < len(self.tokens):
+            tokenIndex+=1
+            token = self.tokens[tokenIndex]
+            if token == "\n":
+                # Doesn't matter
+                continue
             if token == "\\header":
                 if self.header != None:
                     raise Exception("Header had already been set")
+                if self.tokens[tokenIndex + 1] != '{':
+                    raise Exception("Header definition is wrong")
                 self.header = LilypondHeader()
-                tokenIndex = self.header.getHeaderFromTokens(self.tokens, tokenIndex, nestedElements) + 1
+                tokenIndex = self.header.getHeaderFromTokens(self.tokens, tokenIndex + 1) # from the opening { will return the closing }
+            elif token == "\\new":
+                # Is it one new staff?
+                if self.tokens[tokenIndex+1] == "Staff":
+                    # It's a new staff
+                    staff = LilypondStaff()
+                    # Let's read the staff
+                    tokenIndex = staff.getStaffFromTokens(self.tokens, tokenIndex + 1) #Pass the opening Staff will return the closing }
+                    self.staffs.append(staff)
+            else:
+                raise Exception("Unexpected " + token)
 
-            tokenIndex+=1
 
                     
     def getHeader(self):
