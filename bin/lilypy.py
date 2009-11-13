@@ -121,15 +121,34 @@ class LilypondAnalyser:
 
     def __init__(self):
         self.header = None
+        self.tokens = []
+
+    def readTokens(self, lines):
+        for line in lines:
+            token = "" # Starting a line, word is empty
+            for char in line:
+                if char == " " or char == "\t":
+                    # space or tab
+                    if len(token) > 0:
+                        # there is something in the token
+                        self.tokens.append(token)
+                        token = ""
+                elif char == "\n":
+                    # end of line
+                    if len(token)  > 0:
+                        self.tokens.append(token)
+                        # Don't have to reset... it will be done when starting the next line
+                        self.tokens.append("\n")
+                else:
+                    # any other character
+                    token += char
 
     def analyseFile(self, aFile):
         """
             Nothing yet
         """
-        for line in aFile.readlines():
-            line = line.rstrip("\n")
-            print line
-
+        self.readTokens(aFile.readlines())
+                    
     def getHeader(self):
         """
             Return the header of the result of one analysis
