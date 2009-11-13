@@ -116,6 +116,18 @@ class LilypondHeader:
         """
             Nothing yet
         """
+        self.title = None
+
+    def setTitle(self, title):
+        self.title = title
+
+    def toString(self):
+        temp = "Header - ";
+        if self.title == None:
+            temp += "Title <unset>"
+        else:
+            temp += "Title: <" + self.title + ">"
+        return temp
 
 class LilypondAnalyser:
 
@@ -143,16 +155,70 @@ class LilypondAnalyser:
                     # any other character
                     token += char
 
+    def getHeaderFromTokens(self, nestedElements, headerIndex):
+        """
+            Get the content of the header. headerIndex specifies the position of the \header word
+        """
+        if len(nestedElements) != 0:
+            raise Exception("Unexpected \\header")
+        if self.header != None:
+            raise Exception("Header had already been defined")
+        if self.tokens[headerIndex + 1] != "{":
+            raise Exception("Have to open header with '{'")
+        
+        # analysing header
+        nestedElements.append("header")
+        tokenIndex = headerIndex+2
+        possibleHeader = LilypondHeader()
+        while tokenIndex < len(self.tokens):
+            token = self.tokens[tokenIndex]
+            if token != "\n":
+                if token == "\\title":
+                    # user wants to set the title
+                    if self.tokens[tokenIndex + 1] == "=" and self.tokens[tokenIndex + 2] != "\n":
+                        # all that's following is the title till the line closes
+                        title = ""
+                        tokenIndex += 2
+                        while self.tokens[tokenIndex] != "\n":
+                            if len(title) > 0:
+                                title += " "
+                            title += self.tokens[tokenIndex]
+                            tokenIndex += 1
+                        # Got to the end of the line
+                        possibleHeader.setTitle(title)
+                    else:
+                        raise Exception("Unexpected title definition")
+                elif token == "}":
+                    break
+                else:
+                    raise Exception("Unexpected token in header: " + token)
+            tokenIndex+=1
+        if tokenIndex >= len(self.tokens):
+            raise Exception("Unexpected end of file")
+        self.header = possibleHeader
+        nestedElements.remove("header")
+        return tokenIndex # Closing } index
+        
+
     def analyseFile(self, aFile):
         """
             Nothing yet
         """
         self.readTokens(aFile.readlines())
+        nestedElements = []
+        tokenIndex = 0
+        for token in self.tokens:
+            if token == "\\header":
+                tokenIndex = self.getHeaderFromTokens(nestedElements, tokenIndex) + 1
+
+            tokenIndex+=1
+
                     
     def getHeader(self):
         """
             Return the header of the result of one analysis
         """
+        return self.header
 
 if __name__ == "__main__":
     aFile = open(sys.argv[1])
@@ -162,4 +228,4 @@ if __name__ == "__main__":
     if header == None:
         print "Piece has no header"
     else:
-        print "Piece does have a header"
+        print header.toString()
