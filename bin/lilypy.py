@@ -156,7 +156,7 @@ class LilypondHeader:
         while tokenIndex < len(tokens):
             token = tokens[tokenIndex]
             if token.word != "\n":
-                if token.word == "\\title":
+                if token.word == "title":
                     titleLine = token.line
                     # user wants to set the title
                     if tokens[tokenIndex + 1].word == "=":
