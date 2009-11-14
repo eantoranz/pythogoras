@@ -226,6 +226,7 @@ class LilypondStaff:
             # TODO If it's relative, there are more calculations to make to know the index
 
         charIndex=1
+        difference = 0
         if charIndex < len(token.word):
             if token.word[charIndex] == ',':
                 difference = -1
@@ -251,19 +252,17 @@ class LilypondStaff:
 
     def getStaffFromTokens(self, tokens, tokenIndex):
         """ Nothing yet """
-        if tokens[tokenIndex+1].word != '=':
-            raise Exception("Unexpected Staff definition")
-        if tokens[tokenIndex+2].word != '\\relative':
+        if tokens[tokenIndex+1].word != '\\relative':
             raise Exception("Don't know how to read non-relative staffs")
         # Let's read the relative note
-        self.lastReferenceNote = self.readNote(tokens[tokenIndex+3], True)
+        self.lastReferenceNote = self.readNote(tokens[tokenIndex+2], True)
 
         # Now a { must come
-        if tokens[tokenIndex+4].word != "{":
-            tokens[tokenIndex + 4].raiseException("Unexpected staff opening");
+        if tokens[tokenIndex+3].word != "{":
+            tokens[tokenIndex + 3].raiseException("Unexpected staff opening");
 
         # Now we start processing the things that come inside of the staff
-        tokenIndex+=4
+        tokenIndex+=3
         while True:
             token = tokens[tokenIndex]
             if token.word == '}':
@@ -285,6 +284,7 @@ class LilypondAnalyser:
 
     def __init__(self):
         self.header = None
+        self.version = None
         self.tokens = []
         self.staffs = []
 
@@ -332,6 +332,10 @@ class LilypondAnalyser:
                     raise Exception("Header definition is wrong")
                 self.header = LilypondHeader()
                 tokenIndex = self.header.getHeaderFromTokens(self.tokens, tokenIndex + 1) # from the opening { will return the closing }
+            elif token.word == "\\version":
+                # Lilypond version
+                self.version = self.tokens[tokenIndex+1].word.rstrip("\"").lstrip("\"")
+                tokenIndex+=1
             elif token.word == "\\new":
                 # Is it one new staff?
                 if self.tokens[tokenIndex+1].word == "Staff":
@@ -351,6 +355,9 @@ class LilypondAnalyser:
         """
         return self.header
 
+    def getLilypondVersion(self):
+        return self.version
+
 if __name__ == "__main__":
     aFile = open(sys.argv[1])
     analyser = LilypondAnalyser()
@@ -360,3 +367,8 @@ if __name__ == "__main__":
         print "Piece has no header"
     else:
         print header.toString()
+    lilypondVersion=analyser.getLilypondVersion()
+    if lilypondVersion == None:
+        print "Lilypond version: not especified"
+    else:
+        print "Lilypond version: " + lilypondVersion
