@@ -217,6 +217,20 @@ class LilypondStaff:
             token.raiseException("Unknown note: " + token.word[0])
 
         # TODO have to get the alteration.... but won't do it right now
+        alteration = 0
+        charIndex = 1
+        while charIndex + 2 <= len(token.word):
+            # Could be altered
+            alterText = token.word[charIndex:charIndex+2]
+            if alterText not in ['is', 'es']:
+                # Finished with the alterations
+                break
+            if alterText == 'is':
+                # sharp
+                alteration+=1
+            else:
+                alteration-=1
+            charIndex+=2
 
         # Index, let's count the 's or ,s
         if absolute:
@@ -225,7 +239,6 @@ class LilypondStaff:
             index=self.lastReferenceNote.index;
             # TODO If it's relative, there are more calculations to make to know the index
 
-        charIndex=1
         difference = 0
         if charIndex < len(token.word):
             if token.word[charIndex] == ',':
@@ -247,9 +260,6 @@ class LilypondStaff:
             return MusicalNote(note, 0, index, self.lastDuration)
         # One duration must follow
         
-        
-        
-
     def getStaffFromTokens(self, tokens, tokenIndex):
         """ Nothing yet """
         if tokens[tokenIndex+1].word != '\\relative':
@@ -262,17 +272,19 @@ class LilypondStaff:
             tokens[tokenIndex + 3].raiseException("Unexpected staff opening");
 
         # Now we start processing the things that come inside of the staff
-        tokenIndex+=3
+        tokenIndex+=4
         while True:
             token = tokens[tokenIndex]
             if token.word == '}':
                 # Closing staff
                 break
-            if token.word == '\\cleff':
+            if token.word == '\\clef':
                 # setting the key
                 tokenIndex += 1
             elif token.word == '\\key':
                 tokenIndex += 2
+            elif token.word == '\\time':
+                tokenIndex += 1
             else:
                 print "Token inside of staff" + token.toString()
 
