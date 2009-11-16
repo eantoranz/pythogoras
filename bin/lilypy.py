@@ -358,19 +358,21 @@ class LilypondStaff:
         # Now we start processing the things that come inside of the staff
         tokenIndex+=4
         while True:
-            token = tokens[tokenIndex]
-            if token.word == '}':
+            token = tokens[tokenIndex].word
+            if token == '}':
                 # Closing staff
                 break
-            if token.word == '\\clef':
+            if token == '\\clef':
                 # setting the key
                 tokenIndex += 1
-            elif token.word == '\\key':
+            elif token == '\\key':
                 tokenIndex = self.getStaffKey(tokens, tokenIndex)
-            elif token.word == '\\time':
+            elif token == '\\time':
                 tokenIndex += 1
+            elif token == '\\bar':
+                tokenIndex += 1 # Just a bar
             else:
-                print "Token inside of staff" + token.toString()
+                print "Token inside of staff: " + token
 
             tokenIndex += 1
         
