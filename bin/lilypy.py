@@ -111,6 +111,45 @@ class MusicalNote:
     def __repr__(self):
         return self.toString()
 
+class MusicalKey:
+
+    def __init__(self, note, alteration, major):
+        self.note = note
+        self.alteration = alteration
+        self.major = major
+
+    def toString(self):
+        if self.note == MusicalNote.NOTE_A:
+            note = 'A'
+        elif self.note == MusicalNote.NOTE_B:
+            note = 'B'
+        elif self.note == MusicalNote.NOTE_C:
+            note = 'C'
+        elif self.note == MusicalNote.NOTE_D:
+            note = 'D'
+        elif self.note == MusicalNote.NOTE_E:
+            note = 'E'
+        elif self.note == MusicalNote.NOTE_F:
+            note = 'F'
+        elif self.note == MusicalNote.NOTE_G:
+            note = 'G'
+        else:
+            raise Exception('Unknown note in musical key: ' + str(self.note))
+
+        if self.alteration < 0:
+            alteration = (self.alteration * -1) * 'b'
+        elif self.alteration > 0:
+            alteration = self.alteration * '#'
+        else:
+            alteration = ''
+
+        if self.major:
+            major = 'Major'
+        else:
+            major = 'Minor'
+            
+        return "Key: " + note + alteration + " " + major
+
 class LilypondToken:
 
     def __init__(self, word, line, pos):
@@ -189,9 +228,8 @@ class LilypondStaff:
     """
 
     def __init__(self):
-        self.key = None
         self.cleff = None
-        self.notes = []
+        self.events = [] # Can be notes, chords, key changes
         self.lastReferenceNote = None # When working with \relative
         self.lastDuration = 1 # Asume we start with a "Redonda"
         self.relative = False # Don't know how to read non relative parts, but anyway
@@ -259,6 +297,52 @@ class LilypondStaff:
             # Got to the end of the note... have to use the previous duration
             return MusicalNote(note, 0, index, self.lastDuration)
         # One duration must follow
+
+    def getStaffKey(self, tokens, tokenIndex):
+        """
+            Get the key
+        """
+        noteStr = tokens[tokenIndex+1].word
+        if noteStr[0] == 'a':
+            note = MusicalNote.NOTE_A
+        elif noteStr[0] == 'b':
+            note = MusicalNote.NOTE_B
+        elif noteStr[0] == 'c':
+            note = MusicalNote.NOTE_C
+        elif noteStr[0] == 'd':
+            note = MusicalNote.NOTE_D
+        elif noteStr[0] == 'e':
+            note = MusicalNote.NOTE_E
+        elif noteStr[0] == 'f':
+            note = MusicalNote.NOTE_F
+        elif noteStr[0] == 'g':
+            note = MusicalNote.NOTE_G
+        else:
+            raise Exception("Unexpected note for staff key: " + noteStr)
+
+        # Alterations?
+        alteration = 0
+        charIndex = 1
+        while charIndex + 2 <= len(noteStr):
+            alterStr = noteStr[charIndex:charIndex+2]
+            if alterStr == 'es':
+                alteration-=1
+            elif alterStr == 'is':
+                alteration+=1
+            else:
+                raise Exception('Unexpected alteration ' + alterStr)
+            charIndex+=2
+
+        majorStr = tokens[tokenIndex + 2].word
+        if majorStr == '\\major':
+            major = True
+        elif majorStr == '\\minor':
+            major = False
+        else:
+            raise Exception("Unexpected tonality definition: " + majorStr)
+
+        self.events.append(MusicalKey(note, alteration, major))
+        return tokenIndex + 2
         
     def getStaffFromTokens(self, tokens, tokenIndex):
         """ Nothing yet """
@@ -282,7 +366,7 @@ class LilypondStaff:
                 # setting the key
                 tokenIndex += 1
             elif token.word == '\\key':
-                tokenIndex += 2
+                tokenIndex = self.getStaffKey(tokens, tokenIndex)
             elif token.word == '\\time':
                 tokenIndex += 1
             else:
@@ -384,3 +468,9 @@ if __name__ == "__main__":
         print "Lilypond version: not especified"
     else:
         print "Lilypond version: " + lilypondVersion
+
+    print "Staffs:"
+    for staff in analyser.staffs:
+        print "\tStaff"
+        for event in staff.events:
+            print "\t\t" + event.toString()
