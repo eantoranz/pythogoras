@@ -315,7 +315,6 @@ class LilypondStaff:
 
     def getNoteIndex(self, note, index, previousNote):
         # if previous note == None, will return the provided index
-        print "Calculating relative index"
         if previousNote == None or previousNote.note == note:
             return index
 
@@ -329,7 +328,6 @@ class LilypondStaff:
         distance = distance[0] # Only care about diatonic semitones
         if distance < 0:
             distance += 7
-        print "Absolute Distance in diatonic semitones: " + str(distance)
         if distance > 4:
             # The note is within a fourth going down
             if previousNote.note == MusicalNote.NOTE_C:
@@ -367,7 +365,6 @@ class LilypondStaff:
             Get a note from the staff
         """
         noteStr = token.word
-        print "Getting a note from " + noteStr
         if noteStr[0] == 'a':
             note = MusicalNote.NOTE_A
         elif noteStr[0] == 'b':
