@@ -17,7 +17,7 @@ class MusicalNote:
     NOTE_F = 6
     NOTE_G = 7
 
-    def __init__(self, note, alter, index, duration):
+    def __init__(self, note, alter, index, duration = None):
         self.note = note
         self.alter = alter
         self.index = index
@@ -252,69 +252,6 @@ class LilypondStaff:
         self.lastDuration = '4' # Asume we start with a "black"
         self.relative = False # Don't know how to read non relative parts, but anyway
 
-    def readNote(self, token, absolute = False):
-        """ Have to return a single note from a given token """
-        note=token.word[0]
-        if note == "a":
-            note=MusicalNote.NOTE_A
-        elif note == "b":
-            note=MusicalNote.NOTE_B
-        elif note == "c":
-            note=MusicalNote.NOTE_C
-        elif note == "d":
-            note=MusicalNote.NOTE_D
-        elif note == "e":
-            note=MusicalNote.NOTE_E
-        elif note == "f":
-            note=MusicalNote.NOTE_F
-        elif note == "g":
-            note=MusicalNote.NOTE_G
-        else:
-            token.raiseException("Unknown note: " + token.word[0])
-
-        alteration = 0
-        charIndex = 1
-        while charIndex + 2 <= len(token.word):
-            # Could be altered
-            alterText = token.word[charIndex:charIndex+2]
-            if alterText not in ['is', 'es']:
-                # Finished with the alterations
-                break
-            if alterText == 'is':
-                # sharp
-                alteration+=1
-            else:
-                alteration-=1
-            charIndex+=2
-
-        # Index, let's count the 's or ,s
-        if absolute:
-            index = 0
-        else:
-            index=self.lastReferenceNote.index;
-            # TODO If it's relative, there are more calculations to make to know the index
-
-        difference = 0
-        if charIndex < len(token.word):
-            if token.word[charIndex] == ',':
-                difference = -1
-            elif token.word[charIndex] == '\'':
-                difference = 1
-        if difference != 0:
-            while charIndex < len(token.word) and token.word[charIndex]:
-                if token.word[charIndex] not in ",\'":
-                    break; # finished
-                if difference == -1 and token.word[charIndex] != ',' or difference == 1 and token.word[charIndex] != '\'':
-                    token[charIndex].raiseException()
-                index+=difference
-                charIndex+=1
-
-        # Got to the end of the index.... how about the duration?
-        if charIndex >= len(token.word):
-            # Got to the end of the note... have to use the previous duration
-            return MusicalNote(note, 0, index, self.lastDuration)
-        # One duration must follow
-
     def getStaffKey(self, tokens, tokenIndex):
         """
             Get the key
@@ -478,8 +415,11 @@ class LilypondStaff:
             charIndex+=1
         if includeDuration and duration == None:
             duration = previousNote.duration
-        
-        index = self.getNoteIndex(note, index, previousNote)
+
+        if previousNote == None:
+            index = index + 2
+        else:
+            index = self.getNoteIndex(note, index, previousNote)
         if includeDuration:
             return MusicalNote(note, alteration, index, duration)
         else:
@@ -556,7 +496,9 @@ class LilypondStaff:
         if tokens[tokenIndex+1].word != '\\relative':
             raise Exception("Don't know how to read non-relative staffs")
         # Let's read the relative note
-        self.lastReferenceNote = self.readNote(tokens[tokenIndex+2], True)
+        self.lastReferenceNote = self.getNote(tokens[tokenIndex+2], None, False)
+        # Set duration to 4 by default
+        self.lastReferenceNote.duration='4'
 
         # Now a { must come
         if tokens[tokenIndex+3].word != "{":
