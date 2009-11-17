@@ -56,25 +56,21 @@ class LilypondChordPlayer:
 
 class LilypondStaffPlayer:
 
-    def __init__(self, beatsPerMinute, tuningSystem, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, tuningSystem, staff, samplingRate = 44100):
         """
             A Staff Player
         """
         self.beatsPerMinute = beatsPerMinute
-        self.beatUnit = None # Will be caught from staff
+        self.staff = staff
+        # beat unit from Time Marker
+        self.beatUnit = self.staff.getFirstTimeMarker().denominator
         self.tuningSystem = tuningSystem
         self.samplingRate = samplingRate
 
-        self.staff = None
         self.eventPlayer = None # Nothing is being played right now
         self.eventCounterIndex = -1
 
         self.finished = False
-
-    def playStaff(self, staff):
-        self.staff = staff
-        # Time Marker
-        self.beatUnit = self.staff.getFirstTimeMarker().denominator
 
     def getNextValue(self):
         if self.eventPlayer == None:
@@ -105,10 +101,26 @@ class LilypondSystemPlayer:
         Class that can play a system instead of just a staff
     """
 
-    def __init__(self, beatsPerMinute, tuningSystem, samplingRate = 44100):
-        self.beatsPerMinute = beatsPerMinute
-        self.tuningSystem = tuningSystem
-        self.samplingRate = samplingRate
+    def __init__(self, beatsPerMinute, tuningSystem, system, samplingRate = 44100):
+        self.players = []
+        for staff in system.staffs:
+            self.players.append(LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate))
+        self.length = len(self.players)
+
+    def getNextValue(self):
+        accumulator = 0
+        for player in self.players:
+            if player.finished:
+                self.players.remove(player)
+                self.length -= 1
+                continue
+            accumulator += player.getNextValue()
+        if self.length == 0:
+            return 0
+        return int(accumulator / self.length)
+
+    def isFinished(self):
+        return self.length <= 0
 
 
 class LilypondPlayer:
@@ -122,18 +134,23 @@ class LilypondPlayer:
         self.tuningSystem = tuningSystem
         self.samplingRate = wavePlayer.samplingRate
 
-    def playSystem(self, tuningSystem, lilypondSystem):
+    def playSystem(self, system):
         """
             play from a lilypond system
         """
         sys.stderr.write("Playing Lilypond system\n")
+        player = LilypondSystemPlayer(self.beatsPerMinute, self.tuningSystem, system, self.samplingRate)
+        while not player.isFinished():
+            self.wavePlayer.play(player.getNextValue())
+        sys.stderr.write("Finished playing system\n")
+        sys.stderr.flush()
+        # finished playing
 
     def playStaff(self, staff):
         """
             Play from a staff
         """
-        player = LilypondStaffPlayer(self.beatsPerMinute, self.tuningSystem, self.samplingRate)
-        player.playStaff(staff)
+        player = LilypondStaffPlayer(self.beatsPerMinute, self.tuningSystem, staff, self.samplingRate)
         while not player.finished:
             self.wavePlayer.play(player.getNextValue())
         sys.stderr.write("Finished playing\n")

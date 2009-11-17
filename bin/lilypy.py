@@ -111,6 +111,7 @@ class LilypondStaff:
     def getFirstTimeMarker(self):
         if self.firstTimeMarker == None:
             return LilypondTimeMarker(4, 4)
+        return self.firstTimeMarker
 
     def getStaffKey(self, tokens, tokenIndex):
         """
