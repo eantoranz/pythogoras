@@ -17,15 +17,11 @@ class MusicalNote:
     NOTE_F = 6
     NOTE_G = 7
 
-    #instance members
-    note = None
-    alter = None
-    index = None
-
-    def __init__(self, note, alter, index):
+    def __init__(self, note, alter, index, duration = None):
         self.note = note
         self.alter = alter
         self.index = index
+        self.duration = duration
 
     # Will return a tuple. index 0 is diatonic and index 1 is chromatic
     def getDistance(self, note2):
@@ -87,7 +83,7 @@ class MusicalNote:
 
         return [diatonic, chromatic]
 
-    def toString(self):
+    def toString(self, showDuration = True):
         temp = None
         if self.note == MusicalNote.NOTE_A:
             temp = "A"
@@ -109,11 +105,71 @@ class MusicalNote:
             else:
                 temp += (-self.alter * 'b')
         temp += str(self.index)
+        if showDuration:
+            temp += "<" + str(self.duration) + ">"
         return temp
 
     def __repr__(self):
         return self.toString()
+
+class MusicalChord:
+
+    def __init__(self, notes, duration):
+        self.duration = duration
+        self.notes = notes
+        for note in notes:
+            note.duration = duration
+
+    def toString(self):
+        temp = "Chord. Duration: " + self.duration  + " Notes: "
+        firstNote = True
+        for note in self.notes:
+            if firstNote:
+                firstNote = False
+            else:
+                temp += " "
+            temp += note.toString(False)
+        return temp
         
+class MusicalKey:
+
+    def __init__(self, note, alteration, major):
+        self.note = note
+        self.alteration = alteration
+        self.major = major
+
+    def toString(self):
+        if self.note == MusicalNote.NOTE_A:
+            note = 'A'
+        elif self.note == MusicalNote.NOTE_B:
+            note = 'B'
+        elif self.note == MusicalNote.NOTE_C:
+            note = 'C'
+        elif self.note == MusicalNote.NOTE_D:
+            note = 'D'
+        elif self.note == MusicalNote.NOTE_E:
+            note = 'E'
+        elif self.note == MusicalNote.NOTE_F:
+            note = 'F'
+        elif self.note == MusicalNote.NOTE_G:
+            note = 'G'
+        else:
+            raise Exception('Unknown note in musical key: ' + str(self.note))
+
+        if self.alteration < 0:
+            alteration = (self.alteration * -1) * 'b'
+        elif self.alteration > 0:
+            alteration = self.alteration * '#'
+        else:
+            alteration = ''
+
+        if self.major:
+            major = 'Major'
+        else:
+            major = 'Minor'
+            
+        return "Key: " + note + alteration + " " + major
+
 class TuningSystem:
 
     FREQ_A4 = 440
