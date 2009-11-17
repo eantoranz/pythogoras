@@ -315,7 +315,7 @@ class LilypondStaff:
 
     def getNoteIndex(self, note, index, previousNote):
         # if previous note == None, will return the provided index
-        if previousNote == None or previousNote.note == note:
+        if previousNote == None:
             return index
 
         # When in relative mode, when a note is read, the note's index (default) is calculated based on that it's within a fouth of the
@@ -328,7 +328,7 @@ class LilypondStaff:
         distance = distance[0] # Only care about diatonic semitones
         if distance < 0:
             distance += 7
-        if distance > 4:
+        if distance > 3:
             # The note is within a fourth going down
             if previousNote.note == MusicalNote.NOTE_C:
                 return previousNote.index - 1 + index
@@ -337,7 +337,7 @@ class LilypondStaff:
                     return previousNote.index + index
                 return previousNote.index - 1 + index
             if previousNote.note == MusicalNote.NOTE_E:
-                if note in [MusicalNote.NOTE_C, MusicalNote_D]:
+                if note in [MusicalNote.NOTE_C, MusicalNote.NOTE_D]:
                     return previousNote.index + index
                 return previousNote.index - 1 + index
             # F G A B
@@ -414,7 +414,7 @@ class LilypondStaff:
             duration = previousNote.duration
 
         if previousNote == None:
-            index = index + 2
+            index = index + 3
         else:
             index = self.getNoteIndex(note, index, previousNote)
         if includeDuration:
@@ -494,7 +494,7 @@ class LilypondStaff:
             raise Exception("Don't know how to read non-relative staffs")
         # Let's read the relative note
         self.lastReferenceNote = self.getNote(tokens[tokenIndex+2], None, False)
-        # Set duration to 4 by default
+        # Set duration to blacks by default
         self.lastReferenceNote.duration='4'
 
         # Now a { must come
