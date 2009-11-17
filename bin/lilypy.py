@@ -117,6 +117,8 @@ class MusicalChord:
     def __init__(self, notes, duration):
         self.duration = duration
         self.notes = notes
+        for note in notes:
+            note.duration = duration
 
     def toString(self):
         temp = "Chord. Duration: " + self.duration  + " Notes: "
@@ -249,7 +251,6 @@ class LilypondStaff:
         self.cleff = None
         self.events = [] # Can be notes, chords, key changes
         self.lastReferenceNote = None # When working with \relative
-        self.lastDuration = '4' # Asume we start with a "black"
         self.relative = False # Don't know how to read non relative parts, but anyway
 
     def getStaffKey(self, tokens, tokenIndex):
@@ -439,7 +440,7 @@ class LilypondStaff:
                     if len(token.word) > 1:
                         duration = token.word[1:]
                     else:
-                        duration = self.lastDuration
+                        duration = self.lastReferenceNote.duration
                     self.events.append(MusicalChord(notes, duration))
                     self.lastReferenceNote = notes[0]
                 return tokenIndex
@@ -486,12 +487,47 @@ class LilypondStaff:
         
         return tokenIndex
 
+class LilypondSystem:
+    """
+        A system is made of various staffs
+    """
+
+    def __init__(self):
+        self.staffs = []
+
+    def readSystemFromTokens(self, tokens, tokenIndex):
+        """
+            read the system from the tokens provided. tokenIndex especifyes the <<... have to return the closing >> index
+        """
+
+        if tokens[tokenIndex].word != "<<":
+            raise Exception("Wrong system starter: " + tokens[tokenIndex].toString() + ". Expecting <<")
+
+        tokenIndex = tokenIndex+1
+        while True:
+            token = tokens[tokenIndex]
+            if token.word == ">>":
+                # closing system
+                return tokenIndex
+            if token.word == "\\new":
+                if tokens[tokenIndex+1].word == "Staff":
+                    staff = LilypondStaff()
+                    tokenIndex = staff.getStaffFromTokens(tokens, tokenIndex + 1)
+                    self.staffs.append(staff)
+                else:
+                    raise Exception("Unexpected new instance in system: " + tokens[tokenIndex+1].toString())
+            else:
+                raise Exception("Unexpected system member: " + token.toString())
+            tokenIndex+=1
+                
+
 class LilypondAnalyser:
 
     def __init__(self):
         self.header = None
         self.version = None
         self.tokens = []
+        self.systems = []
         self.staffs = []
 
     def readTokens(self, lines):
@@ -550,6 +586,11 @@ class LilypondAnalyser:
                     # Let's read the staff
                     tokenIndex = staff.getStaffFromTokens(self.tokens, tokenIndex + 1) #Pass the opening Staff will return the closing }
                     self.staffs.append(staff)
+            elif token.word == "<<":
+                # System starter
+                lilypondSystem = LilypondSystem()
+                tokenIndex = lilypondSystem.readSystemFromTokens(self.tokens, tokenIndex)
+                self.systems.append(lilypondSystem)
             else:
                 token.raiseException()
 
@@ -579,8 +620,19 @@ if __name__ == "__main__":
     else:
         print "Lilypond version: " + lilypondVersion
 
-    print "Staffs:"
-    for staff in analyser.staffs:
-        print "\tStaff"
-        for event in staff.events:
-            print "\t\t" + event.toString()
+    systems = analyser.systems
+    if len(systems) > 0:
+        print "Systems: "
+        for aSystem in systems:
+            print "\tSystem"
+            for staff in aSystem.staffs:
+                print "\t\tStaff"
+                for event in staff.events:
+                    print "\t\t\t" + event.toString()
+    staffs = analyser.staffs
+    if len(staffs) > 0:
+        print "Staffs:"
+        for staff in analyser.staffs:
+            print "\tStaff"
+            for event in staff.events:
+                print "\t\t" + event.toString()
