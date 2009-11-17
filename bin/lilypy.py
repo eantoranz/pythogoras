@@ -79,6 +79,22 @@ class LilypondHeader:
         return tokenIndex # Closing } index
         
 
+class LilypondTimeMarker:
+
+    def __init__(self, numerator = None, denominator = None):
+        self.numerator = numerator
+        self.denominator = denominator
+
+    def readFromToken(self, token):
+        pos = token.word.find('/')
+        if pos == -1:
+            raise Exception("Invalid time marker: " + token.toString())
+        self.numerator = int(token.word[0:pos])
+        self.denominator = int(token.word[pos+1:])
+
+    def toString(self):
+        return "Time Marker: " + str(self.numerator) + "/" + str(self.denominator)
+
 class LilypondStaff:
     """
         A Staff on a Lilypond script
@@ -89,6 +105,12 @@ class LilypondStaff:
         self.events = [] # Can be notes, chords, key changes
         self.lastReferenceNote = None # When working with \relative
         self.relative = False # Don't know how to read non relative parts, but anyway
+
+        self.firstTimeMarker = None
+
+    def getFirstTimeMarker(self):
+        if self.firstTimeMarker == None:
+            return LilypondTimeMarker(4, 4)
 
     def getStaffKey(self, tokens, tokenIndex):
         """
@@ -287,6 +309,13 @@ class LilypondStaff:
             notes.append(note)
             tokenIndex+=1 #next token
 
+    def getTimeMarker(self, token):
+        timeMarker = LilypondTimeMarker()
+        if self.firstTimeMarker == None:
+            self.firstTimeMarker = timeMarker
+        timeMarker.readFromToken(token)
+        self.events.append(timeMarker)
+
     def getStaffFromTokens(self, tokens, tokenIndex):
         """ Nothing yet """
         if tokens[tokenIndex+1].word != '\\relative':
@@ -313,6 +342,7 @@ class LilypondStaff:
             elif token == '\\key':
                 tokenIndex = self.getStaffKey(tokens, tokenIndex)
             elif token == '\\time':
+                self.getTimeMarker(tokens[tokenIndex+1])
                 tokenIndex += 1
             elif token == '\\bar':
                 tokenIndex += 1 # Just a bar

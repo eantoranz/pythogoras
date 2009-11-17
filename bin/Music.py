@@ -21,7 +21,17 @@ class MusicalNote:
         self.note = note
         self.alter = alter
         self.index = index
-        self.duration = duration
+        self.duration = None
+        self.dotted = False
+        if duration != None:
+            # Can be a number (1, 2, 4, 8, 16, 32, 64) or a number followed by a dot
+            pos = str(duration).find('.')
+            if pos != -1:
+                # dotted
+               self.duration = int(duration[0:pos - 1])
+               self.dotted = True
+            else:
+               self.duration = int(duration)
 
     # Will return a tuple. index 0 is diatonic and index 1 is chromatic
     def getDistance(self, note2):
@@ -106,7 +116,10 @@ class MusicalNote:
                 temp += (-self.alter * 'b')
         temp += str(self.index)
         if showDuration:
-            temp += "<" + str(self.duration) + ">"
+            temp += "<" + str(self.duration)
+            if (self.dotted):
+                temp += "."
+            temp += ">"
         return temp
 
     def __repr__(self):
