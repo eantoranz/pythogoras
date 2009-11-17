@@ -83,7 +83,7 @@ class MusicalNote:
 
         return [diatonic, chromatic]
 
-    def toString(self):
+    def toString(self, showDuration = True):
         temp = None
         if self.note == MusicalNote.NOTE_A:
             temp = "A"
@@ -105,12 +105,30 @@ class MusicalNote:
             else:
                 temp += (-self.alter * 'b')
         temp += str(self.index)
-        temp += "<" + str(self.duration) + ">"
+        if showDuration:
+            temp += "<" + str(self.duration) + ">"
         return temp
 
     def __repr__(self):
         return self.toString()
 
+class MusicalChord:
+
+    def __init__(self, notes, duration):
+        self.duration = duration
+        self.notes = notes
+
+    def toString(self):
+        temp = "Chord. Duration: " + self.duration  + " Notes: "
+        firstNote = True
+        for note in self.notes:
+            if firstNote:
+                firstNote = False
+            else:
+                temp += " "
+            temp += note.toString(False)
+        return temp
+        
 class MusicalKey:
 
     def __init__(self, note, alteration, major):
@@ -231,7 +249,7 @@ class LilypondStaff:
         self.cleff = None
         self.events = [] # Can be notes, chords, key changes
         self.lastReferenceNote = None # When working with \relative
-        self.lastDuration = 1 # Asume we start with a "Redonda"
+        self.lastDuration = '4' # Asume we start with a "black"
         self.relative = False # Don't know how to read non relative parts, but anyway
 
     def readNote(self, token, absolute = False):
@@ -254,7 +272,6 @@ class LilypondStaff:
         else:
             token.raiseException("Unknown note: " + token.word[0])
 
-        # TODO have to get the alteration.... but won't do it right now
         alteration = 0
         charIndex = 1
         while charIndex + 2 <= len(token.word):
@@ -343,6 +360,196 @@ class LilypondStaff:
 
         self.events.append(MusicalKey(note, alteration, major))
         return tokenIndex + 2
+
+    def getMusicalEvent(self, tokens, tokenIndex):
+        """
+            Get a musical event (a single note or a chord)
+        """
+
+        token = tokens[tokenIndex].word
+        if token == '<':
+            # It's a chord
+            return self.getChord(tokens, tokenIndex) # Will return the position of the closing <
+        else:
+            # It's a single note
+            self.lastReferenceNote = self.getNote(tokens[tokenIndex], self.lastReferenceNote)
+            self.events.append(self.lastReferenceNote)
+            return tokenIndex # return the same index
+
+    def getNoteIndex(self, note, index, previousNote):
+        # if previous note == None, will return the provided index
+        print "Calculating relative index"
+        if previousNote == None or previousNote.note == note:
+            return index
+
+        # When in relative mode, when a note is read, the note's index (default) is calculated based on that it's within a fouth of the
+        # previous note
+        if previousNote.note == note:
+            return index + previousNote.index
+        # Notes are digferent
+        distance = previousNote.getDistance(MusicalNote(note, 0, previousNote.index))
+        # Distance to the note with the same index of the previous note
+        distance = distance[0] # Only care about diatonic semitones
+        if distance < 0:
+            distance += 7
+        print "Absolute Distance in diatonic semitones: " + str(distance)
+        if distance > 4:
+            # The note is within a fourth going down
+            if previousNote.note == MusicalNote.NOTE_C:
+                return previousNote.index - 1 + index
+            if previousNote.note == MusicalNote.NOTE_D:
+                if note == MusicalNote.NOTE_C:
+                    return previousNote.index + index
+                return previousNote.index - 1 + index
+            if previousNote.note == MusicalNote.NOTE_E:
+                if note in [MusicalNote.NOTE_C, MusicalNote_D]:
+                    return previousNote.index + index
+                return previousNote.index - 1 + index
+            # F G A B
+            return previousNote.index + index
+        elif distance > 0:
+            # The note is within a fourth going up
+            if previousNote.note == MusicalNote.NOTE_B:
+                return previousNote.index + 1
+            if previousNote.note == MusicalNote.NOTE_A:
+                if note == MusicalNote.NOTE_B:
+                    return previousNote.index + index
+                return previousNote.index + 1 + index
+            if previousNote.note == MusicalNote.NOTE_G:
+                if note in [MusicalNote.NOTE_A, MusicalNote.NOTE_B]:
+                    return previousNote.index + index
+                return previousNote.index + 1 + index
+            # C D E F
+            return previousNote.index + index
+                
+        else:
+            raise Exception("Shouldn't find a distance of " + str(distance) + " at this point")
+
+    def getNote(self, token, previousNote, includeDuration = True):
+        """
+            Get a note from the staff
+        """
+        noteStr = token.word
+        print "Getting a note from " + noteStr
+        if noteStr[0] == 'a':
+            note = MusicalNote.NOTE_A
+        elif noteStr[0] == 'b':
+            note = MusicalNote.NOTE_B
+        elif noteStr[0] == 'c':
+            note = MusicalNote.NOTE_C
+        elif noteStr[0] == 'd':
+            note = MusicalNote.NOTE_D
+        elif noteStr[0] == 'e':
+            note = MusicalNote.NOTE_E
+        elif noteStr[0] == 'f':
+            note = MusicalNote.NOTE_F
+        elif noteStr[0] == 'g':
+            note = MusicalNote.NOTE_G
+        else:
+            raise Exception("Unexpected note definition: " + token.toString())
+
+        alteration = 0
+        charIndex = 1
+        while charIndex + 2 <= len(noteStr):
+            # Could have an alteration
+            alterStr = noteStr[charIndex:charIndex+2]
+            if alterStr == 'es':
+                alteration -= 1
+            elif alterStr == 'is':
+                alteration += 1
+            else:
+                # Not an alteration
+                break
+            charIndex += 2
+        
+        index = 0
+        duration = None # Just in case
+        while charIndex < len(noteStr):
+            if noteStr[charIndex] == '\'':
+                index+=1
+            elif noteStr[charIndex] == ',':
+                index-=1
+            else:
+                # Only the duration is left
+                if not includeDuration:
+                    raise Exception("Unexpected note duration: " + token.toString())
+                duration = noteStr[charIndex:]
+                break
+            charIndex+=1
+        if includeDuration and duration == None:
+            duration = previousNote.duration
+        
+        index = self.getNoteIndex(note, index, previousNote)
+        if includeDuration:
+            return MusicalNote(note, alteration, index, duration)
+        else:
+            return MusicalNote(note, alteration, index)
+        
+
+    def getChord(self, tokens, tokenIndex):
+        if tokens[tokenIndex] != '<':
+            raise Exception("Found an unexpected chord starter: " + tokens[tokenIndex].toString())
+        # Have to get the notes till we find a chord closer (>)
+        notes = []
+        tokenIndex += 1
+        previousNote = None
+        while True:
+            token = tokens[tokenIndex]
+            if token.word[0] == '>':
+                # Closing chord....
+                if len(notes) > 0:
+                    # Does the chord have a duration?
+                    if len(token.word) > 1:
+                        duration = token.word[1:]
+                    else:
+                        duration = self.lastDuration
+                    self.events.append(MusicalChord(notes, duration))
+                return tokenIndex
+            # add a new note
+            note = self.getNoteFromChord(token, previousNote)
+            notes.append()
+            tokenIndex+=1 #next token
+
+    def getNoteFromChord(self, token, previousNote):
+        """
+            Get a note that belongs to a chord
+            Previous note can be None if it's the first note of a chord
+        """
+        noteStr = token.word
+        if noteStr[0] == 'a':
+            note = MusicalNote.NOTE_A
+        elif noteStr[0] == 'b':
+            note = MusicalNote.NOTE_B
+        elif noteStr[0] == 'c':
+            note = MusicalNote.NOTE_C
+        elif noteStr[0] == 'd':
+            note = MusicalNote.NOTE_D
+        elif noteStr[0] == 'e':
+            note = MusicalNote.NOTE_E
+        elif noteStr[0] == 'f':
+            note = MusicalNote.NOTE_F
+        elif noteStr[0] == 'g':
+            note = MusicalNote.NOTE_G
+        else:
+            raise Exception("Unexpected note in chord: " + token)
+
+        alteration = 0
+        charIndex = 1
+        while charIndex + 2 <= len(noteStr):
+            # Could have an alteration
+            alterStr = noteStr[charIndex:charIndex+2]
+            if alterStr == 'es':
+                alteration -= 1
+            elif alterStr == 'is':
+                alteration += 1
+            else:
+                # Not an alteration
+                break
+            charIndex += 2
+        
+        index = 0
+        # TODO Finish the process
+            
         
     def getStaffFromTokens(self, tokens, tokenIndex):
         """ Nothing yet """
@@ -372,7 +579,8 @@ class LilypondStaff:
             elif token == '\\bar':
                 tokenIndex += 1 # Just a bar
             else:
-                print "Token inside of staff: " + token
+                # It must be a note
+                tokenIndex = self.getMusicalEvent(tokens, tokenIndex)
 
             tokenIndex += 1
         
