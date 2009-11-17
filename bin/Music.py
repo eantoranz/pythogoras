@@ -24,14 +24,18 @@ class MusicalNote:
         self.duration = None
         self.dotted = False
         if duration != None:
-            # Can be a number (1, 2, 4, 8, 16, 32, 64) or a number followed by a dot
-            pos = str(duration).find('.')
-            if pos != -1:
-                # dotted
-               self.duration = int(duration[0:pos - 1])
-               self.dotted = True
-            else:
-               self.duration = int(duration)
+            self.setDuration(duration)
+
+    def setDuration(self, duration):
+        # Can be a number (1, 2, 4, 8, 16, 32, 64) or a number followed by a dot
+        pos = str(duration).find('.')
+        if pos != -1:
+            # dotted
+            self.duration = int(duration[0:pos - 1])
+            self.dotted = True
+        else:
+           self.duration = int(duration)
+        
 
     # Will return a tuple. index 0 is diatonic and index 1 is chromatic
     def getDistance(self, note2):
@@ -128,13 +132,16 @@ class MusicalNote:
 class MusicalChord:
 
     def __init__(self, notes, duration):
-        self.duration = duration
         self.notes = notes
         for note in notes:
-            note.duration = duration
+            note.setDuration(duration)
 
     def toString(self):
-        temp = "Chord. Duration: " + self.duration  + " Notes: "
+        temp = "Chord. Duration: " + str(self.notes[0].duration)
+        if self.notes[0].dotted:
+            temp += '.'
+        temp += " Notes: "
+
         firstNote = True
         for note in self.notes:
             if firstNote:
@@ -143,6 +150,12 @@ class MusicalChord:
                 temp += " "
             temp += note.toString(False)
         return temp
+
+    def getDuration(self):
+        return self.notes[0].duration
+
+    def isDotted(self):
+        return self.notes[0].dotted
         
 class MusicalKey:
 

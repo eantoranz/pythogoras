@@ -39,6 +39,20 @@ class LilypondChordPlayer:
         """
             A chord player
         """
+        # Create a number of note players and that's it
+        self.players = []
+        for note in chord.notes:
+            self.players.append(LilypondNotePlayer(beatsPerMinute, beatUnit, tuningSystem, note, samplingRate))
+        self.length = len(self.players)
+
+    def getNextValue(self):
+        accumulator = 0
+        for player in self.players:
+            accumulator += player.getNextValue()
+        return int(accumulator / self.length)
+
+    def finished(self):
+        return self.players[0].finished()
 
 class LilypondStaffPlayer:
 
@@ -85,6 +99,17 @@ class LilypondStaffPlayer:
         if self.eventPlayer.finished():
             self.eventPlayer = None # Have to get the next event
         return temp
+
+class LilypondSystemPlayer:
+    """
+        Class that can play a system instead of just a staff
+    """
+
+    def __init__(self, beatsPerMinute, tuningSystem, samplingRate = 44100):
+        self.beatsPerMinute = beatsPerMinute
+        self.tuningSystem = tuningSystem
+        self.samplingRate = samplingRate
+
 
 class LilypondPlayer:
     """
