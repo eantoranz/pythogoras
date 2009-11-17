@@ -306,7 +306,7 @@ class LilypondStaff:
         token = tokens[tokenIndex].word
         if token == '<':
             # It's a chord
-            return self.getChord(tokens, tokenIndex) # Will return the position of the closing <
+            return self.getChord(tokens, tokenIndex) # Will return the position of the closing >
         else:
             # It's a single note
             self.lastReferenceNote = self.getNote(tokens[tokenIndex], self.lastReferenceNote)
@@ -424,12 +424,12 @@ class LilypondStaff:
         
 
     def getChord(self, tokens, tokenIndex):
-        if tokens[tokenIndex] != '<':
+        if tokens[tokenIndex].word != '<':
             raise Exception("Found an unexpected chord starter: " + tokens[tokenIndex].toString())
         # Have to get the notes till we find a chord closer (>)
         notes = []
         tokenIndex += 1
-        previousNote = None
+        previousNote = self.lastReferenceNote
         while True:
             token = tokens[tokenIndex]
             if token.word[0] == '>':
@@ -441,53 +441,14 @@ class LilypondStaff:
                     else:
                         duration = self.lastDuration
                     self.events.append(MusicalChord(notes, duration))
+                    self.lastReferenceNote = notes[0]
                 return tokenIndex
             # add a new note
-            note = self.getNoteFromChord(token, previousNote)
-            notes.append()
+            note = self.getNote(tokens[tokenIndex], previousNote, False)
+            previousNote = note # For the calculation of the next node
+            notes.append(note)
             tokenIndex+=1 #next token
 
-    def getNoteFromChord(self, token, previousNote):
-        """
-            Get a note that belongs to a chord
-            Previous note can be None if it's the first note of a chord
-        """
-        noteStr = token.word
-        if noteStr[0] == 'a':
-            note = MusicalNote.NOTE_A
-        elif noteStr[0] == 'b':
-            note = MusicalNote.NOTE_B
-        elif noteStr[0] == 'c':
-            note = MusicalNote.NOTE_C
-        elif noteStr[0] == 'd':
-            note = MusicalNote.NOTE_D
-        elif noteStr[0] == 'e':
-            note = MusicalNote.NOTE_E
-        elif noteStr[0] == 'f':
-            note = MusicalNote.NOTE_F
-        elif noteStr[0] == 'g':
-            note = MusicalNote.NOTE_G
-        else:
-            raise Exception("Unexpected note in chord: " + token)
-
-        alteration = 0
-        charIndex = 1
-        while charIndex + 2 <= len(noteStr):
-            # Could have an alteration
-            alterStr = noteStr[charIndex:charIndex+2]
-            if alterStr == 'es':
-                alteration -= 1
-            elif alterStr == 'is':
-                alteration += 1
-            else:
-                # Not an alteration
-                break
-            charIndex += 2
-        
-        index = 0
-        # TODO Finish the process
-            
-        
     def getStaffFromTokens(self, tokens, tokenIndex):
         """ Nothing yet """
         if tokens[tokenIndex+1].word != '\\relative':
