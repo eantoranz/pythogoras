@@ -6,13 +6,28 @@
 
 import sys
 from Wave import Wave
+import os
 
 class WavePlayer:
 
-    def __init__(self, samplingRate = 44100, debug = False):
+    def __init__(self, samplingRate = 44100, outputStream = None, debug = False):
         self.samplingRate = samplingRate
         self.volume=1
         self.debug = debug
+        self.outputStream = outputStream
+        self.pcm = None
+
+        if outputStream == None:
+            if debug:
+                sys.stderr.write("Trying to open sound output\n")
+            if os.name == 'posix':
+                if debug:
+                    sys.stderr.println("Trying to access alsa\n")
+                import alsaaudio
+                self.pcm = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK)
+                self.pcm.setrate(samplingRate)
+                self.pcm.setchannels(2)
+                self.pcm.setformat(alsaaudio.PCM_FORMAT_S16_BE)
 
     def setVolume(self, volume):
         if volume > 1:
@@ -37,9 +52,13 @@ class WavePlayer:
         if rightChannel < 0:
             rightChannel = rightChannel ^ 0xffff + 1
 
-        sys.stdout.write("%(c1)c%(c2)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff})
+        if self.outputStream == None:
+            # PCM
+            self.pcm.write("%(c1)c%(c2)c%(c3)c%(c4)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff, 'c3' : leftChannel >> 8 & 0xff, 'c4' : leftChannel & 0xff})
+        else:
+            self.outputStream.write("%(c1)c%(c2)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff})
 
-        sys.stdout.write("%(c1)c%(c2)c" % {'c1' : rightChannel >> 8 & 0xff, 'c2' : rightChannel & 0xff})
+            self.outputStream.write("%(c1)c%(c2)c" % {'c1' : rightChannel >> 8 & 0xff, 'c2' : rightChannel & 0xff})
 
 if __name__ == "__main__":
     import math
