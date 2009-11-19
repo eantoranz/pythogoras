@@ -7,6 +7,8 @@
 import sys
 from Wave import Wave
 import os
+from threading import Thread
+from time import *
 
 class WavePlayer:
 
@@ -30,6 +32,7 @@ class WavePlayer:
                 self.pcm.setchannels(2)
                 self.pcm.setformat(alsaaudio.PCM_FORMAT_S16_BE)
                 self.pcmBuffer = ""
+                self.alsaHandler = AlsaHandler(self.pcm)
 
     def setVolume(self, volume):
         if volume > 1:
@@ -59,13 +62,38 @@ class WavePlayer:
             self.pcmBuffer += "%(c1)c%(c2)c%(c3)c%(c4)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff, 'c3' : rightChannel >> 8 & 0xff, 'c4' : rightChannel & 0xff}
             if len(self.pcmBuffer)  >= self.samplingRate * 4:
                 print "Ready to write data"
-                self.pcm.write(self.pcmBuffer)
-                print "Wrote data successfully"
+                aNow=time()
+                self.alsaHandler.write(self.pcmBuffer)
+                print "Wrote data successfully in " + str(time() - aNow) + " secs"
                 self.pcmBuffer = ""
         else:
             self.outputStream.write("%(c1)c%(c2)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff})
 
             self.outputStream.write("%(c1)c%(c2)c" % {'c1' : rightChannel >> 8 & 0xff, 'c2' : rightChannel & 0xff})
+
+class AlsaHandler:
+
+    def __init__(self, pcm):
+        self.pcm = pcm
+        self.thread = None
+
+    def write(self, data):
+        if self.thread != None:
+          while self.thread.isAlive():
+            # Have to wait for it to finish
+            None
+        self.thread = AlsaThread(self.pcm, data)
+        self.thread.start()
+
+class AlsaThread(Thread):
+
+    def __init__(self, pcm, data):
+        Thread.__init__(self)
+        self.pcm = pcm
+        self.data = data
+
+    def run(self):
+        self.pcm.write(self.data)
 
 if __name__ == "__main__":
     import math
