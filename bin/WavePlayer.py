@@ -24,9 +24,9 @@ class WavePlayer:
                 if debug:
                     sys.stderr.println("Trying to access alsa\n")
                 import alsaaudio
-                self.pcm = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK, alsaaudio.PCM_NONBLOCK)
+                self.pcm = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK, alsaaudio.PCM_NORMAL)
                 self.pcm.setrate(samplingRate)
-                self.pcm.setperiodsize(samplingRate / 5)
+                self.pcm.setperiodsize(samplingRate)
                 self.pcm.setchannels(2)
                 self.pcm.setformat(alsaaudio.PCM_FORMAT_S16_BE)
                 self.pcmBuffer = ""
@@ -57,8 +57,10 @@ class WavePlayer:
         if self.outputStream == None:
             # PCM
             self.pcmBuffer += "%(c1)c%(c2)c%(c3)c%(c4)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff, 'c3' : rightChannel >> 8 & 0xff, 'c4' : rightChannel & 0xff}
-            if len(self.pcmBuffer)  >= self.samplingRate * 4 / 5:
+            if len(self.pcmBuffer)  >= self.samplingRate * 4:
+                print "Ready to write data"
                 self.pcm.write(self.pcmBuffer)
+                print "Wrote data successfully"
                 self.pcmBuffer = ""
         else:
             self.outputStream.write("%(c1)c%(c2)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff})
