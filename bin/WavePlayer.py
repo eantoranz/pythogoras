@@ -28,7 +28,7 @@ class WavePlayer:
                 import alsaaudio
                 self.pcm = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK, alsaaudio.PCM_NORMAL)
                 self.pcm.setrate(samplingRate)
-                self.pcm.setperiodsize(samplingRate)
+                self.pcm.setperiodsize(samplingRate / 5)
                 self.pcm.setchannels(2)
                 self.pcm.setformat(alsaaudio.PCM_FORMAT_S16_BE)
                 self.pcmBuffer = ""
@@ -60,11 +60,9 @@ class WavePlayer:
         if self.outputStream == None:
             # PCM
             self.pcmBuffer += "%(c1)c%(c2)c%(c3)c%(c4)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff, 'c3' : rightChannel >> 8 & 0xff, 'c4' : rightChannel & 0xff}
-            if len(self.pcmBuffer)  >= self.samplingRate * 4:
-                print "Ready to write data"
+            if len(self.pcmBuffer)  >= self.samplingRate * 4 / 5:
                 aNow=time()
                 self.alsaHandler.write(self.pcmBuffer)
-                print "Wrote data successfully in " + str(time() - aNow) + " secs"
                 self.pcmBuffer = ""
         else:
             self.outputStream.write("%(c1)c%(c2)c" % {'c1' : leftChannel >> 8 & 0xff, 'c2' : leftChannel & 0xff})
@@ -106,12 +104,12 @@ if __name__ == "__main__":
         sys.exit(1)
     elif argc == 2:
         # Provided a single frequency for both channels
-        leftChannel = Wave(float(sys.argv[1]))
+        leftChannel = Wave(float(sys.argv[1]), 11025)
     else:
-        leftChannel = Wave(float(sys.argv[1]))
-        rightChannel = Wave(float(sys.argv[2]))
+        leftChannel = Wave(float(sys.argv[1]), 11025)
+        rightChannel = Wave(float(sys.argv[2]), 11025)
     
-    player = WavePlayer()
+    player = WavePlayer(11025)
     while True:
         leftHeight = leftChannel.getNextValue()
         if rightChannel == None:
