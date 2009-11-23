@@ -96,6 +96,14 @@ class LilypondStaffPlayer:
                     elif isinstance(self.event, MusicalChord):
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
+                    elif isinstance(self.event, MusicalKey):
+                        # If it's just system, have to change it
+                        if isinstance(self.tuningSystem, JustSystem):
+                            # Frequency of the new base note under the actual tuning system
+                            newBaseNote = MusicalNote(self.event.note, self.event.alteration, 4)
+                            newBaseFreq = self.tuningSystem.getFrequency(newBaseNote)
+                            sys.stderr.write("Modulating to " + newBaseNote.toString() + " set to " + str(newBaseFreq) + "\n")
+                            self.tuningSystem = JustSystem(self.event.note, self.event.alteration, newBaseFreq)
                 else:
                     break
             if self.eventCounterIndex >= len(self.staff.events):
