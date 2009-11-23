@@ -170,8 +170,11 @@ class LilypondStaff:
             return self.getChord(tokens, tokenIndex) # Will return the position of the closing >
         else:
             # It's a single note
-            self.lastReferenceNote = self.getNote(tokens[tokenIndex], self.lastReferenceNote)
-            self.events.append(self.lastReferenceNote)
+            note = self.getNote(tokens[tokenIndex], self.lastReferenceNote)
+            if note.note not in [None, 0]:
+                # It's not a rest
+                self.lastReferenceNote = note
+            self.events.append(note)
             return tokenIndex # return the same index
 
     def getNoteIndex(self, note, index, previousNote):
@@ -183,7 +186,7 @@ class LilypondStaff:
         # previous note
         if previousNote.note == note:
             return index + previousNote.index
-        # Notes are digferent
+        # Notes are different
         distance = previousNote.getDistance(MusicalNote(note, 0, previousNote.index))
         # Distance to the note with the same index of the previous note
         distance = distance[0] # Only care about diatonic semitones
@@ -280,6 +283,9 @@ class LilypondStaff:
 
         if previousNote == None:
             index = index + 3
+        elif note == None:
+            # It's a rest
+            return MusicalNote(0, 0, previousNote.index, duration)
         else:
             index = self.getNoteIndex(note, index, previousNote)
         if includeDuration:
