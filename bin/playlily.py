@@ -35,7 +35,7 @@ class LilypondNotePlayer:
         if self.volumeRate == None:
             if self.totalSamples - self.counter <= self.samplingRate * 0.05:
                 # Have to calculate a volume rate
-                self.volumeRate = math.exp(math.log(0.01) / self.totalSamples -  self.counter)
+                self.volumeRate = math.exp(math.log(0.01) / (self.totalSamples -  self.counter))
         if self.volumeRate != None:
             self.wave.setVolume(self.volume * self.volumeRate)
 
