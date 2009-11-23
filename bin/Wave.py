@@ -25,6 +25,9 @@ class Wave:
         self.counter = 0
 
     def getNextValue(self):
+        if self.freq in [None, 0]:
+            return 0
+
         temp = int(math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue) * self.volume)
 
         self.counter+=1

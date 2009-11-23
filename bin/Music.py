@@ -18,6 +18,9 @@ class MusicalNote:
     NOTE_G = 7
 
     def __init__(self, note, alter, index, duration = None):
+        """
+            Create a new note. if note = None or zero, it's a rest
+        """
         self.note = note
         self.alter = alter
         self.index = index
@@ -222,6 +225,8 @@ class TemperedSystem(TuningSystem):
         return TemperedSystem.instance
 
     def getFrequency(self, note):
+        if note.note in [None, 0]:
+            return None
         distance = TuningSystem.A4.getDistance(note)
         return math.pow(2, float(distance[0] + distance[1]) / 12) * self.baseFreq
 
@@ -245,6 +250,8 @@ class PythagoreanSystem(TuningSystem):
         return PythagoreanSystem.instance
 
     def getFrequency(self, note):
+        if note.note in [None, 0]:
+            return None
         distance = TuningSystem.A4.getDistance(note)
         return self.A4Freq * math.pow(PythagoreanSystem.DIATONIC_NUMERATOR, distance[0]) / math.pow(PythagoreanSystem.DIATONIC_DENOMINATOR, distance[0]) \
             * math.pow(PythagoreanSystem.CHROMATIC_NUMERATOR, distance[1]) / math.pow(PythagoreanSystem.CHROMATIC_DENOMINATOR, distance[1])
@@ -275,6 +282,8 @@ class JustSystem(TuningSystem):
         sys.stderr.write("base freq for tuning system is " + str(self.baseFreq) + "\n")
 
     def getFrequency(self, note):
+        if note.note in [None, 0]:
+            return None
         # calculate the distance between the base sound and the note that was provided
         distance = self.baseNote.getDistance(note)
         # let's sum up both types of semitones to start working

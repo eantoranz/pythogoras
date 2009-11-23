@@ -240,22 +240,26 @@ class LilypondStaff:
             note = MusicalNote.NOTE_F
         elif noteStr[0] == 'g':
             note = MusicalNote.NOTE_G
+        elif noteStr[0] == 'r':
+            # Rest
+            note = None
         else:
             raise Exception("Unexpected note definition: " + token.toString())
 
         alteration = 0
         charIndex = 1
-        while charIndex + 2 <= len(noteStr):
-            # Could have an alteration
-            alterStr = noteStr[charIndex:charIndex+2]
-            if alterStr == 'es':
-                alteration -= 1
-            elif alterStr == 'is':
-                alteration += 1
-            else:
-                # Not an alteration
-                break
-            charIndex += 2
+        if note != None:
+            while charIndex + 2 <= len(noteStr):
+                # Could have an alteration
+                alterStr = noteStr[charIndex:charIndex+2]
+                if alterStr == 'es':
+                    alteration -= 1
+                elif alterStr == 'is':
+                    alteration += 1
+                else:
+                    # Not an alteration
+                    break
+                charIndex += 2
         
         index = 0
         duration = None # Just in case
