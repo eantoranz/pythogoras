@@ -139,18 +139,39 @@ class LilypondPlayer:
         Class that can play from a staff or a system
     """
 
-    def __init__(self, beatsPerMinute, tuningSystem, wavePlayer):
+    SYSTEM_EQUAL_TEMPERED = 1
+    SYSTEM_PYTHAGOREAN = 2
+    SYSTEM_JUST = 3
+
+    def __init__(self, beatsPerMinute, tuningSystem, baseFreq, wavePlayer):
         self.beatsPerMinute = beatsPerMinute
         self.wavePlayer = wavePlayer
         self.tuningSystem = tuningSystem
+        self.baseFreq = baseFreq
         self.samplingRate = wavePlayer.samplingRate
 
     def playSystem(self, system):
         """
             play from a lilypond system
         """
-        sys.stderr.write("Playing Lilypond system\n")
-        player = LilypondSystemPlayer(self.beatsPerMinute, self.tuningSystem, system, self.samplingRate)
+        player = None
+        if self.tuningSystem == LilypondPlayer.SYSTEM_EQUAL_TEMPERED:
+            if self.baseFreq == None:
+                self.baseFreq = TuningSystem.FREQ_A4
+            player = LilypondSystemPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), system, self.samplingRate)
+        elif self.tuningSystem == LilypondPlayer.SYSTEM_PYTHAGOREAN:
+            if self.baseFreq == None:
+                self.baseFreq = TuningSystem.FREQ_A4
+            player = LilypondSystemPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), system, self.samplingRate)
+        elif self.tuningSystem == LilypondPlayer.SYSTEM_JUST:
+            sys.stderr.write("Can't play using just system yet\n")
+            sys.stderr.flush()
+            sys.exit(1)
+        else:
+            sys.stderr.write("Don't know what tuning system to use to play lilypond file\n")
+            sys.stderr.flush()
+            sys.exit(1)
+
         while not player.isFinished():
             self.wavePlayer.play(player.getNextValue())
         sys.stderr.write("Finished playing system\n")
@@ -161,7 +182,23 @@ class LilypondPlayer:
         """
             Play from a staff
         """
-        player = LilypondStaffPlayer(self.beatsPerMinute, self.tuningSystem, staff, self.samplingRate)
+        player = None
+        if self.tuningSystem == LilypondPlayer.SYSTEM_EQUAL_TEMPERED:
+            if self.baseFreq == None:
+                self.baseFreq = TuningSystem.FREQ_A4
+            player = LilypondStaffPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), system, self.samplingRate)
+        elif self.tuningSystem == LilypondPlayer.SYSTEM_PYTHAGOREAN:
+            if self.baseFreq == None:
+                self.baseFreq = TuningSystem.FREQ_A4
+            player = LilypondStaffPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), system, self.samplingRate)
+        elif self.tuningSystem == LilypondPlayer.SYSTEM_JUST:
+            sys.stderr.write("Can't play using just system yet\n")
+            sys.stderr.flush()
+            sys.exit(1)
+        else:
+            sys.stderr.write("Don't know what tuning system to use to play lilypond file\n")
+            sys.stderr.flush()
+            sys.exit(1)
         while not player.finished:
             self.wavePlayer.play(player.getNextValue())
         sys.stderr.write("Finished playing\n")
@@ -187,11 +224,14 @@ def main(argv):
 
     speed = int(argv[1])
     system = None
+    baseFreq = None
     fileName = None
 
     if argv[2] == "p":
         system = argv
         # pythagorean
+        # Let's create the tuning system
+        system = LilypondPlayer.SYSTEM_PYTHAGOREAN
         # was the frequency for A4 specified?
         baseFreq = 440
         try:
@@ -201,58 +241,21 @@ def main(argv):
         except:
             # probably frequency wasn't provided
             fileName = argv[3]
-        # Let's create the tuning system
-        system = PythagoreanSystem(baseFreq)
     elif argv[2] == "j":
         # Just.... have to provide the key note
-        keyNoteStr = argv[3].lower()
-        keyNote = None
-        alteration = 0
-        if keyNoteStr[0] == "a":
-            keyNote = MusicalNote.NOTE_A
-        elif keyNoteStr[0] == "b":
-            keyNote = MusicalNote.NOTE_B
-        elif keyNoteStr[0] == "c":
-            keyNote = MusicalNote.NOTE_C
-        elif keyNoteStr[0] == "d":
-            keyNote = MusicalNote.NOTE_D
-        elif keyNoteStr[0] == "e":
-            keyNote = MusicalNote.NOTE_E
-        elif keyNoteStr[0] == "f":
-            keyNote = MusicalNote.NOTE_F
-        elif keyNoteStr[0] == "g":
-            keyNote = MusicalNote.NOTE_G
-        if keyNote == None:
-            sys.stderr.write("Didn't provide a valid base key note\n")
-            sys.exit(1)
-        if len(keyNoteStr) > 1:
-            # Also we have an alteration
-            alterChar = keyNoteStr[1]
-            difference = 0
-            if alterChar == 'b':
-                difference = -1
-            elif alterChar == '#':
-                difference = 1
-            else:
-                sys.stderr.write("Invalid alteration char. Use b or #\n")
-                sys.exit(1)
-            i = 1
-            while i < len(keyNoteStr):
-                if keyNoteStr[i] != alterChar:
-                    sys.stderr.write("Changed alteration char at index " + str(i + 1) + "\n")
-                    sys.exit(1)
-                alteration += difference
-                i+=1
-        system = JustSystem(keyNote, alteration)
-        fileName = argv[4]
+        system = LilypondPlayer.SYSTEM_JUST
+        try:
+            baseFreq = int(argv[3])
+            fileName = argv[4]
+        except:
+            fileName = argv[3]
     else:
         # Tempered System
+        system = LilypondPlayer.SYSTEM_EQUAL_TEMPERED
         try:
             baseFreq = int(argv[2])
-            system = TemperedSystem(baseFreq)
             fileName = argv[3]
         except:
-            system = TemperedSystem.getInstance()
             fileName = argv[2]
 
     if fileName == None:
@@ -267,7 +270,8 @@ def main(argv):
     analyser.analyseFile(file(fileName))
     sys.stderr.write("Finished analyzing file\n")
 
-    lilyPlayer = LilypondPlayer(speed, system, WavePlayer(11025))
+    sys.stderr.write("Playing with base freq " + str(baseFreq) + "\n")
+    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(11025))
     systems = analyser.systems
     if len(systems) > 0:
         # Have to play the systems
