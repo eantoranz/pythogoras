@@ -107,11 +107,17 @@ class LilypondStaff:
         self.relative = False # Don't know how to read non relative parts, but anyway
 
         self.firstTimeMarker = None
+        self.firstKey = None # First key of the staff
 
     def getFirstTimeMarker(self):
         if self.firstTimeMarker == None:
             return LilypondTimeMarker(4, 4)
         return self.firstTimeMarker
+
+    def getFirstKey(self):
+        if self.firstKey == None:
+            return MusicalKey(MusicalNote.NOTE_C, 0, True) # return C major
+        return self.firstKey
 
     def getStaffKey(self, tokens, tokenIndex):
         """
@@ -156,7 +162,10 @@ class LilypondStaff:
         else:
             raise Exception("Unexpected tonality definition: " + majorStr)
 
-        self.events.append(MusicalKey(note, alteration, major))
+        event = MusicalKey(note, alteration, major)
+        if self.firstKey == None:
+            self.firstKey = event
+        self.events.append(event)
         return tokenIndex + 2
 
     def getMusicalEvent(self, tokens, tokenIndex):

@@ -271,15 +271,17 @@ class JustSystem(TuningSystem):
         [16, 9], # MINOR_SEVENTH
         [15, 8]] # MAJOR_SEVENTH
 
-    def __init__(self, note, alteration):
+    def __init__(self, note, alteration, baseFreq = None):
         # right now, can only use major scales to tune
         self.note = note
         self.alteration = alteration
         self.baseNote = MusicalNote(note, alteration, 4)
         pytha = PythagoreanSystem.getInstance()
         # find the frequency of the base sound between C4 and B4
-        self.baseFreq = pytha.getFrequency(self.baseNote)
-        sys.stderr.write("base freq for tuning system is " + str(self.baseFreq) + "\n")
+        if baseFreq == None:
+            self.baseFreq = pytha.getFrequency(self.baseNote)
+        else:
+            self.baseFreq = baseFreq
 
     def getFrequency(self, note):
         if note.note in [None, 0]:

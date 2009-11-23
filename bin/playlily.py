@@ -164,9 +164,8 @@ class LilypondPlayer:
                 self.baseFreq = TuningSystem.FREQ_A4
             player = LilypondSystemPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), system, self.samplingRate)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_JUST:
-            sys.stderr.write("Can't play using just system yet\n")
-            sys.stderr.flush()
-            sys.exit(1)
+            key = system.staffs[0].getFirstKey()
+            player = LilypondSystemPlayer(self.beatsPerMinute, JustSystem(key.note, key.alteration, self.baseFreq), system, self.samplingRate)
         else:
             sys.stderr.write("Don't know what tuning system to use to play lilypond file\n")
             sys.stderr.flush()
@@ -186,15 +185,14 @@ class LilypondPlayer:
         if self.tuningSystem == LilypondPlayer.SYSTEM_EQUAL_TEMPERED:
             if self.baseFreq == None:
                 self.baseFreq = TuningSystem.FREQ_A4
-            player = LilypondStaffPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), system, self.samplingRate)
+            player = LilypondStaffPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), staff, self.samplingRate)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_PYTHAGOREAN:
             if self.baseFreq == None:
                 self.baseFreq = TuningSystem.FREQ_A4
-            player = LilypondStaffPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), system, self.samplingRate)
+            player = LilypondStaffPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), staff, self.samplingRate)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_JUST:
-            sys.stderr.write("Can't play using just system yet\n")
-            sys.stderr.flush()
-            sys.exit(1)
+            key = staff.getFirstKey()
+            player = LilypondStaffPlayer(self.beatsPerMinute, JustSystem(key.note, key.alteration, self.baseFreq), staff, self.samplingRate)
         else:
             sys.stderr.write("Don't know what tuning system to use to play lilypond file\n")
             sys.stderr.flush()
