@@ -18,6 +18,7 @@ class LilypondNotePlayer:
     def __init__(self, beatsPerMinute, beatUnit, tuningSystem, note, samplingRate = 44100):
         self.note = note
         self.volume = 1 # Full colume for starters
+        self.samplingRate = samplingRate
         # How many samples will I have to play?
         self.totalSamples = int(beatUnit * samplingRate * 60 / (note.duration * beatsPerMinute))
         if note.dotted:
@@ -25,9 +26,19 @@ class LilypondNotePlayer:
         self.frequency = tuningSystem.getFrequency(note)
         self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
         self.counter = 0
+        self.volumeRate = None
     
     def getNextValue(self):
         self.counter+=1
+
+        # Do we have to lower the volume?
+        if self.volumeRate == None:
+            if self.totalSamples - self.counter <= self.samplingRate * 0.05:
+                # Have to calculate a volume rate
+                self.volumeRate = math.exp(math.log(0.01) / self.totalSamples -  self.counter)
+        if self.volumeRate != None:
+            self.wave.setVolume(self.volume * self.volumeRate)
+
         return self.wave.getNextValue()
 
     def finished(self):
