@@ -24,7 +24,7 @@ class WavePlayer:
                 sys.stderr.write("Trying to open sound output\n")
             if os.name == 'posix':
                 if debug:
-                    sys.stderr.println("Trying to access alsa\n")
+                    sys.stderr.write("Trying to access alsa\n")
                 import alsaaudio
                 self.pcm = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK, alsaaudio.PCM_NORMAL)
                 self.pcm.setrate(samplingRate)
@@ -33,6 +33,8 @@ class WavePlayer:
                 self.pcm.setformat(alsaaudio.PCM_FORMAT_S16_BE)
                 self.pcmBuffer = ""
                 self.alsaHandler = AlsaHandler(self.pcm)
+            else:
+                print "Unknown OS: " + os.name
 
     def setVolume(self, volume):
         if volume > 1:

@@ -231,7 +231,8 @@ def main(argv):
     speed = int(argv[1])
     system = None
     baseFreq = None
-    fileName = None
+    inputFile = None
+    outputFile = None
 
     if argv[2] == "p":
         system = argv
@@ -243,41 +244,68 @@ def main(argv):
         try:
             baseFreq = int(argv[3])
             if argc >= 3:
-                fileName = argv[4]
+                inputFile = argv[4]
+                try:
+                    outputFile = argv[5]
+                except:
+                    None
         except:
             # probably frequency wasn't provided
-            fileName = argv[3]
+            inputFile = argv[3]
+            try:
+                outputFile = argv[4]
+            except:
+                None
     elif argv[2] == "j":
         # Just.... have to provide the key note
         system = LilypondPlayer.SYSTEM_JUST
         try:
             baseFreq = int(argv[3])
-            fileName = argv[4]
+            inputFile = argv[4]
+            outputFile = argv[5]
         except:
-            fileName = argv[3]
+            inputFile = argv[3]
+            try:
+                outputFile = argv[4]
+            except:
+                None
     else:
         # Tempered System
         system = LilypondPlayer.SYSTEM_EQUAL_TEMPERED
         try:
             baseFreq = int(argv[2])
-            fileName = argv[3]
+            inputFile = argv[3]
+            try:
+                outputFile = argv[4]
+            except:
+                None
         except:
-            fileName = argv[2]
+            inputFile = argv[2]
+            try:
+                outputFile = argv[3]
+            except:
+                None
 
-    if fileName == None:
+    if inputFile == None:
         sys.stderr.write("Didn't provide any file name to play\n")
         sys.stderr.flush()
         sys.exit(1)
     
-    sys.stderr.write("reading file " + fileName + "\n")
+    if outputFile != None:
+        if outputFile == '-':
+            outputFile = sys.stdout
+        else:
+            # The user asked to write on a real file
+            outputFile = open(outputFile, 'w')
+    
+    sys.stderr.write("reading file " + inputFile + "\n")
     
     # Create a lilypond analyser
     analyser = lilypy.LilypondAnalyser()
-    analyser.analyseFile(file(fileName))
+    analyser.analyseFile(file(inputFile))
     sys.stderr.write("Finished analyzing file\n")
 
-    sys.stderr.write("Playing with base freq " + str(baseFreq) + "\n")
-    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(11025))
+    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(11025, outputFile))
     systems = analyser.systems
     if len(systems) > 0:
         # Have to play the systems
