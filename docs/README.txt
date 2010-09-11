@@ -40,8 +40,10 @@ playlily.py:
             Ex: ./playmidi.py 441 lilypond-file.ly
 
         If you provide an additional pcm file argument to the execution, signed 16-bit 11.25-Khtz Stereo output
-            will be saved to said file.
+        will be saved to said file.
             Ex: ./playmidi.py lilypond-file.ly output-file.pcm
+        If the file defined is -, the output will be sent to standard input (to be sent to an encoder like oggenc, for example).
+            Ex: ./playmidi.py lilypond-file.ly - | oggenc -r -R 11250 --raw-endianness=1 -o lilypond-file.ogg -
 
 playmidi.py:
     With this application you could play midi files.
