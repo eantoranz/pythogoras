@@ -423,17 +423,29 @@ class LilypondAnalyser:
             lineCounter += 1
             token = "" # Starting a line, word is empty
             posCounter=0
+            comment = False
             for char in line:
+                if comment:
+                    continue
                 posCounter+=1
                 if char == " " or char == "\t":
                     # space or tab
                     if len(token) > 0:
                         # there is something in the token
+                        if token[0] == '%':
+                            comment = True
+                            token = ""
+                            continue
                         self.tokens.append(LilypondToken(token, lineCounter, posCounter - len(token)))
                         token = ""
                 elif char == "\n":
                     # end of line
                     if len(token) > 0:
+                        if token[0] == '%':
+                            # nevermind what the line says from now on
+                            comment = True
+                            token = ""
+                            continue
                         self.tokens.append(LilypondToken(token, lineCounter, posCounter - len(token)))
                         # Don't have to reset... it will be done when starting the next line
                         token = ""

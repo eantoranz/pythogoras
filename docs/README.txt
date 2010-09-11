@@ -31,14 +31,17 @@ playlily.py:
         In order to play a file, you have to provide the speed at which a measurement unit will be played (in beats per minute).
         Then you can provide the system you want to use to play it
         Pythagorean: specify a p and optionally the base frequency of A4
-            Ex: playmidi.py p 442 lilypond-file.ly
+            Ex: ./playmidi.py p 442 lilypond-file.ly
         Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).
             Optionally set the base freq of the base note of the key
-            Ex: playmidi.py j Bb lilypond-file.ly
-            Ex: playmidi.py j A 442 lilypond-file.ly
+            Ex: ./playmidi.py j Bb lilypond-file.ly
+            Ex: ./playmidi.py j A 442 lilypond-file.ly
         If you want to use tempered system, don't specify anything. Optionally the freq of A4
-            Ex: playmidi.py 441 lilypond-file.ly
+            Ex: ./playmidi.py 441 lilypond-file.ly
 
+        If you provide an additional pcm file argument to the execution, signed 16-bit 11.25-Khtz Stereo output
+            will be saved to said file.
+            Ex: ./playmidi.py lilypond-file.ly output-file.pcm
 
 playmidi.py:
     With this application you could play midi files.
@@ -46,14 +49,13 @@ playmidi.py:
     Usage:
         In order to play a file, you can provide the system you want to use to play it
         Pythagorean: specify a p and optionally the base frequency of A4
-            Ex: playmidi.py p 442 midi-file.mid
+            Ex: ./playmidi.py p 442 midi-file.mid
         Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).
             Optionally set the base freq of the base note of the key
-            Ex: playmidi.py j Bb midi-file.mid
-            Ex: playmidi.py j A 442 midi-file.mid
+            Ex: ./playmidi.py j Bb midi-file.mid
+            Ex: ./playmidi.py j A 442 midi-file.mid
         If you want to use tempered system, don't specify anything. Optionally the freq of A4
-            Ex: playmidi.py 441 midi-file.mid
+            Ex: ./playmidi.py 441 midi-file.mid
 
 Edmundo Carmona Antoranz <eantoranz at gmail dot com>
 Bogota, Colombia
-Sept 11th, 2010
