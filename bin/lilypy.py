@@ -346,7 +346,7 @@ class LilypondStaff:
         self.lastReferenceNote.duration='4'
 
         # Now a { must come
-        if tokens[tokenIndex+3].word != "{":
+        if tokens[tokenIndex + 3].word != "{":
             tokens[tokenIndex + 3].raiseException("Unexpected staff opening");
 
         # Now we start processing the things that come inside of the staff
@@ -436,9 +436,12 @@ class LilypondAnalyser:
                     if len(token) > 0:
                         self.tokens.append(LilypondToken(token, lineCounter, posCounter - len(token)))
                         # Don't have to reset... it will be done when starting the next line
+                        token = ""
                 else:
                     # any other character
                     token += char
+            if len(token) != 0:
+                self.tokens.append(LilypondToken(token, lineCounter, posCounter - len(token)))
 
 
     def analyseFile(self, aFile):
