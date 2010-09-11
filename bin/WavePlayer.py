@@ -102,7 +102,7 @@ if __name__ == "__main__":
     leftChannel = None
     rightChannel = None
     if argc == 1:
-        print "Have to provide either a single frequency to play or a frequency for each channel (left first)"
+        print "Have to provide either a single frequency to play or a frequency for each channel (left channel first)"
         sys.exit(1)
     elif argc == 2:
         # Provided a single frequency for both channels

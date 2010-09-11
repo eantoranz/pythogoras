@@ -1,0 +1,4 @@
+Things to do:
+
+- Improve lilypond parser so that more complex lilypond files can be played
+- Improve midi playing capabilities

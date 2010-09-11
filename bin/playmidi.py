@@ -332,11 +332,16 @@ def main(argv):
         index += 1
         sys.stderr.write("Track " + str(index) + " has " + str(len(track.events)) + " events\n")
 
-    sys.stderr.write("Let's process all the events\n")
+    sys.stderr.write("Let's process all the events (this can take a while)...")
     eventList = EventList()
+    counter = 0
     for track in midiFile.tracks:
         for event in track.events:
             eventList.addEvent(event)
+            counter += 1
+            if counter % 100 == 0:
+                sys.stderr.write(".")
+    sys.stderr.write("done!\n")
 
     # let's reproduce the file
     sys.stderr.write("Starting to play file\n")
