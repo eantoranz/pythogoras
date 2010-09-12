@@ -24,26 +24,26 @@ WavePlayer:
             should be interesting:
                 ./WavePlayer.py 440 -440
 
-playlily.py:
+lilyplay.py:
     With this application, you could play (simple) lilypond files.
 
     Usage:
         In order to play a file, you have to provide the speed at which a measurement unit will be played (in beats per minute).
         Then you can provide the system you want to use to play it
         Pythagorean: specify a p and optionally the base frequency of A4
-            Ex: ./playmidi.py p 442 lilypond-file.ly
+            Ex: ./lilyplay.py p 442 lilypond-file.ly
         Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).
             Optionally set the base freq of the base note of the key
-            Ex: ./playmidi.py j Bb lilypond-file.ly
-            Ex: ./playmidi.py j A 442 lilypond-file.ly
+            Ex: ./lilyplay.py j Bb lilypond-file.ly
+            Ex: ./lilyplay.py j A 442 lilypond-file.ly
         If you want to use tempered system, don't specify anything. Optionally the freq of A4
-            Ex: ./playmidi.py 441 lilypond-file.ly
+            Ex: ./lilyplay.py 441 lilypond-file.ly
 
         If you provide an additional pcm file argument to the execution, signed 16-bit 11.25-Khtz Little Endian Stereo output
         will be saved to said file.
-            Ex: ./playmidi.py lilypond-file.ly output-file.pcm
+            Ex: ./lilyplay.py lilypond-file.ly output-file.pcm
         If the file defined is -, the output will be sent to standard input (to be sent to an encoder like oggenc, for example).
-            Ex: ./playmidi.py lilypond-file.ly - | oggenc -r -R 11250 -o lilypond-file.ogg -
+            Ex: ./lilyplay.py lilypond-file.ly - | oggenc -r -R 11250 -o lilypond-file.ogg -
 
 playmidi.py:
     With this application you could play midi files.
