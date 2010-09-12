@@ -226,7 +226,9 @@ def main(argv):
         sys.stderr.write("If you want to use tempered system, don't specify anything. Optionally the freq of A4\n")
         sys.stderr.write("\tEx: playmidi.py 441 lilypond-file.ly\n")
         sys.stderr.write("\n")
-        sys.stderr.write("As a last argument, can provide a filename where the raw data can be output to (\n")
+        sys.stderr.write("As a last argument, can provide a filename where the raw data can be output to (if - is specified, standard output is used)\n")
+        sys.stderr.write("\n")
+        sys.stderr.write("Output will be raw stereo, 11.25 Khtz, Little Endian, 16-bit per channel\n")
         sys.stderr.flush()
         sys.exit(1)
 
