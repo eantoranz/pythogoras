@@ -275,30 +275,42 @@ class LilypondStaff:
         
         index = 0
         duration = None # Just in case
+        dotted = False
         while charIndex < len(noteStr):
             if noteStr[charIndex] == '\'':
                 index+=1
             elif noteStr[charIndex] == ',':
                 index-=1
             else:
-                # Only the duration is left
+                # Only the duration and possibly dots are left
                 if not includeDuration:
                     raise Exception("Unexpected note duration: " + token.toString())
-                duration = noteStr[charIndex:]
+                # duration is comming
+                durationStr = ""
+                durationIndexStart = charIndex # char index where the duration _possibly_ begins
+                while charIndex < len(noteStr) and noteStr[charIndex] in '0123456789':
+                    charIndex += 1
+                duration = noteStr[durationIndexStart:charIndex]
+                # is there a dot present?
+                if charIndex < len(noteStr):
+                    # could be dotted
+                    if noteStr[charIndex] == '.':
+                        dotted = True
                 break
             charIndex+=1
         if includeDuration and duration == None:
             duration = previousNote.duration
+            dotted = previousNote.dotted
 
         if previousNote == None:
             index = index + 3
         elif note == None:
             # It's a rest
-            return MusicalNote(0, 0, previousNote.index, duration)
+            return MusicalNote(0, 0, previousNote.index, duration, dotted)
         else:
             index = self.getNoteIndex(note, index, previousNote)
         if includeDuration:
-            return MusicalNote(note, alteration, index, duration)
+            return MusicalNote(note, alteration, index, duration, dotted)
         else:
             return MusicalNote(note, alteration, index)
         
