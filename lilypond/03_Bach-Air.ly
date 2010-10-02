@@ -29,6 +29,15 @@
         
         %second end
         cis b b32 cis d16 d8 cis16 b a2
+        
+        % second part
+        cis4 cis16 d32 cis b cis a16 a'4. c,8
+        
+        b b'8. a16 g fis g4 g32 fis e d cis16 b
+        
+        ais b cis8. d16 e8.fis16 g4 fis8
+        
+        e16 d cis b cis d32 e d8 b2
 }
 
 \new Staff \relative c'' {
@@ -59,6 +68,15 @@
         
         % second end
         a8 a4 gis8 e2
+        
+        % second part
+        a2 a16 b c8. b16 a g
+        
+        fis4. dis'8 e2
+        
+        e e16 d cis b ais b cis8
+        
+        b b b ais fis2
         
 }
 
@@ -92,6 +110,15 @@
         % second end
         e fis b, e cis2
         
+        % second part
+        e2 e8 dis16 e fis4
+        
+        fis16 g a fis dis8 b' b4 b,
+        
+        cis16 d e fis g fis g e fis8 e16 d cis8 fis
+        
+        fis8 e16 d g8 fis16 e d2
+        
 }
 
 \new Staff \relative c {
@@ -123,6 +150,15 @@
         
         % second end
         a d, e e, a2
+        
+        % second part
+        a8 a' g g, fis fis' e e,
+        
+        dis dis' fis b, e e' d d,
+        
+        cis cis' b b, ais b cis ais
+        
+        b g' e fis b, b' a a,
         
 }
 >>
