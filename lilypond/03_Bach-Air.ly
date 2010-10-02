@@ -35,7 +35,7 @@
         
         b b'8. a16 g fis g4 g32 fis e d cis16 b
         
-        ais b cis8. d16 e8.fis16 g4 fis8
+        ais b cis8 cis16 d e8 e16 fis g4 fis8
         
         e16 d cis b cis d32 e d8 b2
         
