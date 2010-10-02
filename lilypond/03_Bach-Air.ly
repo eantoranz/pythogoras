@@ -46,6 +46,14 @@
         d4. fis16 e e4. g16 fis
         
         fis4. a16 g g2
+        
+        a,4 a16 cis e g g e fis4 fis16 g32 a
+        
+        d,4 d16 fis a c  b4. d,8
+        
+        cis16 e g4 b,8 a e'16 fis32 g g16 fis8 e16
+        
+        d32 cis b8 cis16 d8 cis16 d d2
 }
 
 \new Staff \relative c'' {
@@ -93,6 +101,14 @@
         a8 b16 c b cis d4 cis16 b cis dis e8
         
         e8 dis16 cis dis e fis8. dis16 e b e,4
+        
+        e16 cis e a cis8 a4 cis16 d d,4
+        
+        d8 e fis4 g2
+        
+        g8 b e4 e16 d cis b a8 b
+        
+        a4 g16 fis g8 fis2
         
 }
 
@@ -143,6 +159,14 @@
         
         cis fis4 dis8 b4 b16 b' g e
         
+        a8 g fis e d4 a'
+        
+        a8 g a4 d,2
+        
+        e16 b e g b a g fis e8 a4 g8
+        
+        fis4 e8 a, a2
+        
 }
 
 \new Staff \relative c {
@@ -191,6 +215,16 @@
         fis fis' g g, gis gis' a a,
         
         ais ais' b b, e e' d d,
+        
+        cis cis' a cis d d, c c'
+        
+        b b, a a' g g, fis fis'
+        
+        e e, d d' cis a d g
+        
+        a g a a, d,2
+        
+        
         
 }
 >>
