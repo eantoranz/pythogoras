@@ -228,7 +228,7 @@ def main(argv):
         sys.stderr.write("\n")
         sys.stderr.write("As a last argument, can provide a filename where the raw data can be output to (if - is specified, standard output is used)\n")
         sys.stderr.write("\n")
-        sys.stderr.write("Output will be raw stereo, 11.25 Khtz, Little Endian, 16-bit per channel\n")
+        sys.stderr.write("Output will be raw stereo, 11.025 Khtz, Little Endian, 16-bit per channel\n")
         sys.stderr.flush()
         sys.exit(1)
 
