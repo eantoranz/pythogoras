@@ -19,12 +19,32 @@
 \new Staff \relative c'' {
         \key d \major
         d1
+        
+        d4 b a2
+        
+        a8 c16 b c8 a'16 c, b8 r r4
+        
+        b8 e16 d e fis g e a,8 r r4
+        
+        a2 a8 gis16 a b8 gis
+        
+        a a4 gis8 e2
 }
 
 \new Staff \relative c'' {
         \clef alto
         \key d \major
         a2 b
+        
+        b,4 e e2
+        
+        e8 dis4 e8 fis r r4
+        
+        e8 b4 e8 e r r4
+        
+        d4. e8 fis d b e
+        
+        e fis b, e cis2
 }
 
 \new Staff \relative c {
