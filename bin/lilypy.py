@@ -218,7 +218,7 @@ class LilypondStaff:
         elif distance > 0:
             # The note is within a fourth going up
             if previousNote.note == MusicalNote.NOTE_B:
-                return previousNote.index + 1
+                return previousNote.index + 1 + index
             if previousNote.note == MusicalNote.NOTE_A:
                 if note == MusicalNote.NOTE_B:
                     return previousNote.index + index
@@ -301,7 +301,7 @@ class LilypondStaff:
         if includeDuration and duration == None:
             duration = previousNote.duration
             dotted = previousNote.dotted
-
+        
         if previousNote == None:
             index = index + 3
         elif note == None:
@@ -309,6 +309,7 @@ class LilypondStaff:
             return MusicalNote(0, 0, previousNote.index, duration, dotted)
         else:
             index = self.getNoteIndex(note, index, previousNote)
+
         if includeDuration:
             return MusicalNote(note, alteration, index, duration, dotted)
         else:
