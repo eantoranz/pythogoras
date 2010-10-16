@@ -4,6 +4,7 @@
 # Released under the terms of the Affero GPLv3
 
 import math
+import sys
 
 class Wave:
 
@@ -43,16 +44,22 @@ class Wave:
             self.volume = 0
         else:
             self.volume=volume
-
-class ChangingWave(Wave):
-
-    def __setFrequency(self, newFreq):
-        """ Used to change the frequency of the wave to a new frequency """
-        # let's calculate the point of the wave where it is right now
-        ticksPerWave = self.samplingRate / self.freq
-        mod = self.counter % ticksPerWave
-        oldPosition = mod * 2 * math.pi / ticksPerWave
-        # new ticks per wave TODO this can break the movement of the wave (ex: if we are going down between 0 and the bottom)
-        self.freq = newFreq
-        ticksPerWave = self.samplingRate / self.freq
-        counter = int(oldPosition * ticksPerWave / (2 * math.pi))
+    
+    def setFrequency(self, frequency):
+        #sys.stderr.write("Switching frequency from " + 
+        # now that the frequency is going to change, we have to recalculate the new counter value that corresponds to the actual
+        # height of the wave at this point but for the new frequency
+        sine = math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq)
+        cosine = math.cos(2 * math.pi * self.counter / self.samplingRate * self.freq)
+        
+        # let's find the "angle" of the wave at this moment in time
+        angle = math.asin(sine) # in radians
+        # if the cosine is negative, have to correct the position in the wave
+        if cosine < 0:
+            # have to correct the position of the angle to the other half
+            # check this because this could be why there is a gap when changing frequencies close to the peaks
+            angle = math.pi - angle
+        
+        self.counter = int(math.floor(angle * self.samplingRate / frequency / (2 * math.pi)))
+        self.freq = frequency
+        

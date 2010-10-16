@@ -8,10 +8,14 @@ import sys
 from Music import *
 
 class LilypondTie:
-    """ It's just a tie.... a lilypond event """
+    """ Note tied to anoher (usually written as ~ )"""
     
     def __init__(self):
+        # nothing to do
         None
+    
+    def toString(self):
+        return "Lilypond Tie";
 
 class LilypondToken:
 
@@ -186,6 +190,7 @@ class LilypondStaff:
         elif token == "~":
             # it's a tie
             self.events.append(LilypondTie())
+            return tokenIndex
         else:
             # It's a single note
             note = self.getNote(tokens[tokenIndex], self.lastReferenceNote)
