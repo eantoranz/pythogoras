@@ -7,6 +7,16 @@
 import sys
 from Music import *
 
+class LilypondTie:
+    """ Note tied to anoher (usually written as ~ )"""
+    
+    def __init__(self):
+        # nothing to do
+        None
+    
+    def toString(self):
+        return "Lilypond Tie";
+
 class LilypondToken:
 
     def __init__(self, word, line, pos):
@@ -177,6 +187,10 @@ class LilypondStaff:
         if token == '<':
             # It's a chord
             return self.getChord(tokens, tokenIndex) # Will return the position of the closing >
+        elif token == "~":
+            # it's a tie
+            self.events.append(LilypondTie())
+            return tokenIndex
         else:
             # It's a single note
             note = self.getNote(tokens[tokenIndex], self.lastReferenceNote)

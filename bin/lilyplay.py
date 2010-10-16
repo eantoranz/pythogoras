@@ -92,6 +92,10 @@ class LilypondStaffPlayer:
                     self.event = self.staff.events[self.eventCounterIndex]
                     if isinstance(self.event, MusicalNote):
                         self.eventPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                        # considering ties
+                        if self.eventCounterIndex + 1 < len(self.staff.events) and isinstance(self.staff.events[self.eventCounterIndex + 1], lilypy.LilypondTie):
+                            # note has to be tied to the next
+                            sys.stderr.write("Found a note that has to be tied\n")
                         break
                     elif isinstance(self.event, MusicalChord):
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
@@ -104,6 +108,11 @@ class LilypondStaffPlayer:
                             newBaseFreq = self.tuningSystem.getFrequency(newBaseNote)
                             sys.stderr.write("Modulating to " + newBaseNote.toString() + " set to " + str(newBaseFreq) + "\n")
                             self.tuningSystem = JustSystem(self.event.note, self.event.alteration, newBaseFreq)
+                    elif isinstance(self.event, lilypy.LilypondTie):
+                        # it should have already been processed
+                        None
+                    else:
+                        sys.stderr.write("Unknown event " + self.event.toString() + "\n")
                 else:
                     break
             if self.eventCounterIndex >= len(self.staff.events):
