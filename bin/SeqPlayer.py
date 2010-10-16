@@ -108,7 +108,7 @@ if __name__ == "__main__":
         sys.stderr.write("Adding frequency " + sys.argv[i] + "\n")
         frequencies.append(float(sys.argv[i]))
     
-    player = WavePlayer(11025, sys.stdout)
+    player = WavePlayer(11025)
     channel = Wave(frequencies[0], 11025)
     for i in frequencies:
         sys.stderr.write("Playing frequency " + str(i) + "\n")

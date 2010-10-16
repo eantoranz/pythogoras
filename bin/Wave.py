@@ -53,16 +53,18 @@ class Wave:
         sys.stderr.write("Sine: " + str(sine) + "\n")
         cosine = math.cos(2 * math.pi * self.counter / self.samplingRate * self.freq)
         sys.stderr.write("Cosine: " + str(cosine) + "\n")
-        # let's find the arc sine of this wave at this height
-        newpos = math.asin(sine) # in radians
-        sys.stderr.write("New pos: " + str(newpos) + " radians\n")
+        
+        # let's find the "angle" of the wave at this moment in time
+        angle = math.asin(sine) # in radians
+        sys.stderr.write("Angle: " + str(angle) + " radians\n")
         # if the cosine is negative, have to correct the position in the wave
         if cosine < 0:
             # have to correct the position of the counter to the other half
-            newpos = math.pi - newpos
-            sys.stderr.write("Cosine is negative. New pos is " + str(newpos) + " radians\n")
+            angle = math.pi - angle
+            sys.stderr.write("Cosine is negative. Angle is " + str(angle) + " radians\n")
         #self.counter = int(math.floor(newpos * self.samplingRate * self.freq) / (2 * math.pi))
-        self.counter = int(math.floor(newpos * self.samplingRate / (2 * math.pi)))
+        
+        self.counter = int(math.floor(angle * self.samplingRate / frequency / (2 * math.pi)))
         sys.stderr.write("New counter position is " + str(self.counter) + " / " + str(self.samplingRate) + ")\n")
         self.freq = frequency
         
