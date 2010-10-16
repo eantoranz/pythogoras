@@ -50,21 +50,16 @@ class Wave:
         # now that the frequency is going to change, we have to recalculate the new counter value that corresponds to the actual
         # height of the wave at this point but for the new frequency
         sine = math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq)
-        sys.stderr.write("Sine: " + str(sine) + "\n")
         cosine = math.cos(2 * math.pi * self.counter / self.samplingRate * self.freq)
-        sys.stderr.write("Cosine: " + str(cosine) + "\n")
         
         # let's find the "angle" of the wave at this moment in time
         angle = math.asin(sine) # in radians
-        sys.stderr.write("Angle: " + str(angle) + " radians\n")
         # if the cosine is negative, have to correct the position in the wave
         if cosine < 0:
-            # have to correct the position of the counter to the other half
+            # have to correct the position of the angle to the other half
+            # check this because this could be why there is a gap when changing frequencies close to the peaks
             angle = math.pi - angle
-            sys.stderr.write("Cosine is negative. Angle is " + str(angle) + " radians\n")
-        #self.counter = int(math.floor(newpos * self.samplingRate * self.freq) / (2 * math.pi))
         
         self.counter = int(math.floor(angle * self.samplingRate / frequency / (2 * math.pi)))
-        sys.stderr.write("New counter position is " + str(self.counter) + " / " + str(self.samplingRate) + ")\n")
         self.freq = frequency
         
