@@ -26,8 +26,8 @@ class LilypondNotePlayer:
         self.frequency = tuningSystem.getFrequency(note)
         self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
         self.counter = 0
-        self.volumeRate = None
-    
+        self.volumeRate = 0.9
+        
     def getNextValue(self):
         self.counter+=1
 
@@ -96,6 +96,9 @@ class LilypondStaffPlayer:
                     elif isinstance(self.event, MusicalChord):
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
+                    elif isinstance(self.event, lilypy.LilypondTie):
+                        sys.stderr.write("Avoiding tie\n")
+                        sys.stderr.flush()
                     elif isinstance(self.event, MusicalKey):
                         # If it's just system, have to change it
                         if isinstance(self.tuningSystem, JustSystem):

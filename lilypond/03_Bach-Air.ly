@@ -3,7 +3,7 @@
 <<
 \new Staff \relative c'' {
         \key d \major
-        fis1
+        fis1 ~
         
         fis8 b16 g e d cis d cis4 a
         
