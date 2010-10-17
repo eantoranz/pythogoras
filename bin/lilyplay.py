@@ -53,6 +53,12 @@ class LilypondNotePlayer:
 
     def finished(self):
         return self.counter >= self.totalSamples
+    
+    def setNewDuration(self, frequency, totalSamples):
+        self.wave.setFrequency(frequency)
+        self.counter = 0
+        self.totalSamples = totalSamples
+  
         
 class LilypondChordPlayer:
 
@@ -92,6 +98,8 @@ class LilypondStaffPlayer:
         self.eventCounterIndex = -1
 
         self.finished = False
+        
+        self.lastPlayer = None
 
     def getNextValue(self):
         if self.eventPlayer == None:
@@ -112,8 +120,13 @@ class LilypondStaffPlayer:
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
                     elif isinstance(self.event, lilypy.LilypondTie):
-                        sys.stderr.write("Avoiding tie\n")
+                        sys.stderr.write("Found a tie\n")
                         sys.stderr.flush()
+                        # have to reuse the previous player and tell it to use the following frequency and duration
+                        self.eventPlayer = self.lastPlayer
+                        followingPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.staff.events[self.eventCounterIndex+1], self.samplingRate)
+                        self.eventPlayer.setNewDuration(followingPlayer.frequency, followingPlayer.totalSamples)
+                        self.eventPlayer.setTied(False)
                     elif isinstance(self.event, MusicalKey):
                         # If it's just system, have to change it
                         if isinstance(self.tuningSystem, JustSystem):
@@ -135,6 +148,7 @@ class LilypondStaffPlayer:
                return 0
         temp = self.eventPlayer.getNextValue()
         if self.eventPlayer.finished():
+            self.lastPlayer = self.eventPlayer # in case there was a tie
             self.eventPlayer = None # Have to get the next event
         return temp
 
