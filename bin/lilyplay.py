@@ -27,12 +27,13 @@ class LilypondNotePlayer:
         self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
         self.counter = 0
         self.volumeRate = 0.9
+        self.tied = False
         
     def getNextValue(self):
         self.counter+=1
 
         # Do we have to lower the volume?
-        if self.volumeRate == None:
+        if not self.tied and self.volumeRate == None:
             if self.totalSamples - self.counter <= self.samplingRate * 0.05:
                 # Have to calculate a volume rate
                 self.volumeRate = math.exp(math.log(0.01) / (self.totalSamples -  self.counter))
@@ -40,6 +41,12 @@ class LilypondNotePlayer:
             self.wave.setVolume(self.volume * self.volumeRate)
 
         return self.wave.getNextValue()
+    
+    def setTied(self, value):
+        self.tied = value
+    
+    def isTied(self):
+        return self.tied
 
     def finished(self):
         return self.counter >= self.totalSamples
@@ -95,7 +102,8 @@ class LilypondStaffPlayer:
                         # considering ties
                         if self.eventCounterIndex + 1 < len(self.staff.events) and isinstance(self.staff.events[self.eventCounterIndex + 1], lilypy.LilypondTie):
                             # note has to be tied to the next
-                            sys.stderr.write("Found a note that has to be tied\n")
+                            sys.stderr.write("Found a note that has to be tied to the next\n")
+                        self.evenPlayer.setTied(True)
                         break
                     elif isinstance(self.event, MusicalChord):
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
