@@ -56,6 +56,7 @@ class LilypondNotePlayer:
     def setNewDuration(self, totalSamples):
         self.counter = 0
         self.totalSamples = totalSamples
+        sys.stderr.write("Set duration to " + str(totalSamples) + "\n")
     
     def getAngle(self):
         return self.wave.getAngle()
