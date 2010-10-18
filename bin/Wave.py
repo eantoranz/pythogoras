@@ -49,6 +49,18 @@ class Wave:
         #sys.stderr.write("Switching frequency from " + 
         # now that the frequency is going to change, we have to recalculate the new counter value that corresponds to the actual
         # height of the wave at this point but for the new frequency
+        angle = self.getAngle()
+        self.setAngle(angle, frequency)
+        
+    # set the angle of the current position (in radians)
+    # also, optionally, set a new frequency
+    def setAngle(self, angle, frequency = None):
+        if frequency == None:
+            frequency = self.freq
+        self.counter = angle * self.samplingRate / frequency / (2 * math.pi)
+        self.freq = frequency
+    
+    def getAngle(self):
         sine = math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq)
         cosine = math.cos(2 * math.pi * self.counter / self.samplingRate * self.freq)
         
@@ -60,6 +72,4 @@ class Wave:
             # check this because this could be why there is a gap when changing frequencies close to the peaks
             angle = math.pi - angle
         
-        self.counter = int(math.floor(angle * self.samplingRate / frequency / (2 * math.pi)))
-        self.freq = frequency
-        
+        return angle

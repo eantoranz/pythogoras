@@ -23,7 +23,6 @@ class LilypondNotePlayer:
         self.totalSamples = int(beatUnit * samplingRate * 60 / (note.duration * beatsPerMinute))
         if note.dotted:
             self.totalSamples = int(self.totalSamples * 1.5)
-        self.frequency = tuningSystem.getFrequency(note)
         self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
         self.counter = 0
         self.volumeRate = None
@@ -54,10 +53,20 @@ class LilypondNotePlayer:
     def finished(self):
         return self.counter >= self.totalSamples
     
-    def setNewDuration(self, frequency, totalSamples):
-        self.wave.setFrequency(frequency)
+    def setNewDuration(self, totalSamples):
         self.counter = 0
         self.totalSamples = totalSamples
+    
+    def getAngle(self):
+        return self.wave.getAngle()
+    
+    def setAngle(self, angle, frequency = None):
+        if frequency == None:
+            frequency = self.save.getFrequency()
+        self.wave.setAngle(angle, frequency)
+    
+    def getFrequency(self):
+        return self.wave.getFrequency()
   
         
 class LilypondChordPlayer:
@@ -113,20 +122,21 @@ class LilypondStaffPlayer:
                         # considering ties
                         if self.eventCounterIndex + 1 < len(self.staff.events) and isinstance(self.staff.events[self.eventCounterIndex + 1], lilypy.LilypondTie):
                             # note has to be tied to the next
-                            sys.stderr.write("Found a note that has to be tied to the next\n")
                             self.eventPlayer.setTied(True)
                         break
                     elif isinstance(self.event, MusicalChord):
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
                     elif isinstance(self.event, lilypy.LilypondTie):
-                        sys.stderr.write("Found a tie\n")
                         sys.stderr.flush()
                         # have to reuse the previous player and tell it to use the following frequency and duration
                         self.eventPlayer = self.lastPlayer
                         followingPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.staff.events[self.eventCounterIndex+1], self.samplingRate)
-                        self.eventPlayer.setNewDuration(followingPlayer.frequency, followingPlayer.totalSamples)
+                        self.eventPlayer.setAngle(self.lastAngle, followingPlayer.getFrequency())
+                        self.eventPlayer.setNewDuration(followingPlayer.totalSamples)
                         self.eventPlayer.setTied(False)
+                        self.eventCounterIndex+=1 # skip next even player
+                        break
                     elif isinstance(self.event, MusicalKey):
                         # If it's just system, have to change it
                         if isinstance(self.tuningSystem, JustSystem):
@@ -148,7 +158,8 @@ class LilypondStaffPlayer:
                return 0
         temp = self.eventPlayer.getNextValue()
         if self.eventPlayer.finished():
-            self.lastPlayer = self.eventPlayer # in case there was a tie
+            self.lastPlayer = self.eventPlayer
+            self.lastAngle = self.eventPlayer.getAngle()
             self.eventPlayer = None # Have to get the next event
         return temp
 
