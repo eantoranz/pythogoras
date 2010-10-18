@@ -61,6 +61,9 @@ class Wave:
         self.freq = frequency
     
     def getAngle(self):
+        if self.freq == None:
+            #@TODO this shouldn't happen. Why does it happen?
+            return 0
         sine = math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq)
         cosine = math.cos(2 * math.pi * self.counter / self.samplingRate * self.freq)
         

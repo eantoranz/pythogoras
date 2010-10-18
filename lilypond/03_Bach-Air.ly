@@ -3,11 +3,11 @@
 <<
 \new Staff \relative c'' {
         \key d \major
-        fis1 ~
+        fis1
         
-        fis8 b16 g e d cis d cis4 a
+        fis8 b16 g e d cis d cis4 b8 a
         
-        a'2 a16 fis c b e dis a' g
+        a'2a16 fis c b e dis a' g
         
         g2 g16 e b a d cis g' fis
         
@@ -35,11 +35,11 @@
         
         b b'8. a16 g fis g4 g32 fis e d cis16 b
         
-        ais b cis8 cis16 d e8 e16 fis g4 fis8
+        ais b cis8 cis16 d e8 e16 fis g8 g fis
         
         e16 d cis b cis d32 e d8 b2
         
-        d4 d16 fis e d b'4. a16 gis
+        d4 d16 fis e d b'4 b8 a16 gis
         
         e a a,8 b8. cis32 d cis8. b16 a4
         
@@ -47,7 +47,7 @@
         
         fis4. a16 g g2
         
-        a,4 a16 cis e g g e fis4 fis16 g32 a
+        a,4 a16 cis e g g e fis8 fis fis16 g32 a
         
         d,4 d16 fis a c  b4. d,8
         
