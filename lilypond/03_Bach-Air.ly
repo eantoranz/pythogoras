@@ -143,7 +143,7 @@
         e fis b, e cis2
         
         % second part
-        e2 e8 dis16 e fis4
+        e2 ~ e8 dis16 e fis4 ~
         
         fis16 g a fis dis8 b' b4 b,
         
@@ -151,19 +151,19 @@
         
         fis8 e16 d g8 fis16 e d2
         
-        b8 b' a16 gis a8 gis8. fis16 e4
+        b8 b' a16 gis a8 gis8. fis16 e4 ~
         
         e8 e fis e e8. d16 cis d e cis
         
-        a8 d4 b e cis8
+        a8 d4 b8 ~ b e4 cis8 ~
         
-        cis fis4 dis8 b4 b16 b' g e
+        cis fis4 dis8 b4 ~ b16 b' g e
         
-        a8 g fis e d4 a'
+        a8 g fis e d4 a' ~
         
         a8 g a4 d,2
         
-        e16 b e g b a g fis e8 a4 g8
+        e16 b e g b a g fis e8 a ~ a g
         
         fis4 e8 a, a2
         
