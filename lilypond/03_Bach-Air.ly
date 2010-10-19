@@ -31,15 +31,15 @@
         cis b b32 cis d16 ~ d8 cis16 b a2
         
         % second part
-        cis4 cis16 d32 cis b cis a16 a'4. c,8
+        cis4 ~ cis16 d32 cis b cis a16 a'4. c,8
         
-        b b'8. a16 g fis g4 g32 fis e d cis16 b
+        b b'8 ~ b16 a g fis g4 ~ g32 fis e d cis16 b
         
-        ais b cis8 cis16 d e8 e16 fis g8 g fis
+        ais b cis8 ~ cis16 d e8 ~ e16 fis g8 ~ g fis
         
         e16 d cis b cis d32 e d8 b2
         
-        d4 d16 fis e d b'4 b8 a16 gis
+        d4 ~ d16 fis e d b'4 ~ b8 a16 gis
         
         e a a,8 b8. cis32 d cis8. b16 a4
         
@@ -47,11 +47,11 @@
         
         fis4. a16 g g2
         
-        a,4 a16 cis e g g e fis8 fis fis16 g32 a
+        a,4 ~ a16 cis e g g e fis8 ~ fis fis16 g32 a % @TODO one tie is still missing
         
-        d,4 d16 fis a c  b4. d,8
+        d,4 ~ d16 fis a c  b4. d,8
         
-        cis16 e g4 b,8 a e'16 fis32 g g16 fis8 e16
+        cis16 e g4 b,8 a e'16 fis32 g ~ g16 fis8 e16
         
         d32 cis b8 cis16 d8 cis16 d d2
 }
@@ -86,27 +86,27 @@
         a a ~ a gis e2
         
         % second part
-        a2 a16 b c8. b16 a g
+        a2 ~ a16 b c8 ~ c16 b a g
         
-        fis4. dis'8 e2
+        fis4. dis'8 e2 ~
         
-        e e16 d cis b ais b cis8
+        e e16 d cis b ais b cis8 % @TODO one tie is still missing
         
         b b b ais fis2
         
-        e4 fis b,8 e16 fis gis a b8
+        e4 fis b,8 e16 fis gis a b8 ~
         
-        b8 a4 gis8 a2
+        b8 a4 gis8 a2 ~
         
-        a8 b16 c b cis d4 cis16 b cis dis e8
+        a8 b16 c b cis d8 ~ d cis16 b cis dis e8 ~
         
-        e8 dis16 cis dis e fis8. dis16 e b e,4
+        e dis16 cis dis e fis8 ~ fis16 dis e b e,4 ~
         
-        e16 cis e a cis8 a4 cis16 d d,4
+        e16 cis e a cis8 a ~ a cis16 d d,4 ~
         
-        d8 e fis4 g2
+        d8 e fis4 g2 ~
         
-        g8 b e4 e16 d cis b a8 b
+        g8 b e4 ~ e16 d cis b a8 b
         
         a4 g16 fis g8 fis2
         
