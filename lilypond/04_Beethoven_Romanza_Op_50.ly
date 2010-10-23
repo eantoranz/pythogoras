@@ -13,7 +13,37 @@
 	f4 g16 fis g gis a4 bes16 a bes d 
 	
 	a4 ~ a16 bes b c g4 r8 c,8
+	
+	bes'4. g16. fis64 g e8 f e f
+	
+	bes4. g16. fis64 g e8 c' b c
+	
+	d4 ~ d16 d e f f,4. a16 g
+	
+	g4. c16 e, f8 r4.
 }
+
+% Fagot
+\new Staff \relative c' {
+        \key f \major
+        \time 2/2
+	r1
+	
+	r1
+	
+	r1
+	
+	r1
+	
+	r1
+	
+	r1
+	
+	r1
+	
+	r2 r16 c16 b c d c bes g
+}
+
 
 % Violin I
 \new Staff \relative c' {
@@ -26,6 +56,14 @@
 	f g a bes
 	
 	a2 g8 r4.
+	
+	e2 ~ e8 c'8 c c
+	
+	e,2 ~ e8 c'8 b c
+	
+	d4 f, f e
+	
+	e2 f16 c' b c d c bes g
 	
 	
 }
@@ -42,6 +80,14 @@
 	
 	c f e8 r4.
 	
+	e2 ~ e8 c'8 bes a
+	
+	e2 ~ e8 a gis a
+	
+	bes4 d, c bes
+	
+	bes2 a8 r4.
+	
 }
 
 % Viola
@@ -56,6 +102,14 @@
 	
 	f c4. r4.
 	
+	bes2 ~ bes8 bes' a g
+	
+	bes,2 ~ bes8 a gis a
+	
+	bes4 bes a c
+	
+	c2 ~ c16 c b c d c bes g
+	
 }
 
 % Cello or Bass
@@ -69,6 +123,14 @@
 	a e' f bes,
 	
 	c c' c,8 r4.
+	
+	c2 ~ c8 r4.
+	
+	c2 ~ c8 r4.
+	
+	bes4 bes' c c,
+	
+	f f, f8 r4.
 	
 }
 
