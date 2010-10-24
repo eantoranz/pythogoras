@@ -94,12 +94,9 @@ class LilypondChordPlayer:
         self.players[0].setAngle(angle)
         
     def getAngle(self):
-        sys.stderr.write("Calculating the angle of a chord\n")
         tangents = list()
         for player in self.players:
-            angle = player.getAngle()
-            sys.stderr.write("\tAngle: "  + str(angle) + "\n")
-            tangents.append(math.tan(angle))
+            tangents.append(math.tan(player.getAngle()))
         # now we calculate the final angle
         sumatory = 0
         multiples = 1
@@ -108,10 +105,8 @@ class LilypondChordPlayer:
            multiples += tangent
         if multiples == 1:
             # would return 0
-            sys.stderr.write("\tAngle of this chord at the time: 0\n")
             return 0
         else:
-            sys.stderr.write("\tAngle of this chord at the time: " + str(math.atan(sumatory / ( 1 - multiples))) + "\n")
             return math.atan(sumatory / ( 1 - multiples))
 
 class LilypondStaffPlayer:
@@ -131,8 +126,6 @@ class LilypondStaffPlayer:
         self.eventCounterIndex = -1
 
         self.finished = False
-        
-        self.lastPlayer = None
 
     def getNextValue(self):
         if self.eventPlayer == None:
@@ -185,7 +178,6 @@ class LilypondStaffPlayer:
                return 0
         temp = self.eventPlayer.getNextValue()
         if self.eventPlayer.finished():
-            self.lastPlayer = self.eventPlayer
             self.lastAngle = self.eventPlayer.getAngle()
             self.eventPlayer = None # Have to get the next event
         return temp
