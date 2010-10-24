@@ -356,10 +356,15 @@ class LilypondStaff:
                     if len(token.word) > 1:
                         duration = token.word[1:]
                     else:
-                        duration = self.lastReferenceNote.duration
+                        duration = self.lastDuration
                     self.events.append(MusicalChord(notes, duration))
                     self.lastReferenceNote = notes[0]
+                
+                # @TODO this is where we go out... maybe we chould rewrite the function to get he return at the end
+                self.lastDuration = duration
+                self.lastDotted = False
                 return tokenIndex
+            
             # add a new note
             note = self.getNote(tokens[tokenIndex], previousNote, None, None, False)
             previousNote = note # For the calculation of the next node
