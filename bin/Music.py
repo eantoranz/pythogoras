@@ -102,7 +102,9 @@ class MusicalNote:
 
     def toString(self, showDuration = True):
         temp = None
-        if self.note == MusicalNote.NOTE_A:
+        if self.note in [None, 0]:
+            temp = "r"
+        elif self.note == MusicalNote.NOTE_A:
             temp = "A"
         elif self.note == MusicalNote.NOTE_B:
             temp = "B"
@@ -121,7 +123,8 @@ class MusicalNote:
                 temp += (self.alter * "#")
             else:
                 temp += (-self.alter * 'b')
-        temp += str(self.index)
+        if self.note not in [None, 0]:
+            temp += str(self.index)
         if showDuration:
             temp += "<" + str(self.duration)
             if (self.dotted):

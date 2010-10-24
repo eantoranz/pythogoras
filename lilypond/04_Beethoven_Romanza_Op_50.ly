@@ -8,7 +8,7 @@
         \time 2/2
 	f2 a8. g16 bes8. g16 
 	
-	f4 ~ f16 e g e c4 r8 c8
+	f4 ~ f16 e g e c4 r8 c
 	
 	f4 g16 fis g gis a4 bes16 a bes d 
 	
@@ -29,17 +29,17 @@
         \time 2/2
 	r1
 	
-	r1
+	r
 	
-	r1
+	r
 	
-	r1
+	r
 	
-	r1
+	r
 	
-	r1
+	r
 	
-	r1
+	r
 	
 	r2 r16 c16 b c d c bes g
 }

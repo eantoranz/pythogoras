@@ -114,6 +114,8 @@ class LilypondStaff:
         self.cleff = None
         self.events = [] # Can be notes, chords, key changes
         self.lastReferenceNote = None # When working with \relative
+        self.lastDuration = None # Has to be separate from the previous note because there are rests and they can't be used to calculate indexes
+        self.lastDotted = False # same thing of lastDuration
         self.relative = False # Don't know how to read non relative parts, but anyway
 
         self.firstTimeMarker = None
@@ -193,11 +195,11 @@ class LilypondStaff:
             return tokenIndex
         else:
             # It's a single note
-            note = self.getNote(tokens[tokenIndex], self.lastReferenceNote)
-            if note.note not in [None, 0]:
-                # It's not a rest
-                self.lastReferenceNote = note
+            note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDotted)
+            self.lastDuration = note.duration
+            self.lastDotted = note.dotted
             self.events.append(note)
+            sys.stderr.write("Created a note: " + note.toString() + "\n")
 
         return tokenIndex # return the same token index
 
@@ -248,7 +250,7 @@ class LilypondStaff:
         else:
             raise Exception("Shouldn't find a distance of " + str(distance) + " at this point")
 
-    def getNote(self, token, previousNote, includeDuration = True):
+    def getNote(self, token, previousNote, previousDuration = None, previousDotted = False, includeDuration = True):
         """
             Get a note from the staff
         """
@@ -300,7 +302,7 @@ class LilypondStaff:
                 # Only the duration and possibly dots are left
                 if not includeDuration:
                     raise Exception("Unexpected note duration: " + token.toString())
-                # duration is comming
+                # duration is coming next
                 durationStr = ""
                 durationIndexStart = charIndex # char index where the duration _possibly_ begins
                 while charIndex < len(noteStr) and noteStr[charIndex] in '0123456789':
@@ -313,9 +315,13 @@ class LilypondStaff:
                         dotted = True
                 break
             charIndex+=1
+
         if includeDuration and duration == None:
-            duration = previousNote.duration
-            dotted = previousNote.dotted
+            if previousDuration == None:
+                duration = 4 # it's a black by defect
+            else:
+                duration = previousDuration
+            dotted = previousDotted
         
         if previousNote == None:
             index = index + 3
@@ -352,7 +358,7 @@ class LilypondStaff:
                     self.lastReferenceNote = notes[0]
                 return tokenIndex
             # add a new note
-            note = self.getNote(tokens[tokenIndex], previousNote, False)
+            note = self.getNote(tokens[tokenIndex], previousNote, None, None, False)
             previousNote = note # For the calculation of the next node
             notes.append(note)
             tokenIndex+=1 #next token
@@ -369,7 +375,7 @@ class LilypondStaff:
         if tokens[tokenIndex+1].word != '\\relative':
             raise Exception("Don't know how to read non-relative staffs")
         # Let's read the relative note
-        self.lastReferenceNote = self.getNote(tokens[tokenIndex+2], None, False)
+        self.lastReferenceNote = self.getNote(tokens[tokenIndex+2], None, None, None, False)
         # Set duration to blacks by default
         self.lastReferenceNote.duration='4'
 
