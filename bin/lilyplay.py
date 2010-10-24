@@ -60,10 +60,8 @@ class LilypondNotePlayer:
     def getAngle(self):
         return self.wave.getAngle()
     
-    def setAngle(self, angle, frequency = None):
-        if frequency == None:
-            frequency = self.save.getFrequency()
-        self.wave.setAngle(angle, frequency)
+    def setAngle(self, angle):
+        self.wave.setAngle(angle)
     
     def getFrequency(self):
         return self.wave.getFrequency()
@@ -89,6 +87,32 @@ class LilypondChordPlayer:
 
     def finished(self):
         return self.players[0].finished()
+        
+    def setAngle(self, angle):
+        # will place the first player to the desired position so that it takes over the wave that was left before
+        # the other players will start from 0
+        self.players[0].setAngle(angle)
+        
+    def getAngle(self):
+        sys.stderr.write("Calculating the angle of a chord\n")
+        tangents = list()
+        for player in self.players:
+            angle = player.getAngle()
+            sys.stderr.write("\tAngle: "  + str(angle) + "\n")
+            tangents.append(math.tan(angle))
+        # now we calculate the final angle
+        sumatory = 0
+        multiples = 1
+        for tangent in tangents:
+           sumatory += tangent
+           multiples += tangent
+        if multiples == 1:
+            # would return 0
+            sys.stderr.write("\tAngle of this chord at the time: 0\n")
+            return 0
+        else:
+            sys.stderr.write("\tAngle of this chord at the time: " + str(math.atan(sumatory / ( 1 - multiples))) + "\n")
+            return math.atan(sumatory / ( 1 - multiples))
 
 class LilypondStaffPlayer:
 
@@ -129,13 +153,16 @@ class LilypondStaffPlayer:
                         break
                     elif isinstance(self.event, lilypy.LilypondTie):
                         sys.stderr.flush()
-                        # have to reuse the previous player and tell it to use the following frequency and duration
-                        self.eventPlayer = self.lastPlayer
-                        followingPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.staff.events[self.eventCounterIndex+1], self.samplingRate)
-                        self.eventPlayer.setAngle(self.lastAngle, followingPlayer.getFrequency())
-                        self.eventPlayer.setNewDuration(followingPlayer.totalSamples)
-                        self.eventPlayer.setTied(False)
-                        self.eventCounterIndex+=1 # skip next even player
+                        self.eventCounterIndex+=1 # let's use a new player and set the angle accordingly
+                        self.event = self.staff.events[self.eventCounterIndex]
+                        if isinstance(self.event, MusicalNote):
+                            self.eventPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                            self.eventPlayer.setAngle(self.lastAngle)
+                            self.eventPlayer.setTied(False)
+                        else:
+                            # it's a chord
+                            self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                            self.eventPlayer.setAngle(self.lastAngle)
                         break
                     elif isinstance(self.event, MusicalKey):
                         # If it's just system, have to change it

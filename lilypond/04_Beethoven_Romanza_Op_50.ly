@@ -57,9 +57,9 @@
 	
 	a2 g8 r4.
 	
-	e2 ~ e8 c'8 c c
+	< e g, >2 ~ < e g, >8 c'8 c c
 	
-	e,2 ~ e8 c'8 b c
+	< e, g, >2 ~ < e g, >8 c'8 b c
 	
 	d4 f, f e
 	
@@ -80,9 +80,9 @@
 	
 	c f e8 r4.
 	
-	e2 ~ e8 c'8 bes a
+	< e g, >2 ~ < e g, >8 c'8 bes a
 	
-	e2 ~ e8 a gis a
+	< e g, >2 ~ < e g >8 a gis a
 	
 	bes4 d, c bes
 	
