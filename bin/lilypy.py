@@ -196,10 +196,13 @@ class LilypondStaff:
         else:
             # It's a single note
             note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDotted)
+            if note.note not in [ 0, None]:
+                # it's not a rest
+                self.lastReferenceNote = note
             self.lastDuration = note.duration
             self.lastDotted = note.dotted
             self.events.append(note)
-            sys.stderr.write("Created a note: " + note.toString() + "\n")
+            #DEBUG Message sys.stderr.write("Created a note: " + note.toString() + "\n")
 
         return tokenIndex # return the same token index
 
