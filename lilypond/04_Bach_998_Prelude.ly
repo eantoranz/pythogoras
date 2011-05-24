@@ -15,7 +15,7 @@
 	
 	ees c bes c g bes a c ees g f ees
 	
-	d bes a bes f aes g d ees bes ees g
+	d bes' a bes f aes g d ees bes ees g
 	
 	r f ees f bes, d c ees g, a c ees
 	
@@ -28,6 +28,16 @@
 	aes f' e f c ees d bes d f g aes
 	
 	g ees d ees b d c aes c ees f g
+	
+	f d c d aes c b g b d ees f
+	
+	ees c' b c g bes aes e f c f aes
+	
+	r g f g c, ees d f c b d f
+	
+	r ees d ees g, bes aes c ees bes aes g
+	
+	fis d c d fis a g bes d g d ees
 }
 
 \new Staff \relative c {
@@ -57,5 +67,15 @@
 	f,4 r8 aes4 r8 bes4 r8 d4 r8
 	
 	ees,4 r8 g4 r8 aes4 r8 c4 r8
+	
+	d,4 r8 f4 r8 g4 r8 b4 r8
+	
+	c,4 r8 r4. r r
+	
+	c4 r8 r4. r r
+	
+	c4 r8 r4. r r
+	
+	c'4 r8 r4. bes4 r8 r4.
 }
 >>
