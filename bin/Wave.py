@@ -7,7 +7,18 @@ import math
 import sys
 from threading import Thread
 
-class Wave(Thread):
+class ThreadCalculator(Thread):
+
+    def __init__(self, wave):
+        Thread.__init__(self)
+        self.wave = wave
+        
+    def run(self):
+        #print "calculating next value of a wave"
+        self.wave.calculateNextVal()
+        #print "Fnished calculation"
+
+class Wave:
 
     freq = None
     samplingRate = None
@@ -18,7 +29,6 @@ class Wave(Thread):
     nextVal = None
 
     def __init__(self, freq, samplingRate = 44100, maxValue = 32000):
-        Thread.__init__(self)
         self.freq = freq
         self.samplingRate = samplingRate
         self.maxValue = maxValue
@@ -26,7 +36,10 @@ class Wave(Thread):
 
         self.resetCounter()
         
-        self.start()
+        self.nextVal = None
+        
+        # first cicle
+        ThreadCalculator(self).start()
 
     def resetCounter(self):
         self.counter = 0
@@ -39,12 +52,9 @@ class Wave(Thread):
         temp = self.nextVal
         self.nextVal = None
         # calculate another next value
-        self.start()
+        ThreadCalculator(self).start()
         return temp
     
-    def run(self):
-        self.calculateNextVal()
-
     def calculateNextVal(self):
         if self.freq in [None, 0]:
             self.nextVal = 0
