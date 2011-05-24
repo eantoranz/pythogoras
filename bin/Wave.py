@@ -5,34 +5,54 @@
 
 import math
 import sys
+from threading import Thread
 
-class Wave:
+class Wave(Thread):
 
     freq = None
     samplingRate = None
     maxValue = None
     binaryOuput = True
     counter = 0
+    
+    nextVal = None
 
     def __init__(self, freq, samplingRate = 44100, maxValue = 32000):
+        Thread.__init__(self)
         self.freq = freq
         self.samplingRate = samplingRate
         self.maxValue = maxValue
         self.volume=1
 
         self.resetCounter()
+        
+        self.start()
 
     def resetCounter(self):
         self.counter = 0
 
     def getNextValue(self):
-        if self.freq in [None, 0]:
-            return 0
+        while self.nextVal == None:
+            # tight loop.. perhaps too tight
+            # could be solved with blocking?
+            continue
+        temp = self.nextVal
+        self.nextVal = None
+        # calculate another next value
+        self.start()
+        return temp
+    
+    def run(self):
+        self.calculateNextVal()
 
-        temp = int(math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue) * self.volume)
+    def calculateNextVal(self):
+        if self.freq in [None, 0]:
+            self.nextVal = 0
+            return
+
+        self.nextVal = int(math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue) * self.volume)
 
         self.counter+=1
-        return temp
 
     def getFrequency(self):
         return self.freq
