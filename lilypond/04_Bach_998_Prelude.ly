@@ -62,6 +62,14 @@
 	d bes a bes c d ees bes a bes d ees
 	
 	f bes, a bes d f aes c bes aes g f
+	
+	g ees d ees g des c g' bes, aes ees' g
+	
+	f d c d f c bes f' aes, g d' f
+	
+	ees c bes c ees bes aes ees' g, f c' ees
+	
+	d aes g aes d f bes aes, g aes d f
 }
 
 \new Staff \relative c {
@@ -125,5 +133,13 @@
 	aes4 r8 r4. g4 r8 r4.
 	
 	d4 r8 r4. bes4 r8 r4.
+	
+	ees4 r8 g4 r8 aes4 r8 c4 r8
+	
+	d,4 r8 f4 r8 g4 r8 bes4 r8
+	
+	c,4 r8 ees4 r8 f4 r8 aes4 r8
+	
+	bes4 r8 r4. r r
 }
 >>
