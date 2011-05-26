@@ -112,14 +112,16 @@ class LilypondChordPlayer:
             
 class LilypondPolyphonyPlayer:
     
-    def __init__(self, beatsPerMinute, tuningSystem, polyphony, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, polyphony, samplingRate = 44100):
         # perhaps the simplest solution is to use staff players for each voice
         self.players = list()
         self.voices = len(polyphony.voices) # number of voices
         for voice in polyphony.voices:
             staff = lilypy.LilypondStaff()
             staff.events = voice
-            self.players.append(LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate))
+            player = LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate)
+            player.beatUnit = beatUnit
+            self.players.append(player)
     
     def getNextValue(self):
         temp = 0
@@ -175,7 +177,7 @@ class LilypondStaffPlayer:
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
                     elif isinstance(self.event, MusicalPolyphony):
-                        self.eventPlayer = LilypondPolyphonyPlayer(self.beatsPerMinute, self.tuningSystem, self.event, self.samplingRate)
+                        self.eventPlayer = LilypondPolyphonyPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
                     elif isinstance(self.event, lilypy.LilypondTie):
                         sys.stderr.flush()
