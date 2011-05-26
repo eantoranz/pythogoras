@@ -70,6 +70,17 @@
 	ees c bes c ees bes aes ees' g, f c' ees
 	
 	d aes g aes d f bes aes, g aes d f
+	
+	bes g, f g bes ees bes' g, f g bes ees
+	
+	bes' f, ees f bes d aes f, ees f bes d
+	
+	<<
+		{ g4 g8 g4 g8 r4 g8 g4 g8 }
+		{ g8 bes, ees ees bes ees r bes ees ees bes ees }
+	<<
+	
+	
 }
 
 \new Staff \relative c {
