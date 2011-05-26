@@ -118,7 +118,7 @@ class LilypondStaff:
 
     def __init__(self):
         self.cleff = None
-        self.events = [] # Can be notes, chords, key changes
+        self.events = [] # Can be notes, chords, polyphonies, key changes
         self.lastReferenceNote = None # When working with \relative
         self.lastDuration = None # Has to be separate from the previous note because there are rests and they can't be used to calculate indexes
         self.lastDotted = False # same thing of lastDuration

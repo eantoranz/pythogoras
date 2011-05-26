@@ -185,6 +185,9 @@ class MusicalPolyphony:
     
     def __str__(self):
         return self.toString()
+    
+    def getVoices(self):
+        return self.voices
         
 class MusicalKey:
 

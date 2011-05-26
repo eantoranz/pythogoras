@@ -50,7 +50,7 @@ class LilypondNotePlayer:
     def isTied(self):
         return self.tied
 
-    def finished(self):
+    def isFinished(self):
         return self.counter >= self.totalSamples
     
     def setNewDuration(self, totalSamples):
@@ -85,8 +85,8 @@ class LilypondChordPlayer:
             accumulator += player.getNextValue()
         return int(accumulator / self.length)
 
-    def finished(self):
-        return self.players[0].finished()
+    def isFinished(self):
+        return self.players[0].isFinished()
         
     def setAngle(self, angle):
         # will place the first player to the desired position so that it takes over the wave that was left before
@@ -111,7 +111,33 @@ class LilypondChordPlayer:
             
             
 class LilypondPolyphonyPlayer:
-    None
+    
+    def __init__(self, beatsPerMinute, tuningSystem, polyphony, samplingRate = 44100):
+        # perhaps the simplest solution is to use staff players for each voice
+        self.players = list()
+        self.voices = len(polyphony.voices) # number of voices
+        for voice in polyphony.voices:
+            staff = lilypy.LilypondStaff()
+            staff.events = voice
+            self.players.append(LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate))
+    
+    def getNextValue(self):
+        temp = 0
+        for player in self.players:
+            temp += player.getNextValue()
+            if player.isFinished():
+                self.players.remove(player)
+        return temp / self.voices
+    
+    def isFinished(self):
+        # will return True if all players are finished
+        return len(self.players) == 0
+    
+    def getAngle(self):
+        return 0
+    
+    def setAngle(self, angle):
+        None
 
 class LilypondStaffPlayer:
 
@@ -148,6 +174,9 @@ class LilypondStaffPlayer:
                     elif isinstance(self.event, MusicalChord):
                         self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
                         break
+                    elif isinstance(self.event, MusicalPolyphony):
+                        self.eventPlayer = LilypondPolyphonyPlayer(self.beatsPerMinute, self.tuningSystem, self.event, self.samplingRate)
+                        break
                     elif isinstance(self.event, lilypy.LilypondTie):
                         sys.stderr.flush()
                         self.eventCounterIndex+=1 # let's use a new player and set the angle accordingly
@@ -181,10 +210,13 @@ class LilypondStaffPlayer:
                self.finished = True
                return 0
         temp = self.eventPlayer.getNextValue()
-        if self.eventPlayer.finished():
+        if self.eventPlayer.isFinished():
             self.lastAngle = self.eventPlayer.getAngle()
             self.eventPlayer = None # Have to get the next event
         return temp
+        
+    def isFinished(self):
+        return self.finished
 
 class LilypondSystemPlayer:
     """
