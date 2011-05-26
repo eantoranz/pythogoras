@@ -108,6 +108,10 @@ class LilypondChordPlayer:
             return 0
         else:
             return math.atan(sumatory / ( 1 - multiples))
+            
+            
+class LilypondPolyphonyPlayer:
+    None
 
 class LilypondStaffPlayer:
 

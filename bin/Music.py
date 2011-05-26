@@ -132,7 +132,7 @@ class MusicalNote:
             temp += ">"
         return temp
 
-    def __repr__(self):
+    def __str__(self):
         return self.toString()
 
 class MusicalChord:
@@ -141,7 +141,7 @@ class MusicalChord:
         self.notes = notes
         for note in notes:
             note.setDuration(duration)
-
+    
     def toString(self):
         temp = "Chord. Duration: " + str(self.notes[0].duration)
         if self.notes[0].dotted:
@@ -157,11 +157,29 @@ class MusicalChord:
             temp += note.toString(False)
         return temp
 
+    def __str__(self):
+        return self.toString()
+
     def getDuration(self):
         return self.notes[0].duration
 
     def isDotted(self):
         return self.notes[0].dotted
+
+class MusicalPolyphony:
+
+    def __init__(self, voices):
+        self.voices = voices
+    
+    def toString(self):
+        temp = "Polyphonic voice\n"
+        counter = 1
+        for voice in self.voices:
+            temp += "Voice " + str(counter) + ":"
+            for element in voice:
+                temp += " " + str(element)
+            temp += "\n"
+            counter+=1
         
 class MusicalKey:
 
@@ -201,6 +219,9 @@ class MusicalKey:
             major = 'Minor'
             
         return "Key: " + note + alteration + " " + major
+
+    def __str__(self):
+        return self.toString()
 
 class TuningSystem:
 

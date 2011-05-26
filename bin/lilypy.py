@@ -26,6 +26,9 @@ class LilypondToken:
 
     def toString(self):
         return "Token: " + str(self.word) + " Line " + str(self.line) + " Pos " + str(self.pos)
+    
+    def __str__(self):
+        return self.toString()
 
     def raiseException(self, message = None):
         if message == None:
@@ -51,6 +54,9 @@ class LilypondHeader:
         else:
             temp += "Title: <" + self.title + ">"
         return temp
+    
+    def __str__(self):
+        return self.toString()
 
     def getHeaderFromTokens(self, tokens, openingIndex):
         """
@@ -182,13 +188,16 @@ class LilypondStaff:
 
     def getMusicalEvent(self, tokens, tokenIndex):
         """
-            Get a musical event (a single note or a chord)
+            Get a musical event (a single note, polyphonic voice or a chord)
         """
 
         token = tokens[tokenIndex].word
         if token == '<':
             # It's a chord
             return self.getChord(tokens, tokenIndex) # Will return the position of the closing >
+        elif token == "<<":
+            # it's a polyphonic voice
+            return self.getPolyphony(tokens, tokenIndex) # Will return the position of the closing >>
         elif token == "~":
             # it's a tie
             self.events.append(LilypondTie())
@@ -342,7 +351,7 @@ class LilypondStaff:
 
     def getChord(self, tokens, tokenIndex):
         if tokens[tokenIndex].word != '<':
-            raise Exception("Found an unexpected chord starter: " + tokens[tokenIndex].toString())
+            raise Exception("Found an unexpected chord starter: " + str(tokens[tokenIndex]))
         # Have to get the notes till we find a chord closer (>)
         notes = []
         tokenIndex += 1
@@ -370,6 +379,44 @@ class LilypondStaff:
             previousNote = note # For the calculation of the next node
             notes.append(note)
             tokenIndex+=1 #next token
+    
+    def getPolyphony(self, tokens, tokenIndex):
+        if tokens[tokenIndex].word != '<<':
+            raise Exception("Found an unexpected polyphony starter: " + str(tokens[tokenIndex]))
+    
+        tokenIndex += 1
+        # have to find the voices
+        voices = list()
+        while tokens[tokenIndex].word != ">>":
+            # it should be the start of a voice
+            if tokens[tokenIndex].word != "{":
+                raise Exception("Found an unexpected polyphonic voice starter: " + str(tokens[tokenIndex]))
+            # have to go on finding notes to create a voice
+            tokenIndex += 1
+            previousNote = self.lastReferenceNote # always refer to the last reference note
+            previousDuration = self.lastDuration
+            previousDotted = self.lastDotted
+            #@TODO do I have to use different reference notes for notes, chords and polyphonies?
+            notes = list()
+            while tokens[tokenIndex].word != "}":
+                # let's get the notes
+                note = self.getNote(tokens[tokenIndex], previousNote, previousDuration, previousDotted, True)
+                notes.append(note)
+                previousNote = note
+                previousDuration = note.duration
+                previousDotted = note.dotted
+                sys.stderr.write(str(note) + "\n")
+                tokenIndex += 1
+            # end of a voice
+            voices.append(notes)
+            
+            # do we have more voices?
+            tokenIndex += 1
+            if tokens[tokenIndex].word == "\\\\":
+                # we have another voice
+                tokenIndex += 1
+        # reached the end of the polyphony
+        return tokenIndex
 
     def getTimeMarker(self, token):
         timeMarker = LilypondTimeMarker()
