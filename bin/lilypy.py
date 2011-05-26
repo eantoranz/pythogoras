@@ -405,7 +405,6 @@ class LilypondStaff:
                 previousNote = note
                 previousDuration = note.duration
                 previousDotted = note.dotted
-                sys.stderr.write(str(note) + "\n")
                 tokenIndex += 1
             # end of a voice
             voices.append(notes)
@@ -416,6 +415,8 @@ class LilypondStaff:
                 # we have another voice
                 tokenIndex += 1
         # reached the end of the polyphony
+        self.events.append(MusicalPolyphony(voices))
+        # @TODO what is the previous note for what's comming?
         return tokenIndex
 
     def getTimeMarker(self, token):

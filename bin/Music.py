@@ -172,7 +172,7 @@ class MusicalPolyphony:
         self.voices = voices
     
     def toString(self):
-        temp = "Polyphonic voice\n"
+        temp = "Polyphony\n"
         counter = 1
         for voice in self.voices:
             temp += "Voice " + str(counter) + ":"
@@ -180,6 +180,11 @@ class MusicalPolyphony:
                 temp += " " + str(element)
             temp += "\n"
             counter+=1
+        
+        return temp
+    
+    def __str__(self):
+        return self.toString()
         
 class MusicalKey:
 
