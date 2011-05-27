@@ -409,6 +409,11 @@ class LilypondStaff:
                 previousDotted = note.dotted
                 tokenIndex += 1
             # end of a voice
+            # if it's the first voice, will save the last of the notes in the voice as the reference note
+            if len(voices) == 0:
+                firstVoiceLastNote = previousNote
+                firstVoiceLastDuration = previousDuration
+                firstVoiceLastDotted = previousDotted
             voices.append(notes)
             
             # do we have more voices?
@@ -418,7 +423,12 @@ class LilypondStaff:
                 tokenIndex += 1
         # reached the end of the polyphony
         self.events.append(MusicalPolyphony(voices))
+        
         # @TODO what is the previous note for what's comming?
+        self.lastReferenceNote = firstVoiceLastNote
+        self.previousDuration = firstVoiceLastDuration
+        self.previousDotted = firstVoiceLastDotted
+        
         return tokenIndex
 
     def getTimeMarker(self, token):
