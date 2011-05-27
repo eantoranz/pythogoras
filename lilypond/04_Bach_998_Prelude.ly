@@ -85,6 +85,17 @@
 		{ r8 aes, ees' ees aes, ees' r g, des' des g, des' }
 	>>
 	
+	< ces ees, > aes g aes ees des ees ces bes ces aes g
+	
+	aes fes ees fes aes ces fes ces bes ces fes aes
+	
+	<<
+		{ bes4 a4 } \\ % trick to simulate coda
+		{ f2 } \\
+		{ c,2 }
+	>> r16 g bes a g f bes8 f d bes f' aes
+	
+	
 }
 
 \new Staff \relative c {
@@ -164,5 +175,11 @@
 	ees4 r8 r4. des4 r8 r4.
 	
 	ces4 r8 r4. bes4 r8 r4.
+	
+	aes4 r8 r4. r r
+	
+	aes4 r8 r4. r r
+	
+	ees4 r8 r4. d4 r8 r4.
 }
 >>
