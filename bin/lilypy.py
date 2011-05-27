@@ -402,7 +402,9 @@ class LilypondStaff:
                 # let's get the notes
                 note = self.getNote(tokens[tokenIndex], previousNote, previousDuration, previousDotted, True)
                 notes.append(note)
-                previousNote = note
+                if note.note not in [0, None]:
+                    # it's not a rest
+                    previousNote = note
                 previousDuration = note.duration
                 previousDotted = note.dotted
                 tokenIndex += 1
