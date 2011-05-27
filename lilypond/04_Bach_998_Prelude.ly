@@ -95,7 +95,13 @@
 		{ c,2 }
 	>> r16 g bes a g f bes8 f d bes f' aes
 	
+	g f ees f c ees f, aes g aes ees' d
 	
+	ees ees' d ees bes des c g aes ees aes c
+	
+	r bes aes bes ees, g f aes c, d f aes
+	
+	r g f g bes, des c ees aes c, bes aes
 }
 
 \new Staff \relative c {
@@ -180,6 +186,14 @@
 	
 	aes4 r8 r4. r r
 	
-	ees4 r8 r4. d4 r8 r4.
+	ees4 r4 r4. d4 r8 r4. % to simulate a coda
+	
+	ees4 r8 aes4 r8 bes4 r8 bes,4 r8
+	
+	ees4 r8 r4. r r
+	
+	ees4 r8 r4. r r
+	
+	ees4 r8 r4. ees4 r8 r4.
 }
 >>
