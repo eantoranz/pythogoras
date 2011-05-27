@@ -73,13 +73,17 @@
 	
 	bes g, f g bes ees bes' g, f g bes ees
 	
-	bes' f, ees f bes d aes f, ees f bes d
+	bes' f, ees f bes d aes' f, ees f bes d
 	
 	<<
-		{ g4 g8 g4 g8 r4 g8 g4 g8 }
+		{ g4 g8 g4 g8 r4 g8 g4 g8 } \\
 		{ g8 bes, ees ees bes ees r bes ees ees bes ees }
-	<<
+	>>
 	
+	<<
+		{ r8 r aes aes4 aes8 r r bes bes4 bes8 } \\
+		{ r8 aes, ees' ees aes, ees' r g, des' des g, des' }
+	>>
 	
 }
 
@@ -152,5 +156,13 @@
 	c,4 r8 ees4 r8 f4 r8 aes4 r8
 	
 	bes4 r8 r4. r r
+	
+	c4 r8 r4. r r
+	
+	d4 r8 r4. r r
+	
+	ees4 r8 r4. des4 r8 r4.
+	
+	ces4 r8 r4. bes4 r8 r4.
 }
 >>
