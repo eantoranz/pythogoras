@@ -102,6 +102,17 @@
 	r bes aes bes ees, g f aes c, d f aes
 	
 	r g f g bes, des c ees aes c, bes aes
+	
+	bes ees g bes, aes g aes d f aes, g f
+	
+	g bes ees g bes des c aes f d f aes
+	
+	g ees bes g bes des c aes f d f aes
+	
+	<<
+		{ aes4 g4 } \\
+		{ ees4 }
+	>>
 }
 
 \new Staff \relative c {
@@ -195,5 +206,13 @@
 	ees4 r8 r4. r r
 	
 	ees4 r8 r4. ees4 r8 r4.
+	
+	ees4 r8 r4. ees4 r8 r4.
+	
+	ees4 r4. < g ees' >8 < aes ees' >4 r8 < bes f' >4 r8
+	
+	< c ees >4 r4. c8 aes4 r8 bes4 r8
+	
+	< ees, bes' >2
 }
 >>
