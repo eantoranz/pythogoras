@@ -1,7 +1,7 @@
 % JS Bach's Prelude from BWV 998
 
 <<
-\new Staff \relative c'' {
+\new Staff \relative c''' {
 	\key ees \major
 	\time 12/8
 	
@@ -115,7 +115,7 @@
 	>>
 }
 
-\new Staff \relative c, {
+\new Staff \relative c {
 	\clef bass
 	\key ees \major
 	\time 12/8
