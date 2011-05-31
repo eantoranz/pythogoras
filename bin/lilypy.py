@@ -393,27 +393,19 @@ class LilypondStaff:
                 raise Exception("Found an unexpected polyphonic voice starter: " + str(tokens[tokenIndex]))
             # have to go on finding notes to create a voice
             tokenIndex += 1
-            previousNote = self.lastReferenceNote # always refer to the last reference note
-            previousDuration = self.lastDuration
-            previousDotted = self.lastDotted
             #@TODO do I have to use different reference notes for notes, chords and polyphonies?
             notes = list()
             while tokens[tokenIndex].word != "}":
                 # let's get the notes
-                note = self.getNote(tokens[tokenIndex], previousNote, previousDuration, previousDotted, True)
+                note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDotted, True)
                 notes.append(note)
                 if note.note not in [0, None]:
                     # it's not a rest
-                    previousNote = note
-                previousDuration = note.duration
-                previousDotted = note.dotted
+                    self.lastReferenceNote = note
+                self.lastDuration = note.duration
+                self.lastDotted = note.dotted
                 tokenIndex += 1
             # end of a voice
-            # if it's the first voice, will save the last of the notes in the voice as the reference note
-            if len(voices) == 0:
-                firstVoiceLastNote = previousNote
-                firstVoiceLastDuration = previousDuration
-                firstVoiceLastDotted = previousDotted
             voices.append(notes)
             
             # do we have more voices?
@@ -423,11 +415,6 @@ class LilypondStaff:
                 tokenIndex += 1
         # reached the end of the polyphony
         self.events.append(MusicalPolyphony(voices))
-        
-        # @TODO what is the previous note for what's comming?
-        self.lastReferenceNote = firstVoiceLastNote
-        self.previousDuration = firstVoiceLastDuration
-        self.previousDotted = firstVoiceLastDotted
         
         return tokenIndex
 

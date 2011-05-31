@@ -1,7 +1,7 @@
 % JS Bach's Prelude from BWV 998
 
 <<
-\new Staff \relative c''' {
+\new Staff \relative c'' {
 	\key ees \major
 	\time 12/8
 	
@@ -29,7 +29,7 @@
 	
 	g ees d ees b d c aes c ees f g
 	
-	f d c d aes c b g b d ees f
+	f d c d a c b g b d ees f
 	
 	ees c' b c g bes aes e f c f aes
 	
@@ -85,15 +85,15 @@
 		{ r8 aes, ees' ees aes, ees' r g, des' des g, des' }
 	>>
 	
-	< ces ees, > aes g aes ees des ees ces bes ces aes g
+	< ces' ees, > aes g aes ees des ees ces bes ces aes g
 	
 	aes fes ees fes aes ces fes ces bes ces fes aes
 	
 	<<
 		{ bes4 a4 } \\ % trick to simulate coda
 		{ f2 } \\
-		{ c,2 }
-	>> r16 g bes a g f bes8 f d bes f' aes
+		{ c2 }
+	>> r16 g' bes a g f bes8 f d bes f' aes
 	
 	g f ees f c ees f, aes g aes ees' d
 	
@@ -115,7 +115,8 @@
 	>>
 }
 
-\new Staff \relative c {
+\new Staff \relative c, {
+	\clef bass
 	\key ees \major
 	\time 12/8
 	
