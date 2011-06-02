@@ -29,6 +29,14 @@
 	r
 	
 	r
+	
+	r
+	
+	r
+	
+	r
+	
+	r
 }
 
 % Flute
@@ -58,6 +66,14 @@
 	f4 g16 fis g gis a4 bes16 a bes d
 	
 	a4 ~ a16 bes b c g4 r8 c,
+	
+	bes'4. g16 fis32 g e8 r r4
+	
+	bes'4. g16 fis32 g e8 c' b c
+	
+	d4 ~ d16 d e f f,4 a8. g16
+	
+	f4 r r d'8. ~ d32 d32
 }
 
 
@@ -85,9 +101,23 @@
 	
 	g, < c e, >
 	
-	< c c, > ~ < c c, >4 < g g, >
+	< c c, > ~ < c c, >4 < g' g, >
 	
 	< f a, >2 < e g, >4 r8 < c c, >8
+	
+	< c bes >2 ~ < c bes >8 < f f, > < e e, > < f f, >
+	
+	< c bes >2 ~ < c bes >8 <<
+		{ f4 f8 } \\
+		{ c8 b c }
+	>>
+	
+	<<
+		{ f2 a,4 bes } \\
+		{ d4 g, f e }
+	>>
+	
+	< a f >4 r r < d, d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
 }
 
 % Fagot
@@ -118,8 +148,59 @@
 	< a f >4 < g e > < a f > < bes g >
 	
 	< a f >2 < g e >4 r8 c,
+	
+	< e g >2 ~ < e g >8 < a c > < g bes > < f a >
+	
+	< e g >2 ~ < e g >8 < a c > < gis b > < a c >
+	
+	<<
+		{ d2 c4 bes } \\
+		{ bes4 b a e }
+	>>
+	
+	< f a >4 r r < d d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
+	
 }
 
+% Horns
+\new Staff \relative c {
+        \key f \major
+	\time 2/2
+        r1
+	
+	r
+	
+	r
+	
+	r
+	
+	r
+	
+	r
+	
+	r
+	
+	r
+	
+	< f f' >2 r
+	
+	< c c' >2 ~ < c c' >4 < c c' >
+	
+	< bes' f' > < c g' > < f a > < g bes >
+	
+	< f a >2 < c g' >4 r
+	
+	< c, c' >2 ~ < c c' >8 c'4 c8
+	
+	< c, c' >2 ~ < c c' >8 f'4 f8
+	
+	<<
+		{ f2. g4 } \\
+		{ f,2 a4 c }
+	>>
+	
+	< a f' >4 r r2
+}
 
 % Violin I
 \new Staff \relative c' {
@@ -148,6 +229,8 @@
 	f4 g16 fis g gis a4 bes16 a bes d
 	
 	a4 ~ a16 bes b c g4 r8 c,
+	
+	
 }
 
 % Violin II
