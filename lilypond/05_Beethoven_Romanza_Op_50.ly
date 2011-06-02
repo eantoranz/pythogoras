@@ -92,6 +92,7 @@
 
 % Fagot
 \new Staff \relative c' {
+	\clef bass
         \key f \major
         \time 2/2
 	r1
@@ -153,7 +154,7 @@
 \new Staff \relative c' {
         \key f \major
         \time 2/2
-	a a r bes
+	a4 a r bes
 	
 	r g g g
 	
@@ -181,6 +182,7 @@
 
 % Viola
 \new Staff \relative c' {
+	\clef alto
         \key f \major
         \time 2/2
 	c4 c r d
@@ -211,6 +213,7 @@
 
 % Cello or Bass
 \new Staff \relative c {
+	\clef bass
         \key f \major
         \time 2/2
 	f4 r bes, r
