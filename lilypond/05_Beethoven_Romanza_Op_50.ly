@@ -45,6 +45,14 @@
 	r
 	
 	a2 c4. e,8
+	
+	f4. a16 g g4. bes16 a
+	
+	a4. bes16 c d e f e f d c bes
+	
+	a4 ~ a16 c bes c g4 r
+	
+	a,2 g''
 }
 
 % Flute
@@ -90,6 +98,14 @@
 	f4 f8. ~ f32 f f4 r
 	
 	r1
+	
+	r
+	
+	r
+	
+	r2 r8 g e d
+	
+	cis r r4 r2
 }
 
 
@@ -142,6 +158,14 @@
 	< f a > < a c >8 ~ < a c >16 ~ < a c >32 < a c > < f a >4 r
 	
 	r1
+	
+	r
+	
+	r
+	
+	r2 r8 < g g' > < e e' > < d d' >
+	
+	< cis cis' > r r4 r2
 }
 
 % Fagot
@@ -195,6 +219,14 @@
 	
 	r1
 	
+	r
+	
+	r
+	
+	r2 r8 g e d
+	
+	cis r r4 r2
+	
 }
 
 % Horns
@@ -243,6 +275,14 @@
 	< a f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >4 r
 	
 	r1
+	
+	r
+	
+	r
+	
+	r
+	
+	r
 }
 
 % Violin I
