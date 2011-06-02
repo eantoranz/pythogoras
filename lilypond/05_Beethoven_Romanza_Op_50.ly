@@ -328,6 +328,14 @@
 	f4 c8. ~ c32 c a4 r
 	
 	r8 c f a g c e, g
+	
+	r c, f a c bes g c
+	
+	r f a c d e f bes,
+	
+	r a c a g g e d
+	
+	cis e e e r < e cis' > < e cis' > < e cis' >
 }
 
 % Violin II
@@ -373,6 +381,14 @@
 	a4 c8. ~ c32 c a4 r
 	
 	c1 ~
+	
+	c ~
+	
+	c4. a8 d e f bes,
+	
+	r a c a g g' e d
+	
+	cis cis cis cis r < a g' > < a g' > < a g' >
 	
 }
 
@@ -421,6 +437,14 @@
 	
 	r8 c f a g c e, g
 	
+	r c, f a c bes g c
+	
+	r f, a c bes c d g,
+	
+	r f a f e g e d
+	
+	cis a' a a r e' e e
+	
 }
 
 % Cello or Bass
@@ -467,6 +491,14 @@
 	f f,8. ~ f32 f f4 r
 	
 	f' r bes r
+	
+	a r e r
+	
+	f r bes, r
+	
+	c r c8 g' e d
+	
+	cis4 r a r
 	
 }
 
