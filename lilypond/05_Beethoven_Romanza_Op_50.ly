@@ -52,7 +52,15 @@
 	
 	a4 ~ a16 c bes c g4 r
 	
-	a,2 g''
+	a,2 g'' ~
+	
+	g16 f e d cis d f d c bes d bes a g f e
+	
+	a8. ~ a32 bes d,2 f8 e
+	
+	d4 r r2
+	
+	g,,2 f'''4 ~ f32 d b g f d b f
 }
 
 % Flute
@@ -106,6 +114,14 @@
 	r2 r8 g e d
 	
 	cis r r4 r2
+	
+	r1
+	
+	r
+	
+	r8 f a g f e d c
+	
+	b r r4 r2
 }
 
 
@@ -166,6 +182,14 @@
 	r2 r8 < g g' > < e e' > < d d' >
 	
 	< cis cis' > r r4 r2
+	
+	r1
+	
+	r
+	
+	r8 < f f' > < a a' > < g g' > < f f' > e' d c
+	
+	b r r4 r2
 }
 
 % Fagot
@@ -227,6 +251,14 @@
 	
 	cis r r4 r2
 	
+	r1
+	
+	r
+	
+	r8 f a g f e d c
+	
+	b r r4 r2
+	
 }
 
 % Horns
@@ -275,6 +307,14 @@
 	< a f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >4 r
 	
 	r1
+	
+	r
+	
+	r
+	
+	r
+	
+	r
 	
 	r
 	
