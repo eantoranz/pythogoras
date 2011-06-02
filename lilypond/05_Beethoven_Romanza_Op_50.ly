@@ -44,7 +44,7 @@
 	
 	r
 	
-	r
+	a2 c4. e,8
 }
 
 % Flute
@@ -240,7 +240,7 @@
 	
 	< f g >2 < f a >4 < c g' >
 	
-	< a f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' >4 r
+	< a f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >4 r
 	
 	r1
 }
@@ -280,6 +280,14 @@
 	d4 ~ d16 d e f f,4 a8. g16
 	
 	f4 a8.~ a32 a d,4 r
+	
+	r bes''8.~ bes32 bes e,4 f
+	
+	g,4 ~ g16 a bes d d c bes a a g bes e,
+	
+	f4 c8. ~ c32 c a4 r
+	
+	r8 c f a g c e, g
 }
 
 % Violin II
@@ -317,6 +325,14 @@
 	< g f' >4 ~ < g f' >8 < g f' > c4 e
 	
 	f a8.~ a32 a d,4 r
+	
+	r bes'8. ~ bes32 bes < g bes >4 < f a >
+	
+	< g, f' >4 ~ < g f' >8 < g f' > < a f' > f' e bes
+	
+	a4 c8. ~ c32 c a4 r
+	
+	c1 ~
 	
 }
 
@@ -357,6 +373,14 @@
 	
 	a a8. ~ a32 a d,4 r
 	
+	r bes'8. ~ bes32 bes cis4 d
+	
+	d4. d8 c c bes g
+	
+	f4 a8. ~ a32 a32 f4 r
+	
+	r8 c f a g c e, g
+	
 }
 
 % Cello or Bass
@@ -395,6 +419,14 @@
 	bes b c c,
 	
 	f a8. ~ a32 a d,4 r
+	
+	r bes'8. ~ bes32 bes cis,4 d
+	
+	bes bes' c c,
+	
+	f f,8. ~ f32 f f4 r
+	
+	f' r bes r
 	
 }
 
