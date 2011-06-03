@@ -486,6 +486,14 @@
 	r < e c' > < e c' > < e c' > < e c' > r r4
 	
 	r8 f f f f' ~ f32 e d c b a g f e d c b
+	
+	c4. r16. g'32 a8. ~ a32 f32 c'8. ~ c32 a
+	
+	g8 r r r16. < e c' >32 < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' > < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' >
+	
+	< e c' >4 r8 r16. g32 aes8. ~ aes32 f32 c'8. ~ c32 aes
+	
+	g8 r r r16. < e c' >32 < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' > < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' >
 }
 
 % Violin II
@@ -555,6 +563,14 @@
 	r < g e' > < g e' > < g e' > < g e' > r r4
 	
 	r8 c c c f ~ f32 e d c b8 < g f' >
+	
+	< g e' >4 ~ < g e' >8 r16. e'32 f8. ~ f32 a, < c f >8 ~ < c f >16 ~ < c f >32 < c f >
+	
+	< c e >8 r r r16. g'32 a8. ~ a32 a a8. ~ a32 a
+	
+	g4 r8 r16. < g, e' >32 < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' > < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' >
+	
+	< g e' >8 r r r16. g'32 aes8. ~ aes32 aes aes8. ~ aes32 aes
 	
 }
 
@@ -627,6 +643,14 @@
 	
 	r8 d d d b ~ b32 c d e f8 d
 	
+	c4. r16. c32 c8. ~ c32 c c8. ~ c32 c
+	
+	c8 r r r16. c32 f,8. ~ f32 f a8. ~ a32 a
+	
+	c4 r8 r16. c,32 f8. ~ f32 f aes8. ~ aes32 aes
+	
+	c8 r r r16. c32 f,8. ~ f32 f aes8. ~ aes32 a
+	
 }
 
 % Cello or Bass
@@ -697,6 +721,14 @@
 	g r r4 g8 r r4
 	
 	g,8 g' g g g, g g g
+	
+	c4. r16. c32 f8. ~ f32 f a8. ~ a32 a
+	
+	c8 r r r16. c32 f,8. ~ f32 f a8. ~ a32 a
+	
+	c4 r8 r16. c,32 f8. ~ f32 f aes8. ~ aes32 aes
+	
+	c8 r r r16. c32 f,8. ~ f32 f aes8. ~ aes32 aes
 	
 }
 
