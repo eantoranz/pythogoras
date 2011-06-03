@@ -70,6 +70,14 @@
 	
 	d,,32 e d e d e d e d e d e d e cis d g a g a g a g a g a g a g a fis g
 	
+	c,4 r r2
+	
+	r8 c16 d e f g gis a gis a f c' b c a
+	
+	g4 r r2
+	
+	r8 c,16 d e f fis g aes16. f32 c'16. aes32 f'8. ~ f32 aes,32
+	
 	
 }
 
@@ -140,6 +148,14 @@
 	r
 	
 	r
+	
+	r4 r8 r16. g'32 a8. ~ a32 f c'8. ~ c32 a
+	
+	g8 r r4 r2
+	
+	r4 r8 r16. g32 aes8. ~ aes32 f c'8. ~ c32 aes
+	
+	g8 r r4 r2
 	
 }
 
@@ -217,6 +233,20 @@
 	r
 	
 	r
+	
+	r4 r8 r16. < g e' >32 < a f' >8 ~ < a f' >16 ~ < a f' >32 < a f' > < a f' >8 ~ < a f' >16 ~ < a f' >32 < a f' >
+	
+	< g e' >8 r r4 <<
+		{ c2 ~ c4 } \\
+		{ r2 r4 }
+	>> % already in the following bar
+	
+	r8 r16. < g e' >32 < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' > < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' >
+	
+	< g e' >8 r r4 << 
+		{ c2 ~ c8 r } \\
+		{ r2 r4 }
+	>> % already in the following bar
 }
 
 % Fagot
@@ -293,6 +323,20 @@
 	r
 	
 	r
+	
+	r4 r8 r16. < e g >32 < f a >8 ~ < f a >16 ~ < f a >32 < f a > < f a >8 ~ < f a >16 ~ < f a >32 < f a >
+	
+	< e g >8 r r4 <<
+		{ c'2 ~ c4 } \\
+		{ r2 r4 }
+	>> % already in the following bar
+	
+	r8 r16. < e, g >32 < f aes >8 ~ < f aes >16 ~ < f aes >32 < f aes > < f aes >8 ~ < f aes >16 ~ < f aes >32 < f aes >
+	
+	< e g >8 r r4 <<
+		{ c'2 ~ c8 r } \\
+		{ r2 r4 }
+	>> % already in the following bar
 }
 
 % Horns
@@ -365,6 +409,14 @@
 	r
 	
 	r
+	
+	r4 r 8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
+	
+	< c c' >8 r r4 r2
+	
+	r4 r 8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
+	
+	< c c' >8 r r4 r2
 }
 
 % Violin I
