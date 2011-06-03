@@ -17,7 +17,7 @@ class MusicalNote:
     NOTE_F = 6
     NOTE_G = 7
 
-    def __init__(self, note, alter, index, duration = None, dotted = False):
+    def __init__(self, note, alter, index, duration = None, dotted = False, times = None):
         """
             Create a new note. if note = None or zero, it's a rest
         """
@@ -26,8 +26,10 @@ class MusicalNote:
         self.index = index
         self.duration = None
         self.dotted = dotted # could be a number later on but right now it's just True/False
+        self.times = times
         if duration != None:
             self.setDuration(duration)
+            
 
     def setDuration(self, duration):
         # Can be a number (1, 2, 4, 8, 16, 32, 64) or a number followed by a dot

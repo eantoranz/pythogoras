@@ -126,6 +126,7 @@ class LilypondStaff:
 
         self.firstTimeMarker = None
         self.firstKey = None # First key of the staff
+        self.times = None
 
     def getFirstTimeMarker(self):
         if self.firstTimeMarker == None:
@@ -344,7 +345,7 @@ class LilypondStaff:
             index = self.getNoteIndex(note, index, previousNote)
 
         if includeDuration:
-            return MusicalNote(note, alteration, index, duration, dotted)
+            return MusicalNote(note, alteration, index, duration, dotted, self.times)
         else:
             return MusicalNote(note, alteration, index)
         
@@ -443,9 +444,12 @@ class LilypondStaff:
         while True:
             token = tokens[tokenIndex].word
             if token == '}':
-                # Closing staff
-                break
-            if token == '\\clef':
+                if self.times == None:
+                    # Closing staff
+                    break
+                # probably closing a times
+                self.times = None
+            elif token == '\\clef':
                 # setting the key
                 tokenIndex += 1
             elif token == '\\key':
@@ -455,8 +459,22 @@ class LilypondStaff:
                 tokenIndex += 1
             elif token == '\\bar':
                 tokenIndex += 1 # Just a bar
+            elif token == "\\times":
+                # adjustment in measurement
+                tokenIndex += 1
+                # this has to be now a division
+                pos = tokens[tokenIndex].word.find("/")
+                if not pos:
+                    raise Exception("Times has to have a x/y format")
+                numerator = int(tokens[tokenIndex].word[:pos])
+                denominator = int(tokens[tokenIndex].word[pos+1:])
+                self.times = float(denominator) / numerator
+                # now a { must follow
+                tokenIndex += 1
+                if tokens[tokenIndex].word != "{":
+                    raise Exception("Times has to start with a {")
             else:
-                # It must be a note
+                # It must be a musical event
                 tokenIndex = self.getMusicalEvent(tokens, tokenIndex)
 
             tokenIndex += 1

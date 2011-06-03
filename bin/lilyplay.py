@@ -21,6 +21,8 @@ class LilypondNotePlayer:
         self.samplingRate = samplingRate
         # How many samples will I have to play?
         self.totalSamples = int(beatUnit * samplingRate * 60 / (note.duration * beatsPerMinute))
+        if self.note.times != None:
+            self.totalSamples /= self.note.times
         if note.dotted:
             self.totalSamples = int(self.totalSamples * 1.5)
         self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
