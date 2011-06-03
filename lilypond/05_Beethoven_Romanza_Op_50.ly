@@ -237,14 +237,14 @@
 	r4 r8 r16. < g e' >32 < a f' >8 ~ < a f' >16 ~ < a f' >32 < a f' > < a f' >8 ~ < a f' >16 ~ < a f' >32 < a f' >
 	
 	< g e' >8 r r4 <<
-		{ c2 ~ c4 } \\
+		{ c2 c4 } \\
 		{ r2 r4 }
 	>> % already in the following bar
 	
 	r8 r16. < g e' >32 < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' > < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' >
 	
 	< g e' >8 r r4 << 
-		{ c2 ~ c8 r } \\
+		{ c2 c8 r } \\
 		{ r2 r4 }
 	>> % already in the following bar
 }
@@ -327,14 +327,14 @@
 	r4 r8 r16. < e g >32 < f a >8 ~ < f a >16 ~ < f a >32 < f a > < f a >8 ~ < f a >16 ~ < f a >32 < f a >
 	
 	< e g >8 r r4 <<
-		{ c'2 ~ c4 } \\
+		{ c'2 c4 } \\
 		{ r2 r4 }
 	>> % already in the following bar
 	
 	r8 r16. < e, g >32 < f aes >8 ~ < f aes >16 ~ < f aes >32 < f aes > < f aes >8 ~ < f aes >16 ~ < f aes >32 < f aes >
 	
 	< e g >8 r r4 <<
-		{ c'2 ~ c8 r } \\
+		{ c'2 c8 r } \\
 		{ r2 r4 }
 	>> % already in the following bar
 }
@@ -410,11 +410,11 @@
 	
 	r
 	
-	r4 r 8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
+	r4 r8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
 	
 	< c c' >8 r r4 r2
 	
-	r4 r 8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
+	r4 r8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
 	
 	< c c' >8 r r4 r2
 }
