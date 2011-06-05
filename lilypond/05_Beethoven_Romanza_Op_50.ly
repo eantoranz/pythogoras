@@ -262,7 +262,7 @@
 	>> % already in the following bar
 	
 	<<
-		{ r8 c4 c8 r c ~ c c } \\
+		{ r8 c4 c8 r c c c } \\
 		{ r4 r2 r4 }
 	>> % already at the following bar
 	
@@ -363,7 +363,7 @@
 	>> % already in the following bar
 	
 	<<
-		{ r8 c4 c8 r c ~ c c } \\
+		{ r8 c4 c8 r c c c } \\
 		{ r4 r2 r4 }
 	>> % already at the following bar
 	
@@ -537,6 +537,14 @@
 	< e c' >4 r8 r16. g32 aes8. ~ aes32 f32 c'8. ~ c32 aes
 	
 	g8 r r r16. < e c' >32 < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' > < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' >
+	
+	< e c' >8 g r aes g g r aes
+	
+	g g r a r bes r g
+	
+	r e r e r2
+	
+	r8 f r f r g r g
 }
 
 % Violin II
@@ -614,6 +622,14 @@
 	g4 r8 r16. < g, e' >32 < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' > < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' >
 	
 	< g e' >8 r r r16. g'32 aes8. ~ aes32 aes aes8. ~ aes32 aes
+	
+	g8 e r f e e r f
+	
+	e e r fis r g r e
+	
+	r bes r bes r2
+	
+	r8 c r c r d r d
 	
 }
 
@@ -694,6 +710,14 @@
 	
 	c8 r r r16. c32 f,8. ~ f32 f aes8. ~ aes32 a
 	
+	c8 c r c ~ c c r c ~ 
+	
+	c c r c r c r bes
+	
+	r g r g r2
+	
+	r8 a r  a r bes r bes
+	
 }
 
 % Cello or Bass
@@ -772,6 +796,14 @@
 	c4 r8 r16. c,32 f8. ~ f32 f aes8. ~ aes32 aes
 	
 	c8 r r r16. c32 f,8. ~ f32 f aes8. ~ aes32 aes
+	
+	c8 r f, r c r f r
+	
+	c r c r c r c r
+	
+	c r c r r2
+	
+	f8 r f r bes, r bes r
 	
 }
 
