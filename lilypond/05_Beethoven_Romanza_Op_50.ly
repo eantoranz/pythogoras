@@ -84,15 +84,24 @@
 	
 	\times 4/6 { e f g f e d c cis d ees e f fis g gis a bes b c b d c bes g }
 	
+	%40
 	f2 a8. g16 bes8. g16
 	
-	f4 ~ f16 e g e c r r8 c
+	f4 ~ f16 e g e c4 r8 c
 	
 	f4 g16 fis g gis a4 bes16 a bes d
 	
 	a4 ~ a16 bes b c g4 r8 c,
 	
-	bes'4. g16. fis32 g e8 f e f
+	bes'4. g16. fis64 g e8 f e f
+	
+	bes4. g16. fis64 g e8 c' b c
+	
+	d4 ~ d16 dis e f f,4. a16 g
+	
+	g4. c16 e, f8 r r4
+	
+	r1
 }
 
 % Flute
@@ -177,6 +186,7 @@
 	
 	r
 	
+	%40
 	r
 	
 	r
@@ -186,6 +196,14 @@
 	r
 	
 	r
+	
+	r
+	
+	r
+	
+	r
+	
+	f2 a8. g16 bes8. g16
 }
 
 
@@ -286,6 +304,7 @@
 	
 	r1
 	
+	%40
 	r
 	
 	r
@@ -295,6 +314,16 @@
 	r
 	
 	r
+	
+	r
+	
+	r
+	
+	r
+	
+	< f, a >2 < d d' >
+	
+	
 }
 
 % Fagot
@@ -395,6 +424,7 @@
 	
 	r1
 	
+	%40
 	r
 	
 	r
@@ -404,6 +434,18 @@
 	r
 	
 	r
+	
+	r
+	
+	r
+	
+	<<
+		{ r2 r16 c b c d c bes g } \\
+		{ r1 }
+	>>
+	
+	< f a >2 < bes, d' >
+	
 }
 
 % Horns
@@ -491,6 +533,7 @@
 	
 	r
 	
+	%40
 	r
 	
 	r
@@ -500,6 +543,14 @@
 	r
 	
 	r
+	
+	r
+	
+	r
+	
+	r
+	
+	< f f' >2 r
 }
 
 % Violin I
@@ -678,6 +729,7 @@
 	
 	r bes r bes r2
 	
+	%40
 	r8 c r c r d r d
 	
 	r c r c r c r c
@@ -773,6 +825,7 @@
 	
 	r g r g r2
 	
+	%40
 	r8 a r  a r bes r bes
 	
 	r a r g r g r g
@@ -868,6 +921,7 @@
 	
 	c r c r r2
 	
+	%40
 	f8 r f r bes, r bes r
 	
 	c r c r c r bes r
