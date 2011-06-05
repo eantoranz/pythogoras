@@ -645,6 +645,16 @@
 	r a r a r g r g
 	
 	bes2 ~ bes8 c c c
+	
+	bes2 ~ bes8 < f c' > < f b > < f c' >
+	
+	< f d' > f r f r f r e
+	
+	e2 f16 c' b c d c bes g
+	
+	f2 a8. g16 bes8. g16
+	
+	
 }
 
 % Violin II
@@ -739,6 +749,14 @@
 	r f r f r e r e
 	
 	< g, e' >2 ~ < g e' >8 c' bes a
+	
+	< g, e' >2 ~ < g e' >8 a'8 gis a
+	
+	bes d, r d r c r bes
+	
+	bes2 a8 r r4
+	
+	a16 c c c a c c c bes d d d bes d d d
 	
 }
 
@@ -836,6 +854,14 @@
 	
 	< c, bes' >2 ~ < c bes' >8 a'' g f
 	
+	< c, bes' >2 ~ < c bes' >8 a' gis a
+	
+	bes bes r bes r a r c
+	
+	c2 ~ c16 c b c d c bes g
+	
+	f a a a f a a a d, bes' bes bes d, bes' bes bes
+	
 }
 
 % Cello or Bass
@@ -931,6 +957,14 @@
 	c r c r c r c r
 	
 	c2 ~ c8 r r4
+	
+	c2 ~ c8 r r4
+	
+	bes'8 r bes r c r c, r
+	
+	f r f, r f' r r4
+	
+	f4 f bes, bes
 	
 }
 
