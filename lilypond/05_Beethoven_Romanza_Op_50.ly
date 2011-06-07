@@ -249,7 +249,7 @@
 	
 	g,4 bes8. ~ bes32 bes e4 f
 	
-	g,4 ~ g16 a bes d d c bes a a g bes e,
+	g,4 ~ g16 aes bes des des c bes aes aes g bes e,
 	
 	f4 r r2
 	
