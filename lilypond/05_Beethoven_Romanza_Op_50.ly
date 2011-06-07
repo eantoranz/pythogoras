@@ -120,6 +120,15 @@
 	
 	r
 	
+	r
+	
+	g'2 c,4. aes16 f
+	
+	e8. f16 g8. aes16 bes8. c16 des8. e,16
+	
+	%60
+	f4 f, aes'4 ~ aes16 g32 aes bes16 aes
+	
 }
 
 % Flute
@@ -239,6 +248,15 @@
 	f4 r r d'8. ~ d32 d
 	
 	g,4 bes8. ~ bes32 bes e4 f
+	
+	g,4 ~ g16 a bes d d c bes a a g bes e,
+	
+	f4 r r2
+	
+	r1
+	
+	%60
+	r
 }
 
 
@@ -380,6 +398,18 @@
 	< f a >4 r r < d d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
 	
 	g4 < bes bes' >8 ~ < bes bes' >16 ~ < bes bes' >32 < bes bes' > < g' bes >4 < f aes >
+	
+	<<
+		{ f2. bes,4 } \\
+		{ g2 aes4 g }
+	>>
+	
+	< f aes >4 r r2
+	
+	r1
+	
+	%60
+	r
 	
 }
 
@@ -523,6 +553,18 @@
 	
 	< g, g' >4 bes'8. ~ bes32 bes < g bes >4 < f aes >
 	
+	<<
+		{ g2 a4 bes } \\
+		{ f2. g4 }
+	>>
+	
+	< f aes >4 r r2
+	
+	r1
+	
+	%60
+	r
+	
 }
 
 % Horns
@@ -649,10 +691,17 @@
 	
 	r r4 < f f' >
 	
-	%<<
-	%	{ g'2 f } \\
-	%	{ f2. }
-	%>> < c, c' >4
+	<<
+		{ g'2 f4 } \\
+		{ f2. }
+	>> < c, c' >4
+	
+	< f c' > r r2
+	
+	r1
+	
+	%60
+	r
 }
 
 % Violin I
