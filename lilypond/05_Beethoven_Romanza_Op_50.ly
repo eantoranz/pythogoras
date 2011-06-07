@@ -822,6 +822,15 @@
 	
 	r bes''8. ~ bes32 bes e,4 f
 	
+	g,4 ~ g16 aes bes des des c bes aes aes g bes ees,
+	
+	f16 f f f f f f f f f f f f f f f
+	
+	< g, e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' > < g e' >
+	
+	%60
+	f' f f f f f f f f f f f f f f f
+	
 	
 }
 
@@ -942,6 +951,15 @@
 	f a8. ~ a32 a d,4 r
 	
 	r bes'8. ~ bes32 bes e,4 f
+	
+	< g, f' >4 ~ < g f' >8 < g f' > f'4 e8 bes
+	
+	aes16 c c c c c c c c c c c c c c c
+	
+	des des des des des des des des des des des des des des des des
+	
+	%60
+	c c c c c c c c c c c c c c c c
 	
 }
 
@@ -1064,6 +1082,15 @@
 	
 	r bes'8. ~ bes32 bes bes4 aes
 	
+	des4. g,16 bes aes8 c bes g
+	
+	f16 aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes
+	
+	bes bes bes bes bes bes bes bes bes bes bes bes bes bes bes bes
+	
+	%60
+	aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes
+	
 }
 
 % Cello or Bass
@@ -1184,6 +1211,15 @@
 	f a8. ~ a32 a d,4 r
 	
 	r bes'8. ~ bes32 bes c,4 des
+	
+	bes bes' c c,
+	
+	f8 r f r f r f r
+	
+	f, r f' r f r f r
+	
+	%60
+	f, r f' r f r f r
 	
 }
 
