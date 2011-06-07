@@ -367,7 +367,7 @@
 	
 	< bes' c >2 ~ < bes c >8 < f f' >8 < e e' > < f f' >
 	
-	< bes c >2 ~ < bes c>8 <<
+	< bes c >2 ~ < bes c >8 <<
 		{ f'4 f8 } \\
 		{ c8 b c }
 	>>
