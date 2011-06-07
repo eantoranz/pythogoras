@@ -129,6 +129,14 @@
 	%60
 	f4 f, aes'4 ~ aes16 g32 aes bes16 aes
 	
+	\times 4/6 { ges f ges bes aes ges f ees des c bes aes g aes bes c des ees f ges ees c aes ges }
+	
+	\times 4/6 { f des ees f ges aes bes c des ees f ges aes bes c des ees e } f8 a,,,
+	
+	bes \times 4/6 { bes''16 g bes ees, d ees ges f ges c, b c ees d ees ges, bes aes ges f ees }
+	
+	des2 f8. ~ f32 ees ges8. ~ ges32 ees 
+	
 }
 
 % Flute
@@ -256,6 +264,14 @@
 	r1
 	
 	%60
+	r
+	
+	r
+	
+	r
+	
+	r
+	
 	r
 }
 
@@ -409,6 +425,14 @@
 	r1
 	
 	%60
+	r
+	
+	r
+	
+	r
+	
+	r
+	
 	r
 	
 }
@@ -565,6 +589,14 @@
 	%60
 	r
 	
+	r
+	
+	r
+	
+	r
+	
+	r
+	
 }
 
 % Horns
@@ -702,6 +734,14 @@
 	
 	%60
 	r
+	
+	r
+	
+	r
+	
+	r
+	
+	r
 }
 
 % Violin I
@@ -831,7 +871,13 @@
 	%60
 	f' f f f f f f f f f f f f f f f
 	
+	ges ges ges ges ges ges ges ges ges ges ges ges ges ges ges ges
 	
+	f f f f f f f f f f f f f f f f
+	
+	ees ees ees ees ees ees ees ees ees ees ees ees ees ees ees ees
+	
+	des8 des r des r ees r ees
 }
 
 % Violin II
@@ -960,6 +1006,14 @@
 	
 	%60
 	c c c c c c c c c c c c c c c c
+	
+	c c c c c c c c c c c c c c c c
+	
+	des des des des des des des des des des des des des des a a
+	
+	des des des des des des des des c c c c c c c c
+	
+	aes8 aes r aes r bes r bes
 	
 }
 
@@ -1091,6 +1145,14 @@
 	%60
 	aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes
 	
+	aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes aes
+	
+	aes aes aes aes aes aes aes aes aes aes aes aes aes aes des des
+	
+	bes bes bes bes bes bes bes bes aes aes aes aes aes aes aes aes
+	
+	f8 f r f r ges r ges
+	
 }
 
 % Cello or Bass
@@ -1220,6 +1282,14 @@
 	
 	%60
 	f, r f' r f r f r
+	
+	ees r ees r aes, r aes r
+	
+	des r des r f r f r
+	
+	ges r ges r aes r aes r
+	
+	des,4 des ges, ges
 	
 }
 
