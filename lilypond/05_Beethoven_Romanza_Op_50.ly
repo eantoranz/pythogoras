@@ -154,7 +154,17 @@
 	
 	c'16 e, g c e c e c e g, c e g e g e
 	
-	c8
+	c8 r r4 r2
+	
+	g16 e g e g e g e aes f aes f a fis a fis
+	
+	bes g bes g bes g bes g c a c a cis a cis a
+	
+	d cis d bes c b c a bes a bes a a gis a fis
+	
+	%g32 a bes a c bes d c a c g bes g a fis a g a bes a c bes d c bes c a bes g a fis a
+	
+	%g a bes a c bes a bes g a f g e f d e c e d f e g f a g bes a c bes a bes g
 	
 }
 
@@ -311,6 +321,12 @@
 	c8 r r4 r2
 	
 	r1
+	
+	r
+	
+	r
+	
+	r
 }
 
 
@@ -503,6 +519,12 @@
 	c8 r r4 r2
 	
 	r1
+	
+	r
+	
+	r
+	
+	r
 	
 }
 
@@ -697,6 +719,12 @@
 	
 	r1
 	
+	r
+	
+	r
+	
+	r
+	
 }
 
 % Horns
@@ -861,6 +889,12 @@
 	< c c' >8 r r4 r2
 	
 	r1
+	
+	r
+	
+	r
+	
+	r
 }
 
 % Violin I
@@ -1015,6 +1049,13 @@
 	
 	c8 r r4 r2
 	
+	g'16 e g e c4 r2
+	
+	r8 g g g r aes r a
+	
+	r bes bes bes r c r cis
+	
+	r d r c r bes r a
 	
 }
 
@@ -1169,6 +1210,14 @@
 	c'16 e, g c e c e c e g, c e g e g e
 	
 	c8 r r4 r2
+	
+	r4 g16 e g e c4 r 
+	
+	r8 e e e r f r fis
+	
+	r g g g r a r a
+	
+	r bes r a r g r fis
 	
 }
 
@@ -1325,6 +1374,14 @@
 	
 	c8 r r4 r2
 	
+	r g16 e g e g e g e
+	
+	c4 r c'8 r c r
+	
+	c r r4 c8 r c r
+	
+	c r c r c r c r
+	
 }
 
 % Cello or Bass
@@ -1479,6 +1536,14 @@
 	c8 g16 c e c e c e g, c e g e g e
 	
 	c8 r r4 r2
+	
+	r g'16 e g e g e g e
+	
+	c4 r c8 r c r
+	
+	c4 r c8 r c r
+	
+	c r c r c r c r
 	
 }
 
