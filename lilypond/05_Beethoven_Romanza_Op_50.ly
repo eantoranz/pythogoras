@@ -145,6 +145,17 @@
 	
 	r
 	
+	r2 c'16 g c e g e g e
+	
+	%70
+	c8 r r4 g'16 c, e g c g c g
+	
+	e8 r r4 r2
+	
+	c'16 e, g c e c e c e g, c e g e g e
+	
+	c8
+	
 }
 
 % Flute
@@ -289,6 +300,17 @@
 	b4 c8 r r4 e
 	
 	f2. ~ f8. b,16
+	
+	c16 g,, c e g e g e c8 r r4
+	
+	%70
+	g'16 c, e g c g c g r8 r r4
+	
+	c'16 e, g c e c e c e g, c e g e g e
+	
+	c8 r r4 r2
+	
+	r1
 }
 
 
@@ -471,6 +493,17 @@
 		{ c2 f,8. f32 f f8. f32 f }
 	>>
 	
+	< e c' >16 g c < e, e' > < g g' > < e e' > < g g' > < e e' > < c c' >8 r r4
+	
+	%70
+	g'16 c, e g c g c g e8 r r4
+	
+	c'16 e, g c e c e c e g, c e g e g e
+	
+	c8 r r4 r2
+	
+	r1
+	
 }
 
 % Fagot
@@ -651,7 +684,18 @@
 	<<
 		{ f'2 } \\
 		{ bes,16 aes c a g f a f }
-	>> < des f' >8 ~ < des f' >16 ~ < des f' >32 ~ < des f' > < des f' >8 ~ < des f' >16 ~ < des f' >32 ~ < des f' >
+	>> < des f' >8 ~ < des f' >16 ~ < des f' >32 ~ < des des' > < des des' >8 ~ < des des' >16 ~ < des des' >32 ~ < des des' >
+	
+	< c c' >16 g c e g e g e c8 r r4
+	
+	%70
+	g'16 c, e g c g c g e8 r r4
+	
+	c8 g16 c e c e c e g, c e g e g e
+	
+	c8 r r4 r2
+	
+	r1
 	
 }
 
@@ -805,7 +849,18 @@
 	
 	< f f' > < c c' >2 < c c' >4
 	
-	< f f' >2 ~ < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' >  
+	< f f' >2 ~ < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' >
+	
+	< c c' >1
+	
+	%70
+	< c c' >
+	
+	< c c' > ~
+	
+	< c c' >8 r r4 r2
+	
+	r1
 }
 
 % Violin I
