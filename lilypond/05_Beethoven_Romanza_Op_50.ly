@@ -160,7 +160,7 @@
 	
 	bes g bes g bes g bes g c a c a cis a cis a
 	
-	d cis d bes c b c a bes a bes a a gis a fis
+	d cis d bes c b c a bes a bes g a gis a fis
 	
 	g32 a bes a c bes d c a c g bes g a fis a g a bes a c bes d c bes c a bes g a fis a
 	
@@ -170,6 +170,14 @@
 	
 	%80
 	f4 ~ f16 e g e c4 r8 c
+	
+	f16 e f fis g fis g gis a gis a c bes c d bes
+	
+	a4 ~ a32 c f e d c bes a g4 r8 c,
+	
+	bes'4. g16 fis32 g e8 f e f
+	
+	bes4. g16 fis32 g e8 c' b c
 	
 }
 
@@ -340,6 +348,14 @@
 	r
 	
 	%80
+	r
+	
+	r
+	
+	r
+	
+	r
+	
 	r
 }
 
@@ -549,6 +565,20 @@
 	%80
 	r
 	
+	r
+	
+	r
+	
+	< bes c >2 ~ < bes c >8 <<
+		{ c4 c8 } \\
+		{ f,8 e f }
+	>>
+	
+	< bes c >2 ~ < bes c >8 <<
+		{ c8 b c } \\
+		{ f,4 f8 }
+	>>
+	
 }
 
 % Fagot
@@ -756,6 +786,20 @@
 	
 	%80
 	r
+	
+	r
+	
+	r
+	
+	<<
+		{ r16 c e c e c e g bes8 } \\
+		{ c,8 r r4 r8 }
+	>> < a' c >8 < g bes > < f a >
+	
+	<<
+		{ g16 c, e c e c e g bes8 } \\
+		{ e,8 r r4 r8 }
+	>> < a c >8 < gis b > < a c >
 }
 
 % Horns
@@ -935,6 +979,14 @@
 	
 	%80
 	r
+	
+	r
+	
+	r
+	
+	r
+	
+	r
 }
 
 % Violin I
@@ -1099,12 +1151,20 @@
 	
 	r bes r g r bes r g
 	
-	r bes r g b e r4
+	r bes r g r e r4
 	
 	r16 f f f r f f f  r g g g  r g g g
 	
 	%80
 	r f f f r e e e r e e e r e e e
+	
+	r f f f r g g g r a a a r bes bes bes
+	
+	r a a a r a a a r g g g r g g g
+	
+	< g, e' >2 ~ < g e' >8 r r4
+	
+	< g e' >2 ~ < g e' >8 r r4
 	
 }
 
@@ -1276,6 +1336,14 @@
 	
 	%80
 	r c c c r c c c r c c c r c c c
+	
+	r c c c r c c c r c c c r g' g g
+	
+	r f f f r f f f r e e e  r e e e
+	
+	bes2 ~ bes8 r r4
+	
+	bes2 ~ bes8 r r4
 	
 }
 
@@ -1449,6 +1517,14 @@
 	%80
 	r a a a r g g g r g g g r g g g
 	
+	r a a a r c c c r f f f r d d d
+	
+	r c c c r c c c r c c c r c c c
+	
+	< c, bes' >2 ~ < c bes' >8 r r4
+	
+	< c bes' >2 ~ < c bes' >8 r r4
+	
 }
 
 % Cello or Bass
@@ -1620,6 +1696,14 @@
 	
 	%80
 	c r c r c r bes r
+	
+	a r e' r f r bes, r
+	
+	c r c' r c, r c r
+	
+	c2 ~ c8 r r4
+	
+	c2 ~ c8 r r4
 	
 }
 
