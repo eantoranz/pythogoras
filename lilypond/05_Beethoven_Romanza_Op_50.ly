@@ -519,7 +519,7 @@
 	>>
 	
 	<<
-		{ f2 f16 f a f ees d c b } \\
+		{ f2 f16 f aes f ees d c b } \\
 		{ c2 f,8. f32 f f8. f32 f }
 	>>
 	
@@ -728,7 +728,7 @@
 	
 	<<
 		{ f'2 } \\
-		{ bes,16 aes c aes g f a f }
+		{ bes,16 aes c aes g f aes f }
 	>> < des f' >8 ~ < des f' >16 ~ < des f' >32 ~ < des des' > < des des' >8 ~ < des des' >16 ~ < des des' >32 ~ < des des' >
 	
 	< c c' >16 g c e g e g e c8 r r4
