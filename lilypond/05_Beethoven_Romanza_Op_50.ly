@@ -1421,6 +1421,12 @@
 	%100
 	f8 r r4 a8 r r4
 	
+	c8 r r4 r2
+	
+	r c4. a8
+	
+	f r c r a r r4
+	
 }
 
 % Violin II
@@ -1633,6 +1639,12 @@
 	
 	%100
 	a8 r r4 f'8 r r4
+	
+	a8 r r4 r2
+	
+	r c4. a8
+	
+	f r c r a r r4
 	
 }
 
@@ -1848,6 +1860,12 @@
 	%100
 	f8 r r4 c'8 r r4
 	
+	f8 r r4 r2
+	
+	r c4. a8
+	
+	f r a r f r r4
+	
 }
 
 % Cello or Bass
@@ -2061,6 +2079,12 @@
 	
 	%100
 	f8 r r4 f8 r r4
+	
+	f8 r r4 r2
+	
+	r c'4. a8
+	
+	f r f, r f r r4
 	
 }
 
