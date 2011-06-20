@@ -187,6 +187,15 @@
 	
 	r
 	
+	r16 a, gis a bes b c cis d ees e f fis g gis a
+	
+	%90
+	bes c cis d d, e f fis g a bes a bes a bes a
+	
+	bes32 a d c bes a d c bes a d c bes a d c bes a d c bes a d c bes a g f e d c bes
+	
+	a16 bes c d e f g a bes b c cis d e f a,
+	
 }
 
 % Flute
@@ -373,6 +382,17 @@
 	g,4 bes8. ~ bes32 bes e4 f
 	
 	g,4 ~ g16 a bes d d c bes a a g bes e,
+	
+	f4 r r2
+	
+	%90
+	r1
+	
+	r
+	
+	r4 f r f
+	
+	
 }
 
 
@@ -596,7 +616,7 @@
 	>>
 	
 	<<
-		{ d'2 c ~ c4 } \\
+		{ d'2 c c4 } \\
 		{ f,4 g a bes a }
 	>> % already at the next bar
 	
@@ -605,6 +625,15 @@
 	g,4 bes8. ~ bes32 bes < g' bes >4 < f a >
 	
 	< g, f' >4 ~ < g f' >8 < g f' > < a f' >4 < g bes >
+	
+	< f a > a8. ~ a32 a d,4 r
+	
+	%90
+	r bes'8. ~ bes32 bes e,4 r
+	
+	r1
+	
+	r4 < f a > r < f c' >
 	
 }
 
@@ -829,7 +858,7 @@
 	>> < a c >8 < gis b > < a c >
 	
 	<<
-		{ d4 f ~ f e f } \\
+		{ d4 f f e f } \\
 		{ bes, b c2 f,4 }
 	>> % alredy ay the following bar
 	
@@ -841,6 +870,15 @@
 		{ g2 a4 bes } \\
 		{ f2. e4 }
 	>>
+	
+	< f a >4 a8. ~ a32 a d,4 r
+	
+	%90
+	r bes'8. ~ bes32 bes e,4 r
+	
+	r1
+	
+	r4 < a c > r < a c >
 }
 
 % Horns
@@ -1036,6 +1074,18 @@
 	r2 r4 < f' a >
 	
 	< f g >2 < f a >4 < c g' >
+	
+	< a f' > r r2
+	
+	%90
+	r1
+	
+	r
+	
+	< f f'>4 r <<
+		{ r2 } \\
+		{ f'2 }
+	>>
 }
 
 % Violin I
