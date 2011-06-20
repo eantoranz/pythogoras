@@ -196,6 +196,14 @@
 	
 	a16 bes c d e f g a bes b c cis d e f a,
 	
+	r fis a g r a c bes r c e d r e f d
+	
+	\times 4/6 { c f e d c b c f e d c b c f e d c b d c b } d32 c bes a
+	
+	g32 a g a g a g a g a g a g a fis g c d c d c d c d c d c d c d b c
+	
+	f4 r r2
+	
 }
 
 % Flute
@@ -391,6 +399,14 @@
 	r
 	
 	r4 f r f
+	
+	r f r f
+	
+	r f r2
+	
+	r1
+	
+	f2 a4. bes16 c
 	
 	
 }
@@ -634,6 +650,17 @@
 	r1
 	
 	r4 < f a > r < f c' >
+	
+	r < f g > r < f g >
+	
+	r < f a > r2
+	
+	r1
+	
+	<<
+		{ f'2 a4. bes16 c } \\
+		{ a,2 ees' }
+	>>
 	
 }
 
@@ -879,6 +906,17 @@
 	r1
 	
 	r4 < a c > r < a c >
+	
+	r < bes d > r < b d >
+	
+	r c r2
+	
+	r1
+	
+	< a f' >2 < c ees >
+	
+	
+	
 }
 
 % Horns
@@ -1086,6 +1124,14 @@
 		{ r2 } \\
 		{ f'2 }
 	>>
+	
+	< f g >1
+	
+	< f a >8 r < f a > r r2
+	
+	r1
+	
+	< f, f' >2 ~ < f f' >4 < f f' >
 }
 
 % Violin I
@@ -1282,6 +1328,14 @@
 	
 	r f f f r < c a' > < c a' > < c a' >
 	
+	r < g g' > < g g' > < g g' > r < g g' > < g g' > < g g' > 
+	
+	r < c a' > r4 r2
+	
+	r8 bes' bes bes bes' bes32 a g f e d c bes a g f e
+	
+	f2 a4. bes16 c
+	
 }
 
 % Violin II
@@ -1477,6 +1531,14 @@
 	c8 bes r bes r bes r bes
 	
 	r a a a r < c f > < c f > < c f >
+	
+	r < d f > < d f > < d f > r < d f > < d f > < d f > 
+	
+	r  f r4 r2
+	
+	r8  g g g < g, e' > < g e' > < g e' > < g e' >
+	
+	a16 a a a a a a a < c e > < c e > < c e > < c e > < c e > < c e > < c e > < c e >
 	
 }
 
@@ -1675,6 +1737,14 @@
 	
 	f2 a
 	
+	bes b
+	
+	c8 r r4 r2
+	
+	r8 f f f e bes bes bes
+	
+	f16 f' f f f, f' f f f, f' f f f, f' f f
+	
 }
 
 % Cello or Bass
@@ -1871,6 +1941,14 @@
 	c,4 d e c
 	
 	f2 a,
+	
+	bes b
+	
+	c8 r r4 r2
+	
+	c8 c' c c c, c c c
+	
+	f,16 f' f f f, f' f f f, f' f f f, f' f f
 	
 }
 
