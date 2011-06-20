@@ -1082,7 +1082,7 @@
 	
 	r
 	
-	< f f'>4 r <<
+	< f f' >4 r <<
 		{ r2 } \\
 		{ f'2 }
 	>>
@@ -1271,7 +1271,16 @@
 	
 	r bes''8. ~ bes32 bes e,4 f
 	
-	g4 ~ g16 a bes d d c bes a a g bes e,
+	g,4 ~ g16 a bes d d c bes a a g bes e,
+	
+	f4 r r d'8. ~ d32 d
+	
+	%90
+	f,4 r r g8. ~ g32 g
+	
+	c,8 e r < c f > r < c f > r < c e >
+	
+	r f f f r < c a' > < c a' > < c a' >
 	
 }
 
@@ -1459,6 +1468,15 @@
 	r bes'8. ~ bes32 bes e,4 f
 	
 	< g, f' >4 ~ < g f' >8 < g f' > < c f > f e bes
+	
+	a4 r r2
+	
+	%90
+	r1
+	
+	c8 bes r bes r bes r bes
+	
+	r a a a r < c f > < c f > < c f >
 	
 }
 
@@ -1648,6 +1666,15 @@
 	
 	d4. d8 a c bes g
 	
+	f4 r r2
+	
+	%90
+	r1
+	
+	e4 f g e
+	
+	f2 a
+	
 }
 
 % Cello or Bass
@@ -1835,6 +1862,15 @@
 	r bes'8. ~ bes32 bes cis,4 d
 	
 	bes bes' c c,
+	
+	f r r d'8. ~ d32 d
+	
+	%90
+	g,4 r r g8. ~ g32 g
+	
+	c,4 d e c
+	
+	f2 a,
 	
 }
 
