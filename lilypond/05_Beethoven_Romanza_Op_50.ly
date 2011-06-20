@@ -213,6 +213,12 @@
 	%100
 	f8 g16 a bes c d e f a, bes c d e f g
 	
+	a c, d e f g a bes c4. a8
+	
+	f4 r r2
+	
+	r1
+	
 }
 
 % Flute
@@ -425,6 +431,12 @@
 	
 	%100
 	f8 r r4 f8 r r4
+	
+	a8 r r4 r2
+	
+	c4. a8 f r r4
+	
+	f8 r f r f r r4
 	
 }
 
@@ -687,6 +699,12 @@
 	
 	%100
 	< a c >8 r r4 < a c >8 r r4
+	
+	< a c >8 r r4 r2
+	
+	c4. a8 f r r4
+	
+	< f a >8 r < a c > r < f a > r r4
 	
 }
 
@@ -953,6 +971,12 @@
 	%100
 	f'8 r r4 f8 r r4
 	
+	f8 r r4 r2
+	
+	c4. a8 f r r4
+	
+	< f a >8 r < a c > r < f a > r r4
+	
 }
 
 % Horns
@@ -1177,6 +1201,13 @@
 	
 	%100
 	r1
+	
+	r
+	
+	r2 < c' c' >4 ~ < c c' >8 < a a' >
+	
+	< f f' > r < f c' > r < f f' > r r4
+	
 }
 
 % Violin I
