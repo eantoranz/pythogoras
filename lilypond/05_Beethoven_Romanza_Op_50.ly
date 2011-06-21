@@ -202,13 +202,13 @@
 	
 	g32 a g a g a g a g a g a g a fis g c d c d c d c d c d c d c d b c
 	
-	f4 r r2
+	f,4 r r2
 	
 	d'4. c16 bes bes a a g g f f e
 	
 	f4 r r2
 	
-	d4 ~ d16 cis32 d e d c bes c bes a g a g f e f e d c b c d e
+	d'4 ~ d16 cis32 d e d c bes c bes a g a g f e f e d c b c d e
 	
 	%100
 	f8 g16 a bes c d e f a, bes c d e f g
