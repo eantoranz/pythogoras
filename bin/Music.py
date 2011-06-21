@@ -17,7 +17,7 @@ class MusicalNote:
     NOTE_F = 6
     NOTE_G = 7
 
-    def __init__(self, note, alter, index, duration = None, dots = 0, times = None):
+    def __init__(self, note, alter, index, duration = None, dots = None, times = None):
         """
             Create a new note. if note = None or zero, it's a rest
         """
@@ -30,25 +30,25 @@ class MusicalNote:
         if duration != None:
             self.setDuration(duration)
 
-    def setDuration(self, duration):
+    def setDuration(self, duration, analyzeDots = False):
         duration = str(duration)
         # Can be a number (1, 2, 4, 8, 16, 32, 64) or a number followed by some dots
-        dots = 0
+        
+        # if the duration has dots, skip pver them
         firstDotPos = str(duration).find('.')
         if (firstDotPos == -1):
             # there is only the duration of the note
             self.duration = int(duration)
-            self.dots = 0
         else:
             self.duration = int(duration[0:firstDotPos])
-            # how many dots are left?
-            pos = firstDotPos + 1
-            dots = 1
-            while pos < len(duration) and duration[pos] == ".":
-                dots += 1
-                pos += 1
-            self.dots = dots
-        
+            if analyzeDots:
+                dots = 0
+                pos = firstDotPos
+                while pos < len(duration) and duration[pos]==".":
+                    dots += 1
+                    pos += 1
+                # finished dots
+                self.dots = dots
 
     # Will return a tuple. index 0 is diatonic and index 1 is chromatic
     def getDistance(self, note2):
@@ -138,7 +138,6 @@ class MusicalNote:
         if showDuration:
             temp += "<" + str(self.duration)
             if (self.dots > 0):
-                sys.stderr.write("Debo incluir " + str(self.dots) + " puntillos\n")
                 for i in range(self.dots):
                     temp += "."
             temp += ">"
@@ -152,7 +151,7 @@ class MusicalChord:
     def __init__(self, notes, duration):
         self.notes = notes
         for note in notes:
-            note.setDuration(duration)
+            note.setDuration(duration, True)
     
     def toString(self):
         temp = "Chord. Duration: " + str(self.notes[0].duration)

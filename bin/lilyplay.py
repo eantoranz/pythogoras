@@ -21,6 +21,7 @@ class LilypondNotePlayer:
         self.samplingRate = samplingRate
         # How many samples will I have to play?
         self.totalSamples = int(beatUnit * samplingRate * 60 / (note.duration * beatsPerMinute))
+        sys.stderr.write("Will play " + str(note) + "\n")
         if self.note.times != None:
             self.totalSamples /= self.note.times
         if note.dots:

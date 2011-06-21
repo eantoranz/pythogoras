@@ -322,12 +322,10 @@ class LilypondStaff:
                     charIndex += 1
                 duration = noteStr[durationIndexStart:charIndex]
                 # is there a dot present?
-                if charIndex < len(noteStr):
-                    # could be dotted
-                    dots = 0
-                    while charIndex < len(noteStr) and noteStr[charIndex]:
-                        dots += 1
-                        charIndex += 1
+                dots = 0
+                while charIndex < len(noteStr) and noteStr[charIndex] == ".":
+                    dots += 1
+                    charIndex += 1
                 break
             charIndex+=1
 
