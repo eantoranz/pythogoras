@@ -367,12 +367,13 @@ class LilypondStaff:
                         duration = token.word[1:]
                     else:
                         duration = self.lastDuration
-                    self.events.append(MusicalChord(notes, duration))
+                    chord = MusicalChord(notes, duration)
+                    self.events.append(chord)
                     self.lastReferenceNote = notes[0]
                 
                 # @TODO this is where we go out... maybe we chould rewrite the function to get he return at the end
-                self.lastDuration = duration
-                self.lastDots = True
+                self.lastDuration = chord.getDuration()
+                self.lastDots = chord.getDots()
                 return tokenIndex
             
             # add a new note
@@ -398,7 +399,7 @@ class LilypondStaff:
             notes = list()
             while tokens[tokenIndex].word != "}":
                 # let's get the notes
-                note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDotted, True)
+                note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDots, True)
                 notes.append(note)
                 if note.note not in [0, None]:
                     # it's not a rest

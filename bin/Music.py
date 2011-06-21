@@ -174,8 +174,8 @@ class MusicalChord:
     def getDuration(self):
         return self.notes[0].duration
 
-    def isDotted(self):
-        return self.notes[0].dotted
+    def getDots(self):
+        return self.notes[0].dots
 
 class MusicalPolyphony:
 
