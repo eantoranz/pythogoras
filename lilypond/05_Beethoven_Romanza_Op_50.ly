@@ -56,7 +56,7 @@
 	
 	g16 f e d cis d f d c bes d bes a g f e
 	
-	a8. ~ a32 bes d,2 f8 e
+	a8.. bes32 d,2 f8 e
 	
 	d4 r r2
 	
@@ -135,7 +135,7 @@
 	
 	bes \times 4/6 { bes''16 g bes ees, d ees ges f ges c, b c ees d ees ges, bes aes ges f ees }
 	
-	des2 f8. ~ f32 ees ges8. ~ ges32 ees 
+	des2 f8.. ees32 ges8.. ees32
 	
 	des4 ~ des16 c ees c aes8 r r4
 	
@@ -255,13 +255,13 @@
 	
 	d4 ~ d16 d e f f,4 a8. g16
 	
-	f4 r r d'8. ~ d32 d32
+	f4 r r d'8.. d32
 	
-	g,4 bes8. ~ bes32 bes32 e4 f
+	g,4 bes8.. bes32 e4 f
 	
 	g,4 ~ g16 a bes d d c bes a a g bes e,
 	
-	f4 f8. ~ f32 f f4 r
+	f4 f8.. f32 f4 r
 	
 	r1
 	
@@ -289,11 +289,11 @@
 	
 	r
 	
-	r4 r8 r16. g'32 a8. ~ a32 f c'8. ~ c32 a
+	r4 r8 r16. g'32 a8.. f32 c'8.. a32
 	
 	g8 r r4 r2
 	
-	r4 r8 r16. g32 aes8. ~ aes32 f c'8. ~ c32 aes
+	r4 r8 r16. g32 aes8.. f32 c'8.. aes32
 	
 	g8 r r4 r2
 	
@@ -335,9 +335,9 @@
 	
 	d4 ~ d16 d e f f,4 a8. g16
 	
-	f4 r r d'8. ~ d32 d
+	f4 r r d'8.. d32
 	
-	g,4 bes8. ~ bes32 bes e4 f
+	g,4 bes8.. bes32 e4 f
 	
 	g,4 ~ g16 aes bes des des c bes aes aes g bes e,
 	
@@ -400,9 +400,9 @@
 	
 	r
 	
-	r2 r4 d8. ~ d32 d
+	r2 r4 d8.. d32
 	
-	g,4 bes8. ~ bes32 bes e4 f
+	g,4 bes8.. bes32 e4 f
 	
 	g,4 ~ g16 a bes d d c bes a a g bes e,
 	
@@ -463,9 +463,10 @@
 	
 	< a f >2 < d d, >
 	
+	%10
 	g, < c e, >
 	
-	< c c, > ~ < c c, >4 < g' g, >
+	< c c, >2. < g' g, >4
 	
 	< f a, >2 < e g, >4 r8 < c c, >8
 	
@@ -481,13 +482,13 @@
 		{ d4 g, f e }
 	>>
 	
-	< a f >4 r r < d, d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
+	< a f >4 r r < d, d' >8.. < d d' >32
 	
-	g4 bes8. ~ bes32 bes < g' bes >4 < f a >
+	g4 bes8.. bes32 < g' bes >4 < f a >
 	
-	< g, f' >4 ~ < g f' >8 < g f' > < a f' >4 < g bes >
+	< g, f' >4. < g f' >8 < a f' >4 < g bes >
 	
-	< f a > < a c >8 ~ < a c >16 ~ < a c >32 < a c > < f a >4 r
+	< f a > < a c >8.. < a c >32 < f a >4 r
 	
 	r1
 	
@@ -515,14 +516,14 @@
 	
 	r
 	
-	r4 r8 r16. < g e' >32 < a f' >8 ~ < a f' >16 ~ < a f' >32 < a f' > < a f' >8 ~ < a f' >16 ~ < a f' >32 < a f' >
+	r4 r8 r16. < g e' >32 < a f' >8.. < a f' >32 < a f' >8.. < a f' >32
 	
 	< g e' >8 r r4 <<
 		{ c2 c4 } \\
 		{ r2 r4 }
 	>> % already in the following bar
 	
-	r8 r16. < g e' >32 < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' > < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' >
+	r8 r16. < g e' >32 < aes f' >8.. < aes f' >32 < aes f' >8.. < aes f' >32
 	
 	< g e' >8 r r4 << 
 		{ c2 c8 r } \\
@@ -560,7 +561,7 @@
 	g < e c' >
 	
 	%50
-	< c c' > ~ < c c' >4 < g' g' >
+	< c c' >2. < g' g' >4
 	
 	< a f' >2 < g e' >4 r8 < c, c' >
 	
@@ -576,9 +577,9 @@
 		{ d4 g, f e }
 	>>
 	
-	< f a >4 r r < d d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
+	< f a >4 r r < d d' >8.. < d d' >32
 	
-	g4 < bes bes' >8 ~ < bes bes' >16 ~ < bes bes' >32 < bes bes' > < g' bes >4 < f aes >
+	g4 < bes bes' >8.. < bes bes' >32 < g' bes >4 < f aes >
 	
 	<<
 		{ f2. bes,4 } \\
@@ -665,16 +666,16 @@
 		{ f,4 g a bes a }
 	>> % already at the next bar
 	
-	r4 r d8. ~ d32 d
+	r4 r d8.. d32
 	
-	g,4 bes8. ~ bes32 bes < g' bes >4 < f a >
+	g,4 bes8.. bes32 < g' bes >4 < f a >
 	
-	< g, f' >4 ~ < g f' >8 < g f' > < a f' >4 < g bes >
+	< g, f' >4. < g f' >8 < a f' >4 < g bes >
 	
-	< f a > a8. ~ a32 a d,4 r
+	< f a > a8.. a32 d,4 r
 	
 	%90
-	r bes'8. ~ bes32 bes e,4 r
+	r bes'8.. bes32 e,4 r
 	
 	r1
 	
@@ -693,7 +694,7 @@
 	
 	< d bes' >4 r r2
 	
-	< f, f' >4 ~ < f f' >8 < f f' > < a ees' > c < a ees' > <  ees' >
+	< f, f' >4. < f f' >8 < a ees' > c < a ees' > <  ees' >
 	
 	< bes d >4 r r2
 	
@@ -746,16 +747,16 @@
 		{ bes4 b a e }
 	>>
 	
-	< f a >4 r r < d d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
+	< f a >4 r r < d d' >8.. < d d' >32
 	
-	< g, g' >4 bes'8. ~ bes32 bes < g bes >4 < f a >
+	< g, g' >4 bes'8.. bes32 < g bes >4 < f a >
 	
 	<<
 		{ g2 a4 bes } \\
 		{ f2. e4 }
 	>>
 	
-	< f a >4 < a c >8 ~ < a c >16 ~ < a c >32 < a c > < f a >4 r
+	< f a >4 < a c >8.. < a c >32 < f a >4 r
 	
 	r1
 	
@@ -783,14 +784,14 @@
 	
 	r
 	
-	r4 r8 r16. < e g >32 < f a >8 ~ < f a >16 ~ < f a >32 < f a > < f a >8 ~ < f a >16 ~ < f a >32 < f a >
+	r4 r8 r16. < e g >32 < f a >8.. < f a >32 < f a >8.. < f a >32
 	
 	< e g >8 r r4 <<
 		{ c'2 c4 } \\
 		{ r2 r4 }
 	>> % already in the following bar
 	
-	r8 r16. < e, g >32 < f aes >8 ~ < f aes >16 ~ < f aes >32 < f aes > < f aes >8 ~ < f aes >16 ~ < f aes >32 < f aes >
+	r8 r16. < e, g >32 < f aes >8.. < f aes >32 < f aes >8.. < f aes >32
 	
 	< e g >8 r r4 <<
 		{ c'2 c8 r } \\
@@ -844,9 +845,9 @@
 		{ bes4 b a e }
 	>>
 	
-	< f a >4 r r < d d' >8 ~ < d d' >16 ~ < d d' >32 < d d' >
+	< f a >4 r r < d d' >8.. < d d' >32
 	
-	< g, g' >4 bes'8. ~ bes32 bes < g bes >4 < f aes >
+	< g, g' >4 bes'8.. bes32 < g bes >4 < f aes >
 	
 	<<
 		{ g2 a4 bes } \\
@@ -886,7 +887,7 @@
 	<<
 		{ f'2 } \\
 		{ bes,16 aes c aes g f aes f }
-	>> < des f' >8 ~ < des f' >16 ~ < des f' >32 ~ < des des' > < des des' >8 ~ < des des' >16 ~ < des des' >32 ~ < des des' >
+	>> < des f' >8.. < des f' >32 < des des' >8.. < des des' >32
 	
 	< c c' >16 g c e g e g e c8 r r4
 	
@@ -933,19 +934,19 @@
 		{ bes, b c2 f,4 }
 	>> % alredy ay the following bar
 	
-	r4 r < d d' >8 ~ < d d' >16 < d d' >32 < d d' >
+	r4 r < d d' >8.. < d d' >32
 	
-	< g, g' >4 bes'8. ~ bes32 bes < g bes >4 < f a >
+	< g, g' >4 bes'8.. bes32 < g bes >4 < f a >
 	
 	<<
 		{ g2 a4 bes } \\
 		{ f2. e4 }
 	>>
 	
-	< f a >4 a8. ~ a32 a d,4 r
+	< f a >4 a8.. a32 d,4 r
 	
 	%90
-	r bes'8. ~ bes32 bes e,4 r
+	r bes'8.. bes32 e,4 r
 	
 	r1
 	
@@ -1001,7 +1002,7 @@
 	
 	< f f' >2 r
 	
-	< c c' >2 ~ < c c' >4 < c c' >
+	< c c' >2. < c c' >4
 	
 	< bes' f' > < c g' > < f a > < g bes >
 	
@@ -1022,7 +1023,7 @@
 	
 	< f g >2 < f a >4 < c g' >
 	
-	< a f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >4 r
+	< a f' > < f f' >8.. < f f' >32 < f f' >4 r
 	
 	r1
 	
@@ -1050,11 +1051,11 @@
 	
 	r
 	
-	r4 r8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
+	r4 r8 r16. < c c' >32 < c c' >8.. < c c' >32 < c c' >8.. < c c' >32
 	
 	< c c' >8 r r4 r2
 	
-	r4 r8 r16. < c c' >32 < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' > < c c' >8 ~ < c c' >16 ~ < c c' >32 < c c' >
+	r4 r8 r16. < c c' >32 < c c' >8.. < c c' >32 < c c' >8.. < c c' >32
 	
 	< c c' >8 r r4 r2
 	
@@ -1129,7 +1130,7 @@
 	
 	< f f' > < c c' >2 < c c' >4
 	
-	< f f' >2 ~ < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' > < f f' >8 ~ < f f' >16 ~ < f f' >32 < f f' >
+	< f f' >2 ~ < f f' >8.. < f f' >32 < f f' >8.. < f f' >32
 	
 	< c c' >1
 	
@@ -1191,7 +1192,7 @@
 	
 	r1
 	
-	< f, f' >2 ~ < f f' >4 < f f' >
+	< f, f' >2. < f f' >4
 	
 	< f f' >4 r r2
 	
@@ -1204,7 +1205,7 @@
 	
 	r
 	
-	r2 < c' c' >4 ~ < c c' >8 < a a' >
+	r2 < c' c' >4. < a a' >8
 	
 	< f f' > r < f c' > r < f f' > r r4
 	
@@ -1244,13 +1245,13 @@
 	
 	d4 ~ d16 d e f f,4 a8. g16
 	
-	f4 a8.~ a32 a d,4 r
+	f4 a8.. a32 d,4 r
 	
-	r bes''8.~ bes32 bes e,4 f
+	r bes''8.. bes32 e,4 f
 	
 	g,4 ~ g16 a bes d d c bes a a g bes e,
 	
-	f4 c8. ~ c32 c a4 r
+	f4 c8.. c32 a4 r
 	
 	r8 c f a g c e, g
 	
@@ -1278,13 +1279,13 @@
 	
 	r8 f f f f' ~ f32 e d c b a g f e d c b
 	
-	c4. r16. g'32 a8. ~ a32 f32 c'8. ~ c32 a
+	c4. r16. g'32 a8.. f32 c'8. ~ c32 a
 	
-	g8 r r r16. < e c' >32 < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' > < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' >
+	g8 r r r16. < e c' >32 < f c' >8.. < f c' >32 < f c' >8.. < f c' >32
 	
-	< e c' >4 r8 r16. g32 aes8. ~ aes32 f32 c'8. ~ c32 aes
+	< e c' >4 r8 r16. g32 aes8.. f32 c'8.. aes32
 	
-	g8 r r r16. < e c' >32 < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' > < f c' >8 ~ < f c' >16 ~ < f c' >32 < f c' >
+	g8 r r r16. < e c' >32 < f c' >8.. < f c' >32 < f c' >8.. < f c' >32
 	
 	< e c' >8 g r aes g g r aes
 	
@@ -1324,9 +1325,9 @@
 	
 	d4 ~ d16 d e f f,4 a8. g16
 	
-	f4 a8. ~ a32 a d,4 r
+	f4 a8.. a32 d,4 r
 	
-	r bes''8. ~ bes32 bes e,4 f
+	r bes''8.. bes32 e,4 f
 	
 	g,4 ~ g16 aes bes des des c bes aes aes g bes ees,
 	
@@ -1389,16 +1390,16 @@
 	
 	r16 g' g g r g g g r a a a r e e e
 	
-	f4 a8. ~ a32 a d,4 r
+	f4 a8.. a32 d,4 r
 	
-	r bes''8. ~ bes32 bes e,4 f
+	r bes''8.. bes32 e,4 f
 	
 	g,4 ~ g16 a bes d d c bes a a g bes e,
 	
-	f4 r r d'8. ~ d32 d
+	f4 r r d'8.. d32
 	
 	%90
-	f,4 r r g8. ~ g32 g
+	f,4 r r g8.. g32
 	
 	c,8 e r < c f > r < c f > r < c e >
 	
@@ -1441,9 +1442,9 @@
 	
 	c f e8 r4.
 	
-	< e g, >2 ~ < e g, >8 c'8 bes a
+	< e g, >2 ~ < e g, >8 c' bes a
 	
-	< e g, >2 ~ < e g >8 a gis a
+	< e g, >2 ~ < e g, >8 a gis a
 	
 	bes4 d, c bes
 	
@@ -1461,15 +1462,15 @@
 	
 	bes2 ~ bes8 r r4
 	
-	< g f' >4 ~ < g f' >8 < g f' > c4 e
+	< g f' >4. < g f' >8 c4 e
 	
-	f a8.~ a32 a d,4 r
+	f a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes < g bes >4 < f a >
+	r bes'8.. bes32 < g bes >4 < f a >
 	
-	< g, f' >4 ~ < g f' >8 < g f' > < a f' > f' e bes
+	< g, f' >4. < g f' >8 < a f' > f' e bes
 	
-	a4 c8. ~ c32 c a4 r
+	a4 c8.. c32 a4 r
 	
 	c1 ~
 	
@@ -1497,13 +1498,13 @@
 	
 	r8 c c c f ~ f32 e d c b8 < g f' >
 	
-	< g e' >4 ~ < g e' >8 r16. e'32 f8. ~ f32 a, < c f >8 ~ < c f >16 ~ < c f >32 < c f >
+	< g e' >4. r16. e'32 f8.. a,32 < c f >8.. < c f >32
 	
-	< c e >8 r r r16. g'32 a8. ~ a32 a a8. ~ a32 a
+	< c e >8 r r r16. g'32 a8.. a32 a8.. a32
 	
-	g4 r8 r16. < g, e' >32 < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' > < aes f' >8 ~ < aes f' >16 ~ < aes f' >32 < aes f' >
+	g4 r8 r16. < g, e' >32 < aes f' >8.. < aes f' >32 < aes f' >8.. < aes f' >32
 	
-	< g e' >8 r r r16. g'32 aes8. ~ aes32 aes aes8. ~ aes32 aes
+	< g e' >8 r r r16. g'32 aes8.. aes32 aes8.. aes32
 	
 	g8 e r f e e r f
 	
@@ -1541,13 +1542,13 @@
 	
 	bes2 ~ bes8 r r4
 	
-	< g f' >4 ~ < g f' >8 < g f' > c4 e
+	< g f' >4. < g f' >8 c4 e
 	
-	f a8. ~ a32 a d,4 r
+	f a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes e,4 f
+	r bes'8.. bes32 e,4 f
 	
-	< g, f' >4 ~ < g f' >8 < g f' > f'4 e8 bes
+	< g, f' >4. < g f' >8 f'4 e8 bes
 	
 	aes16 c c c c c c c c c c c c c c c
 	
@@ -1608,11 +1609,11 @@
 	
 	r16 f' f f r f f f r f f f r bes, bes bes
 	
-	a4 a'8. ~ a32 a d,4 r
+	a4 a'8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes e,4 f
+	r bes'8.. bes32 e,4 f
 	
-	< g, f' >4 ~ < g f' >8 < g f' > < c f > f e bes
+	< g, f' >4. < g f' >8 < c f > f e bes
 	
 	a4 r r2
 	
@@ -1683,13 +1684,13 @@
 	
 	d4. d8 a4 bes
 	
-	a a8. ~ a32 a d,4 r
+	a a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes cis4 d
+	r bes'8.. bes32 cis4 d
 	
 	d4. d8 c c bes g
 	
-	f4 a8. ~ a32 a32 f4 r
+	f4 a8.. a32 f4 r
 	
 	r8 c f a g c e, g
 	
@@ -1711,19 +1712,20 @@
 	
 	r c c c r c c c
 	
+	%30
 	r c r c r c r c
 	
 	r c c c c r r4
 	
 	r8 d d d b ~ b32 c d e f8 d
 	
-	c4. r16. c32 c8. ~ c32 c c8. ~ c32 c
+	c4. r16. c32 c8.. c32 c8.. c32
 	
-	c8 r r r16. c32 f,8. ~ f32 f a8. ~ a32 a
+	c8 r r r16. c32 f,8.. f32 a8.. a32
 	
-	c4 r8 r16. c,32 f8. ~ f32 f aes8. ~ aes32 aes
+	c4 r8 r16. c,32 f8.. f32 aes8.. aes32
 	
-	c8 r r r16. c32 f,8. ~ f32 f aes8. ~ aes32 a
+	c8 r r r16. c32 f,8.. f32 aes8.. aes32
 	
 	c8 c r c ~ c c r c ~ 
 	
@@ -1763,9 +1765,9 @@
 	
 	d4. d8 a4 bes
 	
-	a4 a8. ~ a32 a d,4 r
+	a4 a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes bes4 aes
+	r bes'8.. bes32 bes4 aes
 	
 	des4. g,16 bes aes8 c bes g
 	
@@ -1790,7 +1792,7 @@
 	
 	r aes r g r4 bes' ~
 	
-	bes16 aes c aes g f aes f des8. ~ des32 des des8. ~ des32 des
+	bes16 aes c aes g f aes f des8.. des32 des8.. des32
 	
 	c16 g c e g e g e c8 r r4
 	
@@ -1828,9 +1830,9 @@
 	
 	r16 d' d d r d d d r c c c r c c c
 	
-	c4 a8. ~ a32 a d,4 r
+	c4 a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes bes4 a
+	r bes'8.. bes32 bes4 a
 	
 	d4. d8 a c bes g
 	
@@ -1903,13 +1905,13 @@
 	
 	bes b c c,
 	
-	f a8. ~ a32 a d,4 r
+	f a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes cis,4 d
+	r bes'8.. bes32 cis,4 d
 	
 	bes bes' c c,
 	
-	f f,8. ~ f32 f f4 r
+	f f,8.. f32 f4 r
 	
 	f' r bes r
 	
@@ -1937,13 +1939,13 @@
 	
 	g,8 g' g g g, g g g
 	
-	c4. r16. c32 f8. ~ f32 f a8. ~ a32 a
+	c4. r16. c32 f8.. f32 a8.. a32
 	
-	c8 r r r16. c32 f,8. ~ f32 f a8. ~ a32 a
+	c8 r r r16. c32 f,8.. f32 a8.. a32
 	
-	c4 r8 r16. c,32 f8. ~ f32 f aes8. ~ aes32 aes
+	c4 r8 r16. c,32 f8.. f32 aes8.. aes32
 	
-	c8 r r r16. c32 f,8. ~ f32 f aes8. ~ aes32 aes
+	c8 r r r16. c32 f,8.. f32 aes8.. aes32
 	
 	c8 r f, r c r f r
 	
@@ -1983,9 +1985,9 @@
 	
 	bes4 b c c,
 	
-	f a8. ~ a32 a d,4 r
+	f a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes c,4 des
+	r bes'8.. bes32 c,4 des
 	
 	bes bes' c c,
 	
@@ -2010,7 +2012,7 @@
 	
 	ces ces ces bes' ~
 	
-	bes16 aes c aes g f aes f des8. ~ des32 des des8. ~ des32 des
+	bes16 aes c aes g f aes f des8.. des32 des8.. des32
 	
 	c16 g c e g e g e c8 r r4
 	
@@ -2048,16 +2050,16 @@
 	
 	bes' b c c,
 	
-	f a8. ~ a32 a d,4 r
+	f a8.. a32 d,4 r
 	
-	r bes'8. ~ bes32 bes cis,4 d
+	r bes'8.. bes32 cis,4 d
 	
 	bes bes' c c,
 	
-	f r r d'8. ~ d32 d
+	f r r d'8.. d32
 	
 	%90
-	g,4 r r g8. ~ g32 g
+	g,4 r r g8.. g32
 	
 	c,4 d e c
 	
