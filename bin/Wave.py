@@ -15,7 +15,8 @@ class Wave:
     counter = 0
 
     def __init__(self, freq, samplingRate = 44100, maxValue = 32000):
-        self.freq = freq
+        if freq != None:
+            self.freq = float(freq)
         self.samplingRate = samplingRate
         self.maxValue = maxValue
         self.volume=1
@@ -46,11 +47,13 @@ class Wave:
             self.volume=volume
     
     def setFrequency(self, frequency):
-        #sys.stderr.write("Switching frequency from " + 
-        # now that the frequency is going to change, we have to recalculate the new counter value that corresponds to the actual
-        # height of the wave at this point but for the new frequency
-        angle = self.getAngle()
-        self.setAngle(angle, frequency)
+        # will calculate new position based on the cycles that have gone by in the previous
+        # frequency and the same cycles gone by on the new frequency
+        samplesPerCycle = self.samplingRate / self.freq
+        cyclePosition = self.position / samplesPerCycle
+        self.freq = float(frequency)
+        samplesPerCycle = salf.samplingRate / self.freq
+        self.position = samplesPerCycle * cyclePosition
         
     # set the angle of the current position (in radians)
     # also, optionally, set a new frequency

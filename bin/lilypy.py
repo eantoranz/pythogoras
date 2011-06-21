@@ -121,7 +121,7 @@ class LilypondStaff:
         self.events = [] # Can be notes, chords, polyphonies, key changes
         self.lastReferenceNote = None # When working with \relative
         self.lastDuration = None # Has to be separate from the previous note because there are rests and they can't be used to calculate indexes
-        self.lastDotted = False # same thing of lastDuration
+        self.lastDots = 0 # same thing of lastDuration
         self.relative = False # Don't know how to read non relative parts, but anyway
 
         self.firstTimeMarker = None
@@ -205,12 +205,12 @@ class LilypondStaff:
             return tokenIndex
         else:
             # It's a single note
-            note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDotted)
+            note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDots)
             if note.note not in [ 0, None]:
                 # it's not a rest
                 self.lastReferenceNote = note
             self.lastDuration = note.duration
-            self.lastDotted = note.dotted
+            self.lastDots = note.dots
             self.events.append(note)
             #DEBUG Message sys.stderr.write("Created a note: " + note.toString() + "\n")
 
@@ -263,7 +263,7 @@ class LilypondStaff:
         else:
             raise Exception("Shouldn't find a distance of " + str(distance) + " at this point")
 
-    def getNote(self, token, previousNote, previousDuration = None, previousDotted = False, includeDuration = True):
+    def getNote(self, token, previousNote, previousDuration = None, previousDots = 0, includeDuration = True):
         """
             Get a note from the staff
         """
@@ -305,7 +305,7 @@ class LilypondStaff:
         
         index = 0
         duration = None # Just in case
-        dotted = False
+        dots = 0
         while charIndex < len(noteStr):
             if noteStr[charIndex] == '\'':
                 index+=1
@@ -324,8 +324,10 @@ class LilypondStaff:
                 # is there a dot present?
                 if charIndex < len(noteStr):
                     # could be dotted
-                    if noteStr[charIndex] == '.':
-                        dotted = True
+                    dots = 0
+                    while charIndex < len(noteStr) and noteStr[charIndex]:
+                        dots += 1
+                        charIndex += 1
                 break
             charIndex+=1
 
@@ -334,18 +336,18 @@ class LilypondStaff:
                 duration = 4 # it's a black by defect
             else:
                 duration = previousDuration
-            dotted = previousDotted
+            dots = previousDots
         
         if previousNote == None:
             index = index + 3
         elif note == None:
             # It's a rest
-            return MusicalNote(0, 0, previousNote.index, duration, dotted)
+            return MusicalNote(0, 0, previousNote.index, duration, dots)
         else:
             index = self.getNoteIndex(note, index, previousNote)
 
         if includeDuration:
-            return MusicalNote(note, alteration, index, duration, dotted, self.times)
+            return MusicalNote(note, alteration, index, duration, dots, self.times)
         else:
             return MusicalNote(note, alteration, index)
         
@@ -372,7 +374,7 @@ class LilypondStaff:
                 
                 # @TODO this is where we go out... maybe we chould rewrite the function to get he return at the end
                 self.lastDuration = duration
-                self.lastDotted = False
+                self.lastDots = True
                 return tokenIndex
             
             # add a new note
@@ -404,7 +406,7 @@ class LilypondStaff:
                     # it's not a rest
                     self.lastReferenceNote = note
                 self.lastDuration = note.duration
-                self.lastDotted = note.dotted
+                self.lastDots = note.dots
                 tokenIndex += 1
             # end of a voice
             voices.append(notes)
