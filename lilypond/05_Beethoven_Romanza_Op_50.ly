@@ -617,7 +617,7 @@
 	>>
 	
 	<<
-		{ f2 f16 f aes f ees d c b } \\
+		{ f2 f16 f aes f ees des c b } \\
 		{ c2 f,8. f32 f f8. f32 f }
 	>>
 	
@@ -850,7 +850,7 @@
 	< g, g' >4 bes'8.. bes32 < g bes >4 < f aes >
 	
 	<<
-		{ g2 a4 bes } \\
+		{ g2 aes4 bes } \\
 		{ f2. g4 }
 	>>
 	
@@ -1329,7 +1329,7 @@
 	
 	r bes''8.. bes32 e,4 f
 	
-	g,4 ~ g16 aes bes des des c bes aes aes g bes ees,
+	g,4 ~ g16 aes bes des des c bes aes aes g bes e,
 	
 	f16 f f f f f f f f f f f f f f f
 	
@@ -2010,7 +2010,7 @@
 	
 	bes bes bes des
 	
-	ces ces ces bes' ~
+	c c c bes' ~
 	
 	bes16 aes c aes g f aes f des8.. des32 des8.. des32
 	
