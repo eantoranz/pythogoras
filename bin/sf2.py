@@ -11,7 +11,7 @@ class SF2Parser:
     # this class is used to parse SF2 file contents
     
     @classmethod
-    def parseFromFile(cls, iFile):
+    def parseFromFile(cls, iFile, nodeName = None):
         # parse a file generating an SF2 tree structure
         
         # read stuff from file at the current position
@@ -22,8 +22,8 @@ class SF2Parser:
         aChunk.close()
         
         # let's create a node from this data
-        node = SF2Node(ckID, ckSize, ckData)
-        sys.stderr.write("Created node " + str(node) + "\n")
+        node = SF2Node(nodeName, ckID, ckSize, ckData)
+        sys.stderr.write("Created " + str(node) + "\n")
         
         # depending on the type of node, children could be inside of it
         SF2Parser.parseNode(node)
@@ -38,33 +38,36 @@ class SF2Parser:
         ckID = node.ckID
         if ckID in ["RIFF", "LIST"]:
             # There are children inside of it
-            someName = node.ckData[0:4] # TODO what is this?
-            sys.stderr.write("Some name: " + someName + "\n")
+            chunkName = node.ckData[0:4]
             data = StringIO(node.ckData[4:])
             # let's parse the data until it's empty all children are processed
             try:
                 while True:
                     # let's go on until we reach the end of file
-                    child = SF2Parser.parseFromFile(data)
+                    child = SF2Parser.parseFromFile(data, chunkName)
                     node.addChild(child)
             except EOFError:
-                sys.stderr.write("Reached EOF... coming back a level\n")
+                #sys.stderr.write("Reached EOF... coming back a level\n")
                 
                 
 
 class SF2Node:
     # an SF2 node
     
-    def __init__(self, ckID, ckSize, ckData, parent = None):
-        (self.ckID, self.ckSize, self.ckData, self.parent) = (ckID, ckSize, ckData, parent)
-        self.children = list()
+    def __init__(self, name, ckID, ckSize, ckData, parent = None):
+        (self.name, self.ckID, self.ckSize, self.ckData, self.parent) = (name, ckID, ckSize, ckData, parent)
+        self.children = dict()
     
     def addChild(self, child):
         # add another child to the SF2 node
-        self.children.append(child)
+        self.children[child.name] = child
     
     def __str__(self):
-        return self.ckID + ". Size " + str(self.ckSize)
+        if self.name == None:
+            name = "<None>"
+        else:
+            name = self.name
+        return "Node " + name + ". ID: " + self.ckID + ". Size " + str(self.ckSize)
 
 
 if __name__ == "__main__":
