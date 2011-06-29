@@ -38,7 +38,9 @@ class SF2Parser:
         ckID = node.ckID
         if ckID in ["RIFF", "LIST"]:
             # There are children inside of it
-            data = StringIO(node.ckData)
+            someName = node.ckData[0:4] # TODO what is this?
+            sys.stderr.write("Some name: " + someName + "\n")
+            data = StringIO(node.ckData[4:])
             # let's parse the data until it's empty all children are processed
             try:
                 while True:
