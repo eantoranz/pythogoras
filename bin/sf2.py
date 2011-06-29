@@ -23,7 +23,6 @@ class SF2Parser:
         
         # let's create a node from this data
         node = SF2Node(nodeName, ckID, ckSize, ckData)
-        sys.stderr.write("Created " + str(node) + "\n")
         
         # depending on the type of node, children could be inside of it
         SF2Parser.parseNode(node)
@@ -48,7 +47,7 @@ class SF2Parser:
                     node.addChild(child)
             except EOFError:
                 #sys.stderr.write("Reached EOF... coming back a level\n")
-                
+                None
                 
 
 class SF2Node:
@@ -56,11 +55,25 @@ class SF2Node:
     
     def __init__(self, name, ckID, ckSize, ckData, parent = None):
         (self.name, self.ckID, self.ckSize, self.ckData, self.parent) = (name, ckID, ckSize, ckData, parent)
-        self.children = dict()
+        self.children = list()
     
     def addChild(self, child):
         # add another child to the SF2 node
-        self.children[child.name] = child
+        self.children.append(child)
+    
+    def getChild(self, childID, recursive = False):
+        # return a child by its ckID
+        for child in self.children:
+            if child.ckID == childID:
+                return child
+        # it's not in this node directly
+        if recursive:
+            # let's try to find the child with this ckID in the children of this node
+            for child in self.children:
+                foundChild = child.getChild(childID, True)
+                if foundChild != None:
+                    # found the right child
+                    return foundChild
     
     def __str__(self):
         if self.name == None:
@@ -75,3 +88,8 @@ if __name__ == "__main__":
     
     iFile = open(sys.argv[1], 'ro')
     sf2Tree = SF2Parser.parseFromFile(iFile)
+    # let's print some information about the SF2 file
+    # engineer
+    info = sf2Tree.getChild("IENG", True)
+    sys.stderr.write(info.ckData + "\n")
+    
