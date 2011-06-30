@@ -98,23 +98,40 @@ class SF2Node:
 
 class SF2ShdrRecord:
     # one sample record information in shdr
+    
+    SAMPLE_TYPE_MONO = 1
+    SAMPLE_TYPE_RIGHT = 2
+    SAMPLE_TYPE_LEFT = 4
+    SAMPLE_TYPE_LINKED = 8
+    SAMPLE_TYPE_ROM_MONO = 8000 | SAMPLE_TYPE_MONO
+    SAMPLE_TYPE_ROM_RIGHT = 8000 | SAMPLE_TYPE_RIGHT
+    SAMPLE_TYPE_ROM_LEFT = 8000 | SAMPLE_TYPE_LEFT
+    SAMPLE_TYPE_ROM_LINKED = 8000 | SAMPLE_TYPE_LINKED
 
     def __init__(self, name, start, end, loopStart, loopEnd, sampleRate, midiPitch, pitchCorrection, sampleLink, sampleType):
         (self.name, self.start, self.end, self.loopStart, self.loopEnd, self.sampleRate, self.midiPitch, self.pitchCorrection, self.sampleLink, self.sampleType) = (name, start, end, loopStart, loopEnd, sampleRate, midiPitch, pitchCorrection, sampleLink, sampleType)
     
     def __str__(self):
         # about sample type
-        sampleType = self.sampleType & 0x7fff
-        if sampleType == 1:
+        if self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_MONO:
             sampleType = "Mono Sample"
-        elif sampleType == 2:
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_RIGHT:
             sampleType = "Right Sample"
-        elif sampleType == 4:
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_LEFT:
             sampleType = "Left Sample"
-        elif sampleType == 8:
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_LINKED:
             sampleType = "Linked Sample"
-        if self.sampleType & 0x8000 != 0:
-            sampleType = "Rom " + sampleType
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_ROM_MONO:
+            sampleType = "ROM Mono Sample"
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_ROM_RIGHT:
+            sampleType = "ROM Right Sample"
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_ROM_LEFT:
+            sampleType = "ROM Left Sample"
+        elif self.sampleType == SF2ShdrRecord.SAMPLE_TYPE_ROM_LINKED:
+            sampleType = "ROM Linked Sample"
+        else:
+            # unknown TODO is it valid?
+            sampleType = "Unknown (" + str(self.sampleType) + ")"
         
         return "Sample name: <" + self.name + ">. Start: " + str(self.start) + " End: " + str(self.end) + " Loop Start: " + str(self.loopStart) + " Loop End: " + str(self.loopEnd) + " Sample Rate: " + str(self.sampleRate) + " Midi Pitch: " + str(self.midiPitch) + " Pitch Correction: " + str(self.pitchCorrection) + " Sample Link: " + str(self.sampleLink) + " Sample Type: " + sampleType
 
