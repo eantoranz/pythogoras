@@ -11,7 +11,7 @@ def strToDWord(string):
     return ord(string[3])<<24 | ord(string[2])<<16 | ord(string[1])<<8 | ord(string[0])
 
 def strToWord(string):
-    ord(string[1])<<8 | ord(string[0])
+    return ord(string[1])<<8 | ord(string[0])
 
 class SF2Parser:
     # this class is used to parse SF2 file contents
@@ -99,11 +99,24 @@ class SF2Node:
 class SF2ShdrRecord:
     # one sample record information in shdr
 
-    def __init__(self, name, start, end, loopStart, loopEnd, sampleRate, midiPitch):
-        (self.name, self.start, self.end, self.loopStart, self.loopEnd, self.sampleRate, self.midiPitch) = (name, start, end, loopStart, loopEnd, sampleRate, midiPitch)
+    def __init__(self, name, start, end, loopStart, loopEnd, sampleRate, midiPitch, pitchCorrection, sampleLink, sampleType):
+        (self.name, self.start, self.end, self.loopStart, self.loopEnd, self.sampleRate, self.midiPitch, self.pitchCorrection, self.sampleLink, self.sampleType) = (name, start, end, loopStart, loopEnd, sampleRate, midiPitch, pitchCorrection, sampleLink, sampleType)
     
     def __str__(self):
-        return "Sample name: <" + self.name + ">. Start: " + str(self.start) + " End: " + str(self.end) + " Loop Start: " + str(self.loopStart) + " Loop End: " + str(self.loopEnd) + " Sample Rate: " + str(self.sampleRate) + " Midi Pitch: " + str(self.midiPitch)
+        # about sample type
+        sampleType = self.sampleType & 0x7fff
+        if sampleType == 1:
+            sampleType = "Mono Sample"
+        elif sampleType == 2:
+            sampleType = "Right Sample"
+        elif sampleType == 4:
+            sampleType = "Left Sample"
+        elif sampleType == 8:
+            sampleType = "Linked Sample"
+        if self.sampleType & 0x8000 != 0:
+            sampleType = "Rom " + sampleType
+        
+        return "Sample name: <" + self.name + ">. Start: " + str(self.start) + " End: " + str(self.end) + " Loop Start: " + str(self.loopStart) + " Loop End: " + str(self.loopEnd) + " Sample Rate: " + str(self.sampleRate) + " Midi Pitch: " + str(self.midiPitch) + " Pitch Correction: " + str(self.pitchCorrection) + " Sample Link: " + str(self.sampleLink) + " Sample Type: " + sampleType
 
 class SF2ShdrNode(SF2Node):
     # sample pointers
@@ -119,7 +132,7 @@ class SF2ShdrNode(SF2Node):
         for i in range(records):
             baseIndex = i * 46
             name = self.ckData[baseIndex:baseIndex + 20]
-            if name == "EOS":
+            if name.startswith("EOS"):
                 # this is the last empty sample... won't add it
                 break
             start = strToDWord(self.ckData[baseIndex+20:baseIndex+24])
@@ -128,8 +141,11 @@ class SF2ShdrNode(SF2Node):
             loopEnd = strToDWord(self.ckData[baseIndex+32:baseIndex+36])
             sampleRate = strToDWord(self.ckData[baseIndex+36:baseIndex+40])
             midiPitch = ord(self.ckData[baseIndex+40])
+            pitchCorrection = ord(self.ckData[baseIndex+41]) # in cents
+            sampleLink = strToWord(self.ckData[baseIndex+42:baseIndex+44])
+            sampleType = strToWord(self.ckData[baseIndex+44:baseIndex+46])
             
-            self.records.append(SF2ShdrRecord(name, start, end, loopStart, loopEnd, sampleRate, midiPitch))
+            self.records.append(SF2ShdrRecord(name, start, end, loopStart, loopEnd, sampleRate, midiPitch, pitchCorrection, sampleLink, sampleType))
 
 if __name__ == "__main__":
     # a file name should have been provided to be processed
