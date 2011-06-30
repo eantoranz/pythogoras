@@ -16,6 +16,9 @@ def strToWord(string):
 class SF2Parser:
     # this class is used to parse SF2 file contents
     
+    SAMPLE_RECORDS = "shdr"
+    SAMPLE = "smpl"
+    
     @classmethod
     def parseFromFile(cls, iFile, nodeName = None):
         # parse a file generating an SF2 tree structure
@@ -57,7 +60,7 @@ class SF2Parser:
     
     @classmethod
     def createNode(cls, nodeName, ckID, ckSize, ckData):
-        if ckID == "shdr":
+        if ckID == SF2Parser.SAMPLE_RECORDS:
             # sample pointers
             return SF2ShdrNode(nodeName, ckID, ckSize, ckData)
         else:
@@ -88,6 +91,11 @@ class SF2Node:
                 if foundChild != None:
                     # found the right child
                     return foundChild
+    
+    def getSample(self, shdrRecord):
+        # get a sample given the shdrRecord
+        # shrdRdcord can do it already
+        return shdrRecord.getSample(self)
     
     def __str__(self):
         if self.name == None:
@@ -134,6 +142,17 @@ class SF2ShdrRecord:
             sampleType = "Unknown (" + str(self.sampleType) + ")"
         
         return "Sample name: <" + self.name + ">. Start: " + str(self.start) + " End: " + str(self.end) + " Loop Start: " + str(self.loopStart) + " Loop End: " + str(self.loopEnd) + " Sample Rate: " + str(self.sampleRate) + " Midi Pitch: " + str(self.midiPitch) + " Pitch Correction: " + str(self.pitchCorrection) + " Sample Link: " + str(self.sampleLink) + " Sample Type: " + sampleType
+    
+    def getSample(self, tree):
+        # get the sample from the appropiate node in the tree for this SHDR record
+        if tree.ckID == SF2Parser.SAMPLE:
+            # should find a child
+            sampleNode = tree.getChild(SF2Parser.SAMPLE, True)
+        else:
+            sampleNode = tree
+        
+        # now let's get the information from the sample
+        return tree.ckData[self.start:self.end + 1]
 
 class SF2ShdrNode(SF2Node):
     # sample pointers
@@ -179,3 +198,6 @@ if __name__ == "__main__":
     
     for record in shdr.records:
         sys.stderr.write("SHDR record : " + str(record) + "\n")
+        # let's try to get sample
+        sample = record.getSample(sf2Tree)
+        sys.stderr.write("Sample's size is " + str(len(sample)) + " and it was supposed to be " + str(record.end - record.start + 1) + "\n")
