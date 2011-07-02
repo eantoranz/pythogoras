@@ -19,6 +19,7 @@ class SF2Parser:
     SAMPLE_RECORDS = "shdr"
     SAMPLE = "smpl"
     INSTRUMENTS = "inst"
+    INSTRUMENT_ZONES = "ibag"
     
     @classmethod
     def parseFromFile(cls, iFile, nodeName = None):
@@ -66,6 +67,8 @@ class SF2Parser:
             return SF2ShdrNode(nodeName, ckID, ckSize, ckData)
         elif ckID == SF2Parser.INSTRUMENTS:
             return SF2InstNode(nodeName, ckID, ckSize, ckData)
+        elif ckID == SF2Parser.INSTRUMENT_ZONES:
+            return SF2InstrumentZoneNode(nodeName, ckID, ckSize, ckData)
         else:
             return SF2Node(nodeName, ckID, ckSize, ckData)
                 
@@ -190,8 +193,7 @@ class SF2Instrument:
         (self.name, self.bagIndex) = (name, bagIndex)
     
     def __str__(self):
-        return "Intrument " + self.name + ". Bag INdex: " 
-        + str(self.bagIndex)
+        return "Intrument " + self.name + ". Bag Index: " + str(self.bagIndex)
 
 class SF2InstNode(SF2Node):
     # instruments in the SF2 file
@@ -211,6 +213,33 @@ class SF2InstNode(SF2Node):
             bagIndex = strToWord(self.ckData[baseIndex+20:baseIndex+22])
             
             self.instruments.append(SF2Instrument(name, bagIndex))
+
+class SF2InstrumentZone:
+    # an instrument zone... as found in the IBAG node
+    # generatorsListIndex is the index of the instrument zone's list of generators in the IGEN node
+    # modulatorsListIndex is the index of the instrument zone's list of modulatros in the IMOD node
+    
+    def __init__(self, generatorsListIndex, modulatorsListIndex):
+        (self.generatorsListIndex, self.modulatorsListIndex) = (generatorsListIndex, modulatorsListIndex)
+
+class SF2InstrumentZoneNode(SF2Node):
+    # node with the instrument zones in the SF2 file (IBAG)
+    
+    def __init__(self, name, ckID, ckData, parent = None):
+        SF2Node.__init__(self, name, ckID, ckData, parent)
+        
+        self.zones = list()
+        
+        records = len(self.ckData) / 4
+        for i in range(records - 1):
+            baseIndex = i * 4
+            
+            generatorsListIndex = strToWord(self.ckData[baseIndex:baseIndex+2])
+            modulatorsListIndex = strToWord(self.ckData[baseIndex+2:baseIndex+4])
+            
+            self.zones.append(SF2InstrumentZone(generatorsListIndex, modulatorsListIndex))
+            sys.stderr.write("Created instrument zone with generators list index of " + str(generatorsListIndex) + " and modulators list index of " + str(modulatorsListIndex) + "\n")
+
 
 if __name__ == "__main__":
     # a file name should have been provided to be processed
