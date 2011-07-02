@@ -18,6 +18,7 @@ class SF2Parser:
     
     SAMPLE_RECORDS = "shdr"
     SAMPLE = "smpl"
+    INSTRUMENTS = "inst"
     
     @classmethod
     def parseFromFile(cls, iFile, nodeName = None):
@@ -48,7 +49,7 @@ class SF2Parser:
             # There are children inside of it
             chunkName = node.ckData[0:4]
             data = StringIO(node.ckData[4:])
-            # let's parse the data until it's empty all children are processed
+            # let's parse the data until it's empty
             try:
                 while True:
                     # let's go on until we reach the end of file
@@ -63,6 +64,8 @@ class SF2Parser:
         if ckID == SF2Parser.SAMPLE_RECORDS:
             # sample pointers
             return SF2ShdrNode(nodeName, ckID, ckSize, ckData)
+        elif ckID == SF2Parser.INSTRUMENTS:
+            return SF2InstNode(nodeName, ckID, ckSize, ckData)
         else:
             return SF2Node(nodeName, ckID, ckSize, ckData)
                 
@@ -164,13 +167,10 @@ class SF2ShdrNode(SF2Node):
         
         # let's break the information of the pointers
         # how many records are there?
-        records = self.ckSize / 46
+        records = self.ckSize / 46 - 1 # last record is supposed to be empty
         for i in range(records):
             baseIndex = i * 46
             name = self.ckData[baseIndex:baseIndex + 20]
-            if name.startswith("EOS"):
-                # this is the last empty sample... won't add it
-                break
             start = strToDWord(self.ckData[baseIndex+20:baseIndex+24])
             end = strToDWord(self.ckData[baseIndex+24:baseIndex+28])
             loopStart = strToDWord(self.ckData[baseIndex+28:baseIndex+32])
@@ -182,6 +182,34 @@ class SF2ShdrNode(SF2Node):
             sampleType = strToWord(self.ckData[baseIndex+44:baseIndex+46])
             
             self.records.append(SF2ShdrRecord(name, start, end, loopStart, loopEnd, sampleRate, midiPitch, pitchCorrection, sampleLink, sampleType))
+            
+class SF2Instrument:
+    # instrument in an SF2 file (defined in the INST block)
+
+    def __init__(self, name, index):
+        (self.name, self.index) = (name, index)
+    
+    def __str__(self):
+        return "Intrument " + str(self.index) + ": " + self.name
+
+class SF2InstNode(SF2Node):
+    # instruments in the SF2 file
+    
+    def __init__(self, name, ckID, ckData, parent = None):
+        SF2Node.__init__(self, name, ckID, ckData, parent)
+        
+        self.instruments = dict()
+
+        # now we have to process the instruments
+        records = len(self.ckData) / 22
+        for i in range(records):
+            baseIndex = i * 22
+            
+            # data for the instrument record
+            name = self.ckData[baseIndex:baseIndex+20]
+            index = strToWord(self.ckData[baseIndex+20:baseIndex+22])
+            
+            self.instruments[index] = SF2Instrument(name, index)
 
 if __name__ == "__main__":
     # a file name should have been provided to be processed
@@ -201,3 +229,9 @@ if __name__ == "__main__":
         # let's try to get sample
         sample = record.getSample(sf2Tree)
         sys.stderr.write("Sample's size is " + str(len(sample)) + " and it was supposed to be " + str(record.end - record.start + 1) + "\n")
+    
+    #instruments
+    sys.stderr.write("Instruments:\n")
+    instruments = sf2Tree.getChild(SF2Parser.INSTRUMENTS, True)
+    for index in instruments.instruments:
+        sys.stderr.write("\t" + str(instruments.instruments[index]) + "\n")
