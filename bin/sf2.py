@@ -186,11 +186,12 @@ class SF2ShdrNode(SF2Node):
 class SF2Instrument:
     # instrument in an SF2 file (defined in the INST block)
 
-    def __init__(self, name, index):
-        (self.name, self.index) = (name, index)
+    def __init__(self, name, bagIndex):
+        (self.name, self.bagIndex) = (name, bagIndex)
     
     def __str__(self):
-        return "Intrument " + str(self.index) + ": " + self.name
+        return "Intrument " + self.name + ". Bag INdex: " 
+        + str(self.bagIndex)
 
 class SF2InstNode(SF2Node):
     # instruments in the SF2 file
@@ -198,7 +199,7 @@ class SF2InstNode(SF2Node):
     def __init__(self, name, ckID, ckData, parent = None):
         SF2Node.__init__(self, name, ckID, ckData, parent)
         
-        self.instruments = dict()
+        self.instruments = list()
 
         # now we have to process the instruments
         records = len(self.ckData) / 22
@@ -207,9 +208,9 @@ class SF2InstNode(SF2Node):
             
             # data for the instrument record
             name = self.ckData[baseIndex:baseIndex+20]
-            index = strToWord(self.ckData[baseIndex+20:baseIndex+22])
+            bagIndex = strToWord(self.ckData[baseIndex+20:baseIndex+22])
             
-            self.instruments[index] = SF2Instrument(name, index)
+            self.instruments.append(SF2Instrument(name, bagIndex))
 
 if __name__ == "__main__":
     # a file name should have been provided to be processed
@@ -233,5 +234,5 @@ if __name__ == "__main__":
     #instruments
     sys.stderr.write("Instruments:\n")
     instruments = sf2Tree.getChild(SF2Parser.INSTRUMENTS, True)
-    for index in instruments.instruments:
-        sys.stderr.write("\t" + str(instruments.instruments[index]) + "\n")
+    for instrument in instruments.instruments:
+        sys.stderr.write("\t" + str(instrument) + "\n")
