@@ -73,8 +73,36 @@
 	
 	e8 r a2
 	
-	%\times 2/3 { gis8 fis gis } e2
+	\times 2/3 { gis8 fis gis } e2
 	
+	d16 e d e fis2
+	
+	e4 b8 r e4~
+	
+	e8 ais, fis'4. e8
+	
+	\times 2/3 { d8 cis d } b2
+	
+	r8 gis a b a gis
+	
+	cis4 gis2
+	
+	%40
+	r8 fis gis a gis fis
+	
+	b4 fis2
+	
+	r8 f g a g f
+	
+	a4 e2
+	
+	a4 d,2
+	
+	a'4 cis,2
+	
+	r2.
+	
+	r
 	
 }
 
@@ -151,7 +179,36 @@
 	
 	< cis a' >
 	
+	< d b' >
 	
+	< d b' >
+	
+	< d b' >
+	
+	< e cis' >
+	
+	< fis d' >
+	
+	< d b' >
+	
+	< cis b' >
+	
+	% 40
+	< cis a' >
+	
+	< b a' >
+	
+	< b a' >
+	
+	< a a' >
+	
+	< b a' >
+	
+	< cis a' >
+	
+	< cis a' >
+	
+	< cis a' >4 r2
 	
 }
 
@@ -228,6 +285,37 @@
 	
 	a e fis e fis e
 	
+	e e a gis fis e
+	
+	fis fis b a gis a
+	
+	b b e fis e b
+	
+	ais cis ais b ais cis
+	
+	b b d cis b a
+	
+	gis b fis gis a b
+	
+	b fisis gis a b gis
+	
+	% 40
+	fis a eis fis gis a
+	
+	a eis fis gis a fis
+	
+	f d e f e d
+	
+	cis bis cis bis cis e
+	
+	fis eis fis eis fis f
+	
+	e dis e dis e dis
+	
+	e f e f e f
+	
+	e r r2
+	
 }
 
 % Cello 
@@ -302,6 +390,37 @@
 	e
 	
 	a
+	
+	a
+	
+	a
+	
+	gis
+	
+	g
+	
+	fis
+	
+	fis
+	
+	eis
+	
+	% 40
+	e
+	
+	dis
+	
+	d
+	
+	e
+	
+	a
+	
+	a ~
+	
+	a ~
+	
+	a4 r2
 }
 
 
