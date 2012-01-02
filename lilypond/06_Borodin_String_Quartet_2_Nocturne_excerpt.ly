@@ -1,4 +1,4 @@
-%  Beethoven's Romanza for Violin Op. 50 in F major
+%  Borodin's Second String Quartet - Nocturne (excerpt)
 
 <<
 
