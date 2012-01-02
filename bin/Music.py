@@ -155,7 +155,7 @@ class MusicalChord:
     
     def toString(self):
         temp = "Chord. Duration: " + str(self.notes[0].duration)
-        if self.notes[0].dotted:
+        if self.notes[0].dots:
             temp += '.'
         temp += " Notes: "
 

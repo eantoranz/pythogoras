@@ -363,17 +363,23 @@ class LilypondStaff:
                 # Closing chord....
                 if len(notes) > 0:
                     # Does the chord have a duration?
+                    duration = None
                     if len(token.word) > 1:
+                        # do we have dots?
                         duration = token.word[1:]
                     else:
-                        duration = self.lastDuration
+                        duration = str(self.lastDuration)
+                        dots = self.lastDots
+                        if dots is not None:
+                            for i in range(dots):
+                                duration += "."
                     chord = MusicalChord(notes, duration)
                     self.events.append(chord)
                     self.lastReferenceNote = notes[0]
+                    self.lastDuration = chord.getDuration()
+                    self.lastDots = chord.getDots()
                 
-                # @TODO this is where we go out... maybe we chould rewrite the function to get he return at the end
-                self.lastDuration = chord.getDuration()
-                self.lastDots = chord.getDots()
+                # @TODO this is where we go out... maybe we chould rewrite the function to get the return at the end
                 return tokenIndex
             
             # add a new note
