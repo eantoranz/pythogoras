@@ -79,3 +79,37 @@ class Wave:
             angle = math.pi - angle
         
         return angle
+
+
+class SynthWave(Wave):
+    """
+        This wave can read from a sampling file and reproduce the wave as in the sampling file with the desired frequency
+        
+        The sampling file has to contain (at least for the moment) a single wave cycle. It can be any length and the sampling
+        size will be used to calculate the original wave frquency
+        
+        Format of the sampling file:
+        RAW PCM signed 16 bit mono, 44.1 khtz, little endian
+    """
+    
+    samples = []
+
+    def __init__(self, samplingFile, freq, samplingRate = 44100, maxValue = 32000):
+        Wave.__init__(self, freq, samplingRate, maxValue)
+        
+        # let's read the sampling file
+        inputFile = open(samplingFile, 'r')
+        # now we start reading numbers
+        while (True):
+            value = inputFile.read(2)
+            if (len(value) < 2):
+                # sample was incomplete.... we go out
+                break
+            # now we create the numeric sample
+            sample = 0;
+            for i in xrange(2):
+                sample = sample << 8 | ord(value[i])
+            if (sample & 0x80 != 0):
+                sample = ~sample + 1
+            self.samples.append(sample)
+            print sample
