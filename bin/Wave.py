@@ -92,6 +92,7 @@ class SynthWave(Wave):
         RAW PCM signed 16 bit mono, 44.1 khtz, little endian
     """
     
+    sampleFreq = None # Frequency of the sample
     samples = []
 
     def __init__(self, samplingFile, freq, samplingRate = 44100, maxValue = 32000):
@@ -106,10 +107,10 @@ class SynthWave(Wave):
                 # sample was incomplete.... we go out
                 break
             # now we create the numeric sample
-            sample = 0;
-            for i in xrange(2):
-                sample = sample << 8 | ord(value[i])
-            if (sample & 0x80 != 0):
-                sample = ~sample + 1
-            self.samples.append(sample)
+            sample = ord(value[1]) << 8 | ord(value[0]);
+            if (sample & 0x8000 != 0):
+                sample -= 0x10000
             print sample
+            self.samples.append(sample)
+        
+        self.sampleFreq = 44100.0 / len(self.samples)
