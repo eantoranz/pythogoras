@@ -3,6 +3,7 @@
 # Copyright 2009 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
+import math
 
 class Sampler:
     """
@@ -41,9 +42,32 @@ class Sampler:
             self.samples.pop(0)
         # then at the end
         while (self.samples[len(self.samples) - 2] > 0):
-	    self.samples.pop()
+            self.samples.pop()
         
-        self.sampleFreq = 44100.0 / len(self.samples)
         self.x0index = float(self.samples[0]) / float(self.samples[0] - self.samples[1])
-        self.x1index = len(self.samples) - 1 + float(self.samples[len(self.samples) - 2]) / float(self.samples[len(self.samples) - 2] - self.samples[len(self.samples) - 1])
-    
+        self.x1index = len(self.samples) - 2 + float(self.samples[len(self.samples) - 2]) / float(self.samples[len(self.samples) - 2] - self.samples[len(self.samples) - 1])
+        self.sampleFreq = 44100.0 / (self.x1index - self.x0index)
+
+    def getY(self, index):
+        """
+            Index is a value between 0 and 1 (0 = cycle start, 1 = cycle end)
+            Will return a value between 1 and -1
+        """
+        # first, we have to find the "real" index that we have to use for that 0-1 index
+        # 0 = self.x0index
+        # 1 = self.x1index
+        realIndex = self.x0index + (self.x1index - self.x0index) * index
+        # now we can calculate the values involved
+        beforeIndex = math.floor(realIndex)
+        beforeValue = self.samples[int(beforeIndex)]
+        if (beforeIndex == realIndex):
+            # a perfect match... let's use that value directly
+            return float(beforeValue) / 0x8000
+        # it's a value in between
+        # let's do a lineal function aprox
+        afterValue = self.samples[int(beforeIndex + 1)]
+        
+        # now we do the lineal calculation
+        if (beforeIndex == 0):
+            return afterValue * float(realIndex - self.x0index) / 0x8000
+        return (beforeValue + (afterValue - beforeValue) * float(realIndex - beforeIndex)) / 0x8000
