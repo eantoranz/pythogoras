@@ -1,4 +1,4 @@
-class SynthWave(Wave):
+class Sampler:
     """
         This wave can read from a sampling file and reproduce the wave as in the sampling file with the desired frequency
         
@@ -14,9 +14,7 @@ class SynthWave(Wave):
     x0index = None # position of the first root (x where y = 0)
     x1index = None
 
-    def __init__(self, samplingFile, freq, samplingRate = 44100, maxValue = 32000):
-        Wave.__init__(self, freq, samplingRate, maxValue)
-        
+    def __init__(self, samplingFile):
         # let's read the sampling file
         inputFile = open(samplingFile, 'r')
         # now we start reading numbers
@@ -43,11 +41,3 @@ class SynthWave(Wave):
         self.x0index = float(self.samples[0]) / float(self.samples[0] - self.samples[1])
         self.x1index = len(self.samples) - 1 + float(self.samples[len(self.samples) - 2]) / float(self.samples[len(self.samples) - 2] - self.samples[len(self.samples) - 1])
     
-    def getNextValue(self):
-        """
-            This is different from the normal wave because we have to see what we will be playing according to the sample
-        """
-        if self.freq in [None, 0]:
-            return 0
-        # ok.... so, what is the current index?
-        
