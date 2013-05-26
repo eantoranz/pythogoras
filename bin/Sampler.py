@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+# Copyright 2009 Edmundo Carmona Antoranz
+# Released under the terms of the Affero GPLv3
+
+
 class Sampler:
     """
         This wave can read from a sampling file and reproduce the wave as in the sampling file with the desired frequency
