@@ -127,6 +127,8 @@ class LilypondStaff:
         self.firstTimeMarker = None
         self.firstKey = None # First key of the staff
         self.times = None
+        
+        self.sampleName = None # now every voice can use a different sample
 
     def getFirstTimeMarker(self):
         if self.firstTimeMarker == None:
@@ -477,6 +479,10 @@ class LilypondStaff:
                 # we read the full comment
                 comment = LilypondComment()
                 tokenIndex = comment.readCommentFromTokens(tokens, tokenIndex) + 1
+                
+                # now, let's see if it says the name of the sampler
+                if (comment.tokens[0].word == '\\sample'):
+                    self.sampleName = comment.tokens[1].word
                 continue
             if token == '}':
                 if self.times == None:
