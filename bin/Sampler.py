@@ -84,6 +84,9 @@ class SamplerWave(Wave):
         self.samplesPerCycle = float(self.samplingRate) / self.freq
     
     def getNextValue(self):
+        if self.freq in [None, 0]:
+            return 0
+
         # we need to know the current position in the wave
         res = self.sampler.getY(float(self.counter) / self.samplesPerCycle)
         
