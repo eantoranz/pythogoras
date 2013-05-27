@@ -3,6 +3,7 @@
 # Copyright 2009 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
+from Wave import *
 import math
 
 class Sampler:
@@ -71,3 +72,24 @@ class Sampler:
         if (beforeIndex == 0):
             return afterValue * float(realIndex - self.x0index) / 0x8000
         return (beforeValue + (afterValue - beforeValue) * float(realIndex - beforeIndex)) / 0x8000
+
+class SamplerWave(Wave):
+  
+    sampler = None
+    samplesPerCycle = None
+    
+    def __init__(self, sampler, freq, samplingRate = 44100, maxValue = 32000):
+        Wave.__init__(self, freq, samplingRate, maxValue)
+        self.sampler = sampler
+        self.samplesPerCycle = float(self.samplingRate) / self.freq
+    
+    def getNextValue(self):
+        # we need to know the current position in the wave
+        res = self.sampler.getY(float(self.counter) / self.samplesPerCycle)
+        
+        # increase the step counter
+        self.counter += 1
+        if (self.counter >= self.samplesPerCycle):
+            self.counter -= self.samplesPerCycle
+        
+        return int(self.volume * self.maxValue * res)
