@@ -396,6 +396,9 @@ class LilypondStaff:
         # have to find the voices
         voices = list()
         while tokens[tokenIndex].word != ">>":
+            # we skip new lines
+            tokenIndex = self.skipNewLines(tokens, tokenIndex)
+            
             # it should be the start of a voice
             if tokens[tokenIndex].word != "{":
                 raise Exception("Found an unexpected polyphonic voice starter: " + str(tokens[tokenIndex]))
@@ -404,8 +407,13 @@ class LilypondStaff:
             #@TODO do I have to use different reference notes for notes, chords and polyphonies?
             notes = list()
             while tokens[tokenIndex].word != "}":
+                token = tokens[tokenIndex]
+                if token.word == "\n":
+                    # doesn't matter, we skip it
+                    tokenIndex += 1
+                    continue
                 # let's get the notes
-                note = self.getNote(tokens[tokenIndex], self.lastReferenceNote, self.lastDuration, self.lastDots, True)
+                note = self.getNote(token, self.lastReferenceNote, self.lastDuration, self.lastDots, True)
                 notes.append(note)
                 if note.note not in [0, None]:
                     # it's not a rest
@@ -416,15 +424,26 @@ class LilypondStaff:
             # end of a voice
             voices.append(notes)
             
+            tokenIndex = self.skipNewLines(tokens, tokenIndex)
+            
             # do we have more voices?
             tokenIndex += 1
             if tokens[tokenIndex].word == "\\\\":
                 # we have another voice
                 tokenIndex += 1
+            
+            tokenIndex = self.skipNewLines(tokens, tokenIndex)
         # reached the end of the polyphony
         self.events.append(MusicalPolyphony(voices))
         
         return tokenIndex
+    
+    def skipNewLines(self, tokens, tokenIndex):
+        while True:
+            token = tokens[tokenIndex]
+            if (token.word != "\n"):
+                return tokenIndex
+            tokenIndex += 1
 
     def getTimeMarker(self, token):
         timeMarker = LilypondTimeMarker()
@@ -450,6 +469,15 @@ class LilypondStaff:
         tokenIndex+=4
         while True:
             token = tokens[tokenIndex].word
+            if (token == "\n"):
+                # we skip it
+                tokenIndex += 1
+                continue
+            if token == "%":
+                # we read the full comment
+                comment = LilypondComment()
+                tokenIndex = comment.readCommentFromTokens(tokens, tokenIndex) + 1
+                continue
             if token == '}':
                 if self.times == None:
                     # Closing staff
@@ -507,6 +535,15 @@ class LilypondSystem:
         tokenIndex = tokenIndex+1
         while True:
             token = tokens[tokenIndex]
+            if token.word == "\n":
+                # doesn't matter
+                tokenIndex += 1
+                continue
+            if token.word == "%":
+                # let's skip the full comment
+                comment = LilypondComment()
+                tokenIndex = comment.readCommentFromTokens(tokens, tokenIndex) + 1
+                continue
             if token.word == ">>":
                 # closing system
                 return tokenIndex
@@ -520,7 +557,34 @@ class LilypondSystem:
             else:
                 raise Exception("Unexpected system member: " + token.toString())
             tokenIndex+=1
-                
+
+class LilypondComment:
+  
+    tokens = None
+  
+    def __init__(self):
+        """
+            A comment could be added anywhere
+        """
+        self.tokens = []
+    
+    def readCommentFromTokens(self, tokens, tokenIndex):
+        """
+            We read the tokens till we find a \n
+            Have to return the \n index
+        """
+        if tokens[tokenIndex].word != "%":
+            raise Exception("Wrong comment starter: " + tokens[tokenIndex].toString() + ". Expecting %")
+        
+        tokenIndex += 1
+        while True:
+            token = tokens[tokenIndex]
+            if token.word == "\n":
+                # reached EOL
+                return tokenIndex
+            # we save the token
+            self.tokens.append(token)
+            tokenIndex += 1
 
 class LilypondAnalyser:
 
@@ -539,17 +603,11 @@ class LilypondAnalyser:
             posCounter=0
             comment = False
             for char in line:
-                if comment:
-                    continue
                 posCounter+=1
                 if char == " " or char == "\t" or char == "\n":
                     # space or tab
                     if len(token) > 0:
                         # there is something in the token
-                        if token[0] == '%':
-                            comment = True
-                            token = ""
-                            continue
                         self.tokens.append(LilypondToken(token, lineCounter, posCounter - len(token)))
                         token = ""
                 else:
@@ -557,6 +615,8 @@ class LilypondAnalyser:
                     token += char
             if len(token) != 0:
                 self.tokens.append(LilypondToken(token, lineCounter, posCounter - len(token)))
+            
+            self.tokens.append(LilypondToken("\n", lineCounter, posCounter - 1))
 
 
     def analyseFile(self, aFile):
@@ -565,14 +625,18 @@ class LilypondAnalyser:
         """
         self.readTokens(aFile.readlines())
         nestedElements = []
-        tokenIndex = -1
-        while tokenIndex+1 < len(self.tokens):
-            tokenIndex+=1
+        tokenIndex = 0
+        while tokenIndex < len(self.tokens):
             token = self.tokens[tokenIndex]
             if token.word == "\n":
                 # Doesn't matter
+                tokenIndex += 1
                 continue
-            if token.word == "\\header":
+            if token.word == "%":
+                # let's add the full comment
+                comment = LilypondComment()
+                tokenIndex = comment.readCommentFromTokens(self.tokens, tokenIndex)
+            elif token.word == "\\header":
                 if self.header != None:
                     raise Exception("Header had already been set")
                 if self.tokens[tokenIndex + 1].word != '{':
@@ -582,7 +646,7 @@ class LilypondAnalyser:
             elif token.word == "\\version":
                 # Lilypond version
                 self.version = self.tokens[tokenIndex+1].word.rstrip("\"").lstrip("\"")
-                tokenIndex+=1
+                tokenIndex+=1 # we skip the version all together
             elif token.word == "\\new":
                 # Is it one new staff?
                 if self.tokens[tokenIndex+1].word == "Staff":
@@ -598,6 +662,7 @@ class LilypondAnalyser:
                 self.systems.append(lilypondSystem)
             else:
                 token.raiseException()
+            tokenIndex += 1
 
 
                     
