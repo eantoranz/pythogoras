@@ -318,102 +318,47 @@ class LilypondPlayer:
         sys.stderr.flush()
         # Finished playing
         
-
 def main(argv):
-    argc = len(argv)
-    if (argc == 1):
-        sys.stderr.write("In order to play a file, you have to provide the speed at which a measurement unit will be played (in beats per minute).\n")
-        sys.stderr.write("Then you can provide the system you want to use to play it\n")
-        sys.stderr.write("Pythagorean: specify a p and optionally the base frequency of A4\n")
-        sys.stderr.write("\tEx: lilyplay.py p 442 lilypond-file.ly\n")
-        sys.stderr.write("Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).\n")
-        sys.stderr.write("\tOptionally set the base freq of the base note of the key\n")
-        sys.stderr.write("\tEx: lilyplay.py j Bb lilypond-file.ly\n")
-        sys.stderr.write("\tEx: lilyplay.py j A 442 lilypond-file.ly\n")
-        sys.stderr.write("If you want to use tempered system, don't specify anything. Optionally the freq of A4\n")
-        sys.stderr.write("\tEx: lilyplay.py 441 lilypond-file.ly\n")
-        sys.stderr.write("\n")
-        sys.stderr.write("As a last argument, can provide a filename where the raw data can be output to (if - is specified, standard output is used)\n")
-        sys.stderr.write("\n")
-        sys.stderr.write("Output will be raw stereo, 11.025 Khtz, Little Endian, 16-bit per channel\n")
-        sys.stderr.flush()
-        sys.exit(1)
+    import argparse
 
-    speed = int(argv[1])
-    system = None
-    baseFreq = None
-    inputFile = None
-    outputFile = None
+    parser = argparse.ArgumentParser(description='Synthesyze lilypond files')
+    parser.add_argument('file', type=argparse.FileType('r'), nargs=1)
+    parser.add_argument('-b', '--beats-per-minute', action='store', default=60, type=float, help="Beats per minute", metavar='BPM', dest='speed')
+    parser.add_argument('-s', '--system', action='store', default='tempered', choices=['pyth', 'just', 'equal'], help="Intonation system", dest='system')
+    parser.add_argument('-bf', '--base-frequency', action='store', type=float, help='Frequency of key note (index 4)', dest='baseFreq')
+    parser.add_argument('-out', action='store', choices=['alsa', '-'], help='Output to use to synthesyze. Default: alsa', default='alsa', dest='output')
+    
+    args = parser.parse_args(argv[1:])
+    
+    speed = args.speed
+    system = args.system
+    baseFreq = args.baseFreq
+    inputFile = args.file
+    outputFile = args.output
 
-    if argv[2] == "p":
-        system = argv
+    if system == "pyth":
         # pythagorean
         # Let's create the tuning system
         system = LilypondPlayer.SYSTEM_PYTHAGOREAN
         # was the frequency for A4 specified?
-        baseFreq = 440
-        try:
-            baseFreq = int(argv[3])
-            if argc >= 3:
-                inputFile = argv[4]
-                try:
-                    outputFile = argv[5]
-                except:
-                    None
-        except:
-            # probably frequency wasn't provided
-            inputFile = argv[3]
-            try:
-                outputFile = argv[4]
-            except:
-                None
-    elif argv[2] == "j":
+    elif system == "just":
         # Just.... have to provide the key note
         system = LilypondPlayer.SYSTEM_JUST
-        try:
-            baseFreq = int(argv[3])
-            inputFile = argv[4]
-            outputFile = argv[5]
-        except:
-            inputFile = argv[3]
-            try:
-                outputFile = argv[4]
-            except:
-                None
+        # TODO how about the key note?
     else:
         # Tempered System
         system = LilypondPlayer.SYSTEM_EQUAL_TEMPERED
-        try:
-            baseFreq = int(argv[2])
-            inputFile = argv[3]
-            try:
-                outputFile = argv[4]
-            except:
-                None
-        except:
-            inputFile = argv[2]
-            try:
-                outputFile = argv[3]
-            except:
-                None
 
-    if inputFile == None:
-        sys.stderr.write("Didn't provide any file name to play\n")
-        sys.stderr.flush()
-        sys.exit(1)
+    if outputFile != "alsa":
+        outputFile = sys.stdout
+    else:
+        outputFile = None # alsa
     
-    if outputFile != None:
-        if outputFile == '-':
-            outputFile = sys.stdout
-        else:
-            # The user asked to write on a real file
-            outputFile = open(outputFile, 'w')
-    
-    sys.stderr.write("reading file " + inputFile + "\n")
+    sys.stderr.write("reading file\n")
     
     # Create a lilypond analyser
     analyser = lilypy.LilypondAnalyser()
-    analyser.analyseFile(file(inputFile))
+    analyser.analyseFile(inputFile[0])
     sys.stderr.write("Finished analyzing file\n")
 
     lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(11025, outputFile))
