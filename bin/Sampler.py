@@ -51,30 +51,41 @@ class Sampler:
         freqStep = 44100.0 / len(fftRes)
         freq = 0
         level = None # current level
-        prevLevel = None # last level
-        prevLevel2 = None # two levels behind
+        peakLevel = None # peak level in a segment
+        peakFreq = None # peak freq in a segment
         minLevel = None
 
-        for elemento in fftRes:
+        for element in fftRes:
             if freq * 2 > 44100.0:
                 # that's it
                 break
-            level = pow(pow(elemento.real, 2) + pow(elemento.imag, 2), 0.5)
+            level = pow(pow(element.real, 2) + pow(element.imag, 2), 0.5)
             if (freq > 0):
                 self.origLevels.append(level)
             if minLevel == None:
-                minLevel = level
-            if prevLevel != None and prevLevel2 != None and prevLevel >= minLevel and prevLevel > level and prevLevel > prevLevel2 :
-                # we got a peak
-                peakFreq = freq - freqStep
-                self.peaks[peakFreq] = prevLevel
-                if self.highestPeakFreq == None or self.highestPeakLevel < prevLevel:
-                    self.highestPeakFreq = peakFreq
-                    self.highestPeakLevel = prevLevel
-                self.orderedPeaks[prevLevel] = peakFreq
+                minLevel = level # this is the average level, right? Will only consider a single peak per each segment that crosses this value
+            else:
+                # this is a level... is it over or under minLevel?
+                if (level < minLevel):
+                    # Ok.... we are under minLevel... did we have a peak?
+                    if peakLevel != None:
+                        # yes, ye had a peak
+                        self.peaks[peakFreq] = peakLevel
+                        if self.highestPeakFreq == None or self.highestPeakLevel < peakLevel:
+                            self.highestPeakFreq = peakFreq
+                            self.highestPeakLevel = peakLevel
+                        self.orderedPeaks[peakLevel] = peakFreq
+                        peakFreq = None
+                        peakLevel = None
+                    else:
+                        # no previous peak so nothing to do
+                        None
+                else:
+                    # we are at least at the min level
+                    if peakLevel == None or peakLevel < level:
+                        peakFreq = freq
+                        peakLevel = level
             freq += freqStep
-            prevLevel2 = prevLevel
-            prevLevel = level
         
         # now we remove the extremes
         # first, at the begining
