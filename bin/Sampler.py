@@ -19,19 +19,19 @@ class Sampler:
         RAW PCM signed 16 bit mono, 44.1 khtz, little endian
     """
     
-    sampleFreq = None # Frequency of the sample
-    samples = []
-    origLevels = []
-    x0index = None # position of the first root (x where y = 0)
-    x1index = None
+    def __init__(self, samplingFile, harmonics = 5):
+        """
+            We will only use a defined number of harmonics to synthesyze sound
+        """
+        self.sampleFreq = None # Frequency of the sample
+        self.samples = []
+        self.origLevels = []
     
-    # peak stuff
-    peaks = dict()
-    orderedPeaks = dict()
-    highestPeakFreq = None
-    highestPeakLevel = None
+        # peak stuff
+        self.peaks = dict()
+        self.orderedPeaks = dict()
+        self.highestPeakLevel = None
 
-    def __init__(self, samplingFile):
         # let's read the sampling file
         inputFile = open(samplingFile, 'r')
         # now we start reading numbers
@@ -70,11 +70,9 @@ class Sampler:
                     # Ok.... we are under minLevel... did we have a peak?
                     if peakLevel != None:
                         # yes, ye had a peak
-                        self.peaks[peakFreq] = peakLevel
-                        if self.highestPeakFreq == None or self.highestPeakLevel < peakLevel:
-                            self.highestPeakFreq = peakFreq
-                            self.highestPeakLevel = peakLevel
                         self.orderedPeaks[peakLevel] = peakFreq
+                        if self.highestPeakLevel == None or self.highestPeakLevel < peakLevel:
+                            self.highestPeakLevel = peakLevel
                         peakFreq = None
                         peakLevel = None
                     else:
@@ -87,17 +85,14 @@ class Sampler:
                         peakLevel = level
             freq += freqStep
         
-        # now we remove the extremes
-        # first, at the begining
-        while (self.samples[1] < 0):
-            self.samples.pop(0)
-        # then at the end
-        while (self.samples[len(self.samples) - 2] > 0):
-            self.samples.pop()
-        
-        self.x0index = float(self.samples[0]) / float(self.samples[0] - self.samples[1])
-        self.x1index = len(self.samples) - 2 + float(self.samples[len(self.samples) - 2]) / float(self.samples[len(self.samples) - 2] - self.samples[len(self.samples) - 1])
-        self.sampleFreq = 44100.0 / (self.x1index - self.x0index)
+        # let's save the highest peaks
+        # and the lowest (probably base) frequency
+        self.baseFreq = None
+        for level in sorted(self.orderedPeaks.iterkeys(), reverse=True)[0:harmonics]:
+            freq = self.orderedPeaks[level]
+            if self.baseFreq == None or self.baseFreq > freq:
+                self.baseFreq = freq
+            self.peaks[freq] = level / self.highestPeakLevel
 
     def getY(self, index):
         """
