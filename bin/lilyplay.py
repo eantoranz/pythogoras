@@ -10,12 +10,13 @@ import lilypy
 from Music import *
 from Wave import Wave
 from WavePlayer import WavePlayer
+from Sampler import *
 import sys
 import math
 
 class LilypondNotePlayer:
 
-    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, note, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, note, samplingRate = 44100, sample = None):
         self.note = note
         self.volume = 1 # Full colume for starters
         self.samplingRate = samplingRate
@@ -25,7 +26,10 @@ class LilypondNotePlayer:
             self.totalSamples /= self.note.times
         if note.dots:
             self.totalSamples = int(self.totalSamples * ( 2.0 - pow(2, - note.dots)))
-        self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
+        if sample == None:
+            self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
+        else:
+            self.wave = SamplerWave(sample, tuningSystem.getFrequency(note), samplingRate)
         self.counter = 0
         self.volumeRate = None
         self.tied = False
@@ -71,14 +75,14 @@ class LilypondNotePlayer:
         
 class LilypondChordPlayer:
 
-    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, chord, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, chord, samplingRate = 44100, sample = None):
         """
             A chord player
         """
         # Create a number of note players and that's it
         self.players = []
         for note in chord.notes:
-            self.players.append(LilypondNotePlayer(beatsPerMinute, beatUnit, tuningSystem, note, samplingRate))
+            self.players.append(LilypondNotePlayer(beatsPerMinute, beatUnit, tuningSystem, note, samplingRate, sample))
         self.length = len(self.players)
 
     def getNextValue(self):
@@ -114,14 +118,14 @@ class LilypondChordPlayer:
             
 class LilypondPolyphonyPlayer:
     
-    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, polyphony, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, beatUnit, tuningSystem, polyphony, samplingRate = 44100, sample = None):
         # perhaps the simplest solution is to use staff players for each voice
         self.players = list()
         self.voices = len(polyphony.voices) # number of voices
         for voice in polyphony.voices:
             staff = lilypy.LilypondStaff()
             staff.events = voice
-            player = LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate)
+            player = LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate, sample)
             player.beatUnit = beatUnit
             self.players.append(player)
     
@@ -145,7 +149,7 @@ class LilypondPolyphonyPlayer:
 
 class LilypondStaffPlayer:
 
-    def __init__(self, beatsPerMinute, tuningSystem, staff, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, tuningSystem, staff, samplingRate = 44100, sampleDir = None):
         """
             A Staff Player
         """
@@ -160,6 +164,16 @@ class LilypondStaffPlayer:
         self.eventCounterIndex = -1
 
         self.finished = False
+        
+        self.sample = None
+        
+        if (sampleDir != None and staff.sampleName != None):
+            # let's try to load the sample
+            try:
+                self.sample = Sampler(sampleDir + '/' + staff.sampleName + '.raw')
+            except Exception as e:
+                sys.stderr.write("Error loading sample for staff. Assuming sine wave: " + e.__str__() + "\n")
+                self.sample = None
 
     def getNextValue(self):
         if self.eventPlayer == None:
@@ -169,29 +183,29 @@ class LilypondStaffPlayer:
                 if self.eventCounterIndex < len(self.staff.events):
                     self.event = self.staff.events[self.eventCounterIndex]
                     if isinstance(self.event, MusicalNote):
-                        self.eventPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                        self.eventPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate, self.sample)
                         # considering ties
                         if self.eventCounterIndex + 1 < len(self.staff.events) and isinstance(self.staff.events[self.eventCounterIndex + 1], lilypy.LilypondTie):
                             # note has to be tied to the next
                             self.eventPlayer.setTied(True)
                         break
                     elif isinstance(self.event, MusicalChord):
-                        self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                        self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate, self.sample)
                         break
                     elif isinstance(self.event, MusicalPolyphony):
-                        self.eventPlayer = LilypondPolyphonyPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                        self.eventPlayer = LilypondPolyphonyPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate, self.sample)
                         break
                     elif isinstance(self.event, lilypy.LilypondTie):
                         sys.stderr.flush()
                         self.eventCounterIndex+=1 # let's use a new player and set the angle accordingly
                         self.event = self.staff.events[self.eventCounterIndex]
                         if isinstance(self.event, MusicalNote):
-                            self.eventPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
-                            self.eventPlayer.setAngle(self.lastAngle)
+                            self.eventPlayer = LilypondNotePlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate, self.sample)
+                            self.eventPlayer.setAngle(self.lastAngle) # this could fail when using samples
                             self.eventPlayer.setTied(False)
                         else:
                             # it's a chord
-                            self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate)
+                            self.eventPlayer = LilypondChordPlayer(self.beatsPerMinute, self.beatUnit, self.tuningSystem, self.event, self.samplingRate, self.sample)
                             self.eventPlayer.setAngle(self.lastAngle)
                         break
                     elif isinstance(self.event, MusicalKey):
@@ -227,10 +241,10 @@ class LilypondSystemPlayer:
         Class that can play a system instead of just a staff
     """
 
-    def __init__(self, beatsPerMinute, tuningSystem, system, samplingRate = 44100):
+    def __init__(self, beatsPerMinute, tuningSystem, system, samplingRate = 44100, sampleDir = None):
         self.players = []
         for staff in system.staffs:
-            self.players.append(LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate))
+            self.players.append(LilypondStaffPlayer(beatsPerMinute, tuningSystem, staff, samplingRate, sampleDir))
         self.length = len(self.players)
 
     def getNextValue(self):
@@ -258,12 +272,13 @@ class LilypondPlayer:
     SYSTEM_PYTHAGOREAN = 2
     SYSTEM_JUST = 3
 
-    def __init__(self, beatsPerMinute, tuningSystem, baseFreq, wavePlayer):
+    def __init__(self, beatsPerMinute, tuningSystem, baseFreq, wavePlayer, sampleDir):
         self.beatsPerMinute = beatsPerMinute
         self.wavePlayer = wavePlayer
         self.tuningSystem = tuningSystem
         self.baseFreq = baseFreq
         self.samplingRate = wavePlayer.samplingRate
+        self.sampleDir = sampleDir
 
     def playSystem(self, system):
         """
@@ -273,14 +288,14 @@ class LilypondPlayer:
         if self.tuningSystem == LilypondPlayer.SYSTEM_EQUAL_TEMPERED:
             if self.baseFreq == None:
                 self.baseFreq = TuningSystem.FREQ_A4
-            player = LilypondSystemPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), system, self.samplingRate)
+            player = LilypondSystemPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), system, self.samplingRate, self.sampleDir)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_PYTHAGOREAN:
             if self.baseFreq == None:
                 self.baseFreq = TuningSystem.FREQ_A4
-            player = LilypondSystemPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), system, self.samplingRate)
+            player = LilypondSystemPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), system, self.samplingRate, self.sampleDir)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_JUST:
             key = system.staffs[0].getFirstKey()
-            player = LilypondSystemPlayer(self.beatsPerMinute, JustSystem(key.note, key.alteration, self.baseFreq), system, self.samplingRate)
+            player = LilypondSystemPlayer(self.beatsPerMinute, JustSystem(key.note, key.alteration, self.baseFreq), system, self.samplingRate, self.sampleDir)
         else:
             sys.stderr.write("Don't know what tuning system to use to play lilypond file\n")
             sys.stderr.flush()
@@ -300,14 +315,14 @@ class LilypondPlayer:
         if self.tuningSystem == LilypondPlayer.SYSTEM_EQUAL_TEMPERED:
             if self.baseFreq == None:
                 self.baseFreq = TuningSystem.FREQ_A4
-            player = LilypondStaffPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), staff, self.samplingRate)
+            player = LilypondStaffPlayer(self.beatsPerMinute, TemperedSystem(self.baseFreq), staff, self.samplingRate, self.sampleDir)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_PYTHAGOREAN:
             if self.baseFreq == None:
                 self.baseFreq = TuningSystem.FREQ_A4
-            player = LilypondStaffPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), staff, self.samplingRate)
+            player = LilypondStaffPlayer(self.beatsPerMinute, PythagoreanSystem(self.baseFreq), staff, self.samplingRate, self.sampleDir)
         elif self.tuningSystem == LilypondPlayer.SYSTEM_JUST:
             key = staff.getFirstKey()
-            player = LilypondStaffPlayer(self.beatsPerMinute, JustSystem(key.note, key.alteration, self.baseFreq), staff, self.samplingRate)
+            player = LilypondStaffPlayer(self.beatsPerMinute, JustSystem(key.note, key.alteration, self.baseFreq), staff, self.samplingRate, self.sampleDir)
         else:
             sys.stderr.write("Don't know what tuning system to use to play lilypond file\n")
             sys.stderr.flush()
@@ -327,6 +342,7 @@ def main(argv):
     parser.add_argument('-s', '--system', action='store', default='tempered', choices=['pyth', 'just', 'equal'], help="Intonation system", dest='system')
     parser.add_argument('-bf', '--base-frequency', action='store', type=float, help='Frequency of key note (index 4)', dest='baseFreq')
     parser.add_argument('-out', action='store', choices=['alsa', '-'], help='Output to use to synthesyze. Default: alsa', default='alsa', dest='output')
+    parser.add_argument('-sd', '--sample-dir', action='store', help='Directory to read samples from', dest='sample_dir')
     
     args = parser.parse_args(argv[1:])
     
@@ -335,6 +351,7 @@ def main(argv):
     baseFreq = args.baseFreq
     inputFile = args.file
     outputFile = args.output
+    sampleDir = args.sample_dir
 
     if system == "pyth":
         # pythagorean
@@ -361,7 +378,7 @@ def main(argv):
     analyser.analyseFile(inputFile[0])
     sys.stderr.write("Finished analyzing file\n")
 
-    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(11025, outputFile))
+    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(22050, outputFile), sampleDir)
     systems = analyser.systems
     if len(systems) > 0:
         # Have to play the systems

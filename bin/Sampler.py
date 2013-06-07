@@ -19,11 +19,11 @@ class Sampler:
         RAW PCM signed 16 bit mono, 44.1 khtz, little endian
     """
     
-    def __init__(self, samplingFile, harmonics = 5):
+    def __init__(self, samplingFile, harmonics = 8):
         """
             We will only use a defined number of harmonics to synthesyze sound
         """
-        self.sampleFreq = None # Frequency of the sample
+        self.baseFreq = None
         self.samples = []
         self.origLevels = []
     
@@ -87,58 +87,39 @@ class Sampler:
         
         # let's save the highest peaks
         # and the lowest (probably base) frequency
-        self.baseFreq = None
         for level in sorted(self.orderedPeaks.iterkeys(), reverse=True)[0:harmonics]:
             freq = self.orderedPeaks[level]
             if self.baseFreq == None or self.baseFreq > freq:
                 self.baseFreq = freq
             self.peaks[freq] = level / self.highestPeakLevel
 
-    def getY(self, index):
-        """
-            Index is a value between 0 and 1 (0 = cycle start, 1 = cycle end)
-            Will return a value between 1 and -1
-        """
-        # first, we have to find the "real" index that we have to use for that 0-1 index
-        # 0 = self.x0index
-        # 1 = self.x1index
-        realIndex = self.x0index + (self.x1index - self.x0index) * index
-        # now we can calculate the values involved
-        beforeIndex = math.floor(realIndex)
-        beforeValue = self.samples[int(beforeIndex)]
-        if (beforeIndex == realIndex):
-            # a perfect match... let's use that value directly
-            return float(beforeValue) / 0x8000
-        # it's a value in between
-        # let's do a lineal function aprox
-        afterValue = self.samples[int(beforeIndex + 1)]
-        
-        # now we do the lineal calculation
-        if (beforeIndex == 0):
-            return afterValue * float(realIndex - self.x0index) / 0x8000
-        return (beforeValue + (afterValue - beforeValue) * float(realIndex - beforeIndex)) / 0x8000
-
 class SamplerWave(Wave):
   
-    sampler = None
-    samplesPerCycle = None
-    
     def __init__(self, sampler, freq, samplingRate = 44100, maxValue = 32000):
         Wave.__init__(self, freq, samplingRate, maxValue)
+        if freq in [0, None]:
+            return
         self.sampler = sampler
-        if self.freq not in [0, None]:
-            self.samplesPerCycle = float(self.samplingRate) / self.freq
-    
+        self.waves = []
+        # Now I have to create as many waves as harmonics in the sample
+        sys.stderr.write("Requested Freq: " + str(freq) + "\n")
+        sys.stderr.write("Sample base Freq: " + str(sampler.baseFreq) + "\n")
+        factor = freq / sampler.baseFreq
+        for freq in sampler.peaks.iterkeys():
+            level = sampler.peaks[freq]
+            sys.stderr.write("Creating a wave with freq " + str(freq * factor) + " and volume " + str(level) + "\n")
+            wave = Wave(freq * factor, samplingRate, maxValue)
+            wave.setVolume(level)
+            self.waves.append(wave)
+        
     def getNextValue(self):
         if self.freq in [None, 0]:
             return 0
 
-        # we need to know the current position in the wave
-        res = self.sampler.getY(float(self.counter) / self.samplesPerCycle)
+        # we trust on each wave
+        sumValue = 0
+        for wave in self.waves:
+            sumValue += wave.getNextValue()
+        #sys.stderr.write("Sum: " + str(sumValue) + " " + str(self.volume) + "\n")
         
-        # increase the step counter
-        self.counter += 1
-        if (self.counter >= self.samplesPerCycle):
-            self.counter -= self.samplesPerCycle
-        
-        return int(self.volume * self.maxValue * res)
+        return int(sumValue / len(self.waves) * self.volume)
