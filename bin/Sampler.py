@@ -4,6 +4,8 @@
 # Released under the terms of the Affero GPLv3
 
 from Wave import *
+from numpy import fft
+import sys
 import math
 
 class Sampler:
@@ -19,8 +21,15 @@ class Sampler:
     
     sampleFreq = None # Frequency of the sample
     samples = []
+    origLevels = []
     x0index = None # position of the first root (x where y = 0)
     x1index = None
+    
+    # peak stuff
+    peaks = dict()
+    orderedPeaks = dict()
+    highestPeakFreq = None
+    highestPeakLevel = None
 
     def __init__(self, samplingFile):
         # let's read the sampling file
@@ -36,7 +45,37 @@ class Sampler:
             if (sample & 0x8000 != 0):
                 sample -= 0x10000
             self.samples.append(sample)
-         
+        
+        # let's see what numpy has for us
+        fftRes = fft.fft(self.samples)
+        freqStep = 44100.0 / len(fftRes)
+        freq = 0
+        level = None # current level
+        prevLevel = None # last level
+        prevLevel2 = None # two levels behind
+        minLevel = None
+
+        for elemento in fftRes:
+            if freq * 2 > 44100.0:
+                # that's it
+                break
+            level = pow(pow(elemento.real, 2) + pow(elemento.imag, 2), 0.5)
+            if (freq > 0):
+                self.origLevels.append(level)
+            if minLevel == None:
+                minLevel = level
+            if prevLevel != None and prevLevel2 != None and prevLevel >= minLevel and prevLevel > level and prevLevel > prevLevel2 :
+                # we got a peak
+                peakFreq = freq - freqStep
+                self.peaks[peakFreq] = prevLevel
+                if self.highestPeakFreq == None or self.highestPeakLevel < prevLevel:
+                    self.highestPeakFreq = peakFreq
+                    self.highestPeakLevel = prevLevel
+                self.orderedPeaks[prevLevel] = peakFreq
+            freq += freqStep
+            prevLevel2 = prevLevel
+            prevLevel = level
+        
         # now we remove the extremes
         # first, at the begining
         while (self.samples[1] < 0):
@@ -81,7 +120,8 @@ class SamplerWave(Wave):
     def __init__(self, sampler, freq, samplingRate = 44100, maxValue = 32000):
         Wave.__init__(self, freq, samplingRate, maxValue)
         self.sampler = sampler
-        self.samplesPerCycle = float(self.samplingRate) / self.freq
+        if self.freq not in [0, None]:
+            self.samplesPerCycle = float(self.samplingRate) / self.freq
     
     def getNextValue(self):
         if self.freq in [None, 0]:
