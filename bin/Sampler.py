@@ -19,16 +19,17 @@ class Sampler:
         RAW PCM signed 16 bit mono, 44.1 khtz, little endian
     """
     
-    def __init__(self, samplingFile, harmonics = 8):
+    def __init__(self, samplingFile, totalHarmonics = 8, peaksForAnalysis = 3):
         """
             We will only use a defined number of harmonics to synthesyze sound
+            We will also consider so many peaks to find base freq
         """
         self.baseFreq = None
         self.samples = []
         self.origLevels = []
     
         # peak stuff
-        self.peaks = dict()
+        self.harmonics = list() # level to use for the different harmonics (self.harmonics[0] is level for base frequency)
         self.orderedPeaks = dict()
         self.highestPeakLevel = None
 
@@ -55,6 +56,7 @@ class Sampler:
         peakFreq = None # peak freq in a segment
         minLevel = None
 
+        freqIndex = 0
         for element in fftRes:
             if freq * 2 > 44100.0:
                 # that's it
@@ -69,8 +71,8 @@ class Sampler:
                 if (level < minLevel):
                     # Ok.... we are under minLevel... did we have a peak?
                     if peakLevel != None:
-                        # yes, ye had a peak
-                        self.orderedPeaks[peakLevel] = peakFreq
+                        # yes, we had a peak
+                        self.orderedPeaks[peakLevel] = freqIndex
                         if self.highestPeakLevel == None or self.highestPeakLevel < peakLevel:
                             self.highestPeakLevel = peakLevel
                         peakFreq = None
@@ -83,15 +85,35 @@ class Sampler:
                     if peakLevel == None or peakLevel < level:
                         peakFreq = freq
                         peakLevel = level
+            freqIndex += 1
             freq += freqStep
         
         # let's save the highest peaks
         # and the lowest (probably base) frequency
-        for level in sorted(self.orderedPeaks.iterkeys(), reverse=True)[0:harmonics]:
-            freq = self.orderedPeaks[level]
-            if self.baseFreq == None or self.baseFreq > freq:
-                self.baseFreq = freq
-            self.peaks[freq] = level / self.highestPeakLevel
+        baseFreqIndex = None
+        for level in sorted(self.orderedPeaks.iterkeys(), reverse=True)[0:peaksForAnalysis]:
+            freqIndex = self.orderedPeaks[level]
+            if baseFreqIndex == None or baseFreqIndex > freqIndex:
+                baseFreqIndex = freqIndex
+        self.baseFreq = freqStep * baseFreqIndex
+        
+        # Now let's check the levels of each harmonic
+        harmonicCount = 0
+        highestHarmonicLevel = None
+        while harmonicCount < totalHarmonics or harmonicCount * baseFreqIndex >= len(self.origLevels):
+            harmonicCount += 1
+            harmonicIndex = harmonicCount * baseFreqIndex
+            level = self.origLevels[harmonicIndex]
+            if highestHarmonicLevel == None or highestHarmonicLevel < level:
+                highestHarmonicLevel = level
+            self.harmonics.append(level)
+
+        # now we normalize the levels
+        i = 0
+        while i < len(self.harmonics):
+            self.harmonics[i] = self.harmonics[i] / highestHarmonicLevel
+            i += 1
+        
 
 class SamplerWave(Wave):
   
@@ -102,12 +124,12 @@ class SamplerWave(Wave):
         self.sampler = sampler
         self.waves = []
         # Now I have to create as many waves as harmonics in the sample
-        sys.stderr.write("Requested Freq: " + str(freq) + "\n")
-        sys.stderr.write("Sample base Freq: " + str(sampler.baseFreq) + "\n")
         factor = freq / sampler.baseFreq
-        for freq in sampler.peaks.iterkeys():
-            level = sampler.peaks[freq]
-            sys.stderr.write("Creating a wave with freq " + str(freq * factor) + " and volume " + str(level) + "\n")
+        harmonicIndex = 0
+        for level in sampler.harmonics:
+            harmonicIndex += 1
+            freq = sampler.baseFreq * harmonicIndex
+            sys.stderr.write("Creating wave of freq " + str(freq * factor) + " with level " + str(level) + "\n")
             wave = Wave(freq * factor, samplingRate, maxValue)
             wave.setVolume(level)
             self.waves.append(wave)
