@@ -50,13 +50,13 @@ class Sampler:
         # let's see what numpy has for us
         fftRes = fft.fft(self.samples)
         freqStep = 44100.0 / len(fftRes)
-        freq = 0
         level = None # current level
         peakLevel = None # peak level in a segment
-        peakFreq = None # peak freq in a segment
+        peakIndex = None # peak freq index in a segment
         minLevel = None
 
         freqIndex = 0
+        freq = 0
         for element in fftRes:
             if freq * 2 > 44100.0:
                 # that's it
@@ -72,7 +72,7 @@ class Sampler:
                     # Ok.... we are under minLevel... did we have a peak?
                     if peakLevel != None:
                         # yes, we had a peak
-                        self.orderedPeaks[peakLevel] = freqIndex
+                        self.orderedPeaks[peakLevel] = peakIndex
                         if self.highestPeakLevel == None or self.highestPeakLevel < peakLevel:
                             self.highestPeakLevel = peakLevel
                         peakFreq = None
@@ -83,7 +83,7 @@ class Sampler:
                 else:
                     # we are at least at the min level
                     if peakLevel == None or peakLevel < level:
-                        peakFreq = freq
+                        peakIndex = freqIndex
                         peakLevel = level
             freqIndex += 1
             freq += freqStep
@@ -103,7 +103,7 @@ class Sampler:
         while harmonicCount < totalHarmonics or harmonicCount * baseFreqIndex >= len(self.origLevels):
             harmonicCount += 1
             harmonicIndex = harmonicCount * baseFreqIndex
-            level = self.origLevels[harmonicIndex]
+            level = self.origLevels[harmonicIndex - 1]
             if highestHarmonicLevel == None or highestHarmonicLevel < level:
                 highestHarmonicLevel = level
             self.harmonics.append(level)
@@ -129,7 +129,6 @@ class SamplerWave(Wave):
         for level in sampler.harmonics:
             harmonicIndex += 1
             freq = sampler.baseFreq * harmonicIndex
-            sys.stderr.write("Creating wave of freq " + str(freq * factor) + " with level " + str(level) + "\n")
             wave = Wave(freq * factor, samplingRate, maxValue)
             wave.setVolume(level)
             self.waves.append(wave)
@@ -142,6 +141,5 @@ class SamplerWave(Wave):
         sumValue = 0
         for wave in self.waves:
             sumValue += wave.getNextValue()
-        #sys.stderr.write("Sum: " + str(sumValue) + " " + str(self.volume) + "\n")
         
         return int(sumValue / len(self.waves) * self.volume)
