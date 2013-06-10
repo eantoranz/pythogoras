@@ -3,6 +3,8 @@
 # Copyright 2013 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
+from Wave import Wave
+
 class Sampler:
     
     def __init__(self, totalHarmonics = 8):
@@ -14,5 +16,5 @@ class Sampler:
         """
             This method has to be overwriten by the sampler and has to return a Wave instance
         """
-        return None
+        return Wave(frequency, samplingRate, maxValue)
         

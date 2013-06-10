@@ -11,6 +11,7 @@ from Music import *
 from Wave import Wave
 from WavePlayer import WavePlayer
 from RawSampler import *
+from SharcSampler import *
 import sys
 import math
 
@@ -176,12 +177,24 @@ class LilypondStaffPlayer:
                     try:
                         self.sample = RawSampler(sampleDir + '/' + staff.sampleName + '.raw')
                     except Exception as e:
-                        sys.stderr.write("Error loading sample for staff. Assuming sine wave: " + e.__str__() + "\n")
+                        sys.stderr.write("Error loading raw sample for staff: " + e.__str__() + "\n")
+                        sys.stderr.write("Assuming sine wave\n")
                         self.sample = None
                 else:
-                    sys.stderr.write("Raw sample dir wasn't defined so skiping sample\n")
+                    sys.stderr.write("Raw sample dir wasn't defined\n")
+                    sys.stderr.write("Assuming sine wave\n")
+                    self.sample = None
             elif staff.sampleType == "sharc":
-                sys.stderr.write("Sharc sampling is not supported yet\n")
+                try:
+                    self.sample = SharcSampler(staff.sampleName)
+                except Exception as e:
+                    sys.stderr.write("Error loading SHARC sample for staff. " + e.__str__() + "\n")
+                    sys.stderr.write("Assuming sine wave\n")
+                    self.sample = None
+            else:
+                sys.stderr.write("Unsupported sample type: " + self.sampleType + "\n")
+                sys.stderr.write("Assuming sine wave\n")
+                self.sample = None
 
     def getNextValue(self):
         if self.eventPlayer == None:
