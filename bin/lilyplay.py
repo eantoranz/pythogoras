@@ -167,13 +167,21 @@ class LilypondStaffPlayer:
         
         self.sample = None
         
-        if (sampleDir != None and staff.sampleName != None):
-            # let's try to load the sample
-            try:
-                self.sample = Sampler(sampleDir + '/' + staff.sampleName + '.raw')
-            except Exception as e:
-                sys.stderr.write("Error loading sample for staff. Assuming sine wave: " + e.__str__() + "\n")
-                self.sample = None
+        if (staff.sampleName != None):
+            # what kind of sample is it?
+            if staff.sampleType == "raw":
+                # it's a raw sample
+                if (sampleDir != None):
+                    # let's try to load the sample
+                    try:
+                        self.sample = Sampler(sampleDir + '/' + staff.sampleName + '.raw')
+                    except Exception as e:
+                        sys.stderr.write("Error loading sample for staff. Assuming sine wave: " + e.__str__() + "\n")
+                        self.sample = None
+                else:
+                    sys.stderr.write("Raw sample dir wasn't defined so skiping sample\n")
+            elif staff.sampleType == "sharc":
+                sys.stderr.write("Sharc sampling is not supported yet\n")
 
     def getNextValue(self):
         if self.eventPlayer == None:

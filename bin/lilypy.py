@@ -128,6 +128,7 @@ class LilypondStaff:
         self.firstKey = None # First key of the staff
         self.times = None
         
+        self.sampleType = None # could be sharc or raw
         self.sampleName = None # now every voice can use a different sample
 
     def getFirstTimeMarker(self):
@@ -482,7 +483,13 @@ class LilypondStaff:
                 
                 # now, let's see if it says the name of the sampler
                 if (comment.tokens[0].word == '\\sample'):
-                    self.sampleName = comment.tokens[1].word
+                    # there are two kinds of sample: raw and sharc
+                    sampleType = comment.tokens[1].word
+                    if sampleType in ['raw', 'sharc']:
+                        self.sampleType = sampleType
+                    else:
+                        sys.stderr.write("Unknown Sample Type: " + sampleType + ". Should be raw or sharc\n")
+                    self.sampleName = comment.tokens[2].word
                 continue
             if token == '}':
                 if self.times == None:
