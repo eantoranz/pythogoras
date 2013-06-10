@@ -5,9 +5,10 @@
 
 import os
 import sys
+from Sampler import *
 from Wave import Wave
 
-class SharcSampler:
+class SharcSampler(Sampler):
     """
         SharcSampler will use SHARC defitions (older format) for instrument timbre representation
         root directory of sharc should be in /usr/share/sharc
@@ -44,14 +45,11 @@ class SharcSampler:
                 break
             # so we have a line.... what's the value for this harmonic?
             level = line.strip().split(" ")[0] # in dB
-            self.harmonics.append(1 * pow(10, float(level) / 10))
+            self.harmonics.append(pow(pow(10, float(level) / 10), 0.5))
             i += 1
         firstSoundFile.close()
     
     def getWave(self, frequency, samplingRate = 44100, maxValue = 32000):
-        """
-            This method has to be overwriten by the sampler and has to return a Wave instance
-        """
         return SharcSamplerWave(self, frequency, samplingRate, maxValue)
 
 class SharcSamplerWave(Wave):
@@ -64,11 +62,9 @@ class SharcSamplerWave(Wave):
         self.waves = []
         # Now I have to create as many waves as harmonics in the sample
         harmonicIndex = 0
-        baseFreq = freq
         for level in sampler.harmonics:
             harmonicIndex += 1
-            freq = baseFreq * harmonicIndex
-            wave = Wave(freq, samplingRate, maxValue)
+            wave = Wave(freq * harmonicIndex, samplingRate, maxValue)
             wave.setVolume(level)
             self.waves.append(wave)
         
