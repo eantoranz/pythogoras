@@ -10,7 +10,7 @@ import lilypy
 from Music import *
 from Wave import Wave
 from WavePlayer import WavePlayer
-from Sampler import *
+from RawSampler import *
 import sys
 import math
 
@@ -29,7 +29,7 @@ class LilypondNotePlayer:
         if sample == None:
             self.wave = Wave(tuningSystem.getFrequency(note), samplingRate)
         else:
-            self.wave = SamplerWave(sample, tuningSystem.getFrequency(note), samplingRate)
+            self.wave = sample.getWave(tuningSystem.getFrequency(note), samplingRate)
         self.counter = 0
         self.volumeRate = None
         self.tied = False
@@ -174,7 +174,7 @@ class LilypondStaffPlayer:
                 if (sampleDir != None):
                     # let's try to load the sample
                     try:
-                        self.sample = Sampler(sampleDir + '/' + staff.sampleName + '.raw')
+                        self.sample = RawSampler(sampleDir + '/' + staff.sampleName + '.raw')
                     except Exception as e:
                         sys.stderr.write("Error loading sample for staff. Assuming sine wave: " + e.__str__() + "\n")
                         self.sample = None
