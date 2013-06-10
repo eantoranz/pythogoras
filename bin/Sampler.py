@@ -103,7 +103,8 @@ class Sampler:
         while harmonicCount < totalHarmonics or harmonicCount * baseFreqIndex >= len(self.origLevels):
             harmonicCount += 1
             harmonicIndex = harmonicCount * baseFreqIndex
-            level = self.origLevels[harmonicIndex - 1]
+            # level = self.origLevels[harmonicIndex - 1]
+            level = self.getPeak(harmonicIndex - 1, harmonicCount * 2)
             if highestHarmonicLevel == None or highestHarmonicLevel < level:
                 highestHarmonicLevel = level
             self.harmonics.append(level)
@@ -113,6 +114,21 @@ class Sampler:
         while i < len(self.harmonics):
             self.harmonics[i] = self.harmonics[i] / highestHarmonicLevel
             i += 1
+    
+    def getPeak(self, freqIndex, dispersion = 1):
+        """
+           Will look between the freqIndex+-dispersion levels and return the hightest value
+        """
+        i = freqIndex - dispersion
+        if i < 0:
+            i = 0
+        peakLevel = None
+        while i <= freqIndex + dispersion:
+            level = self.origLevels[i]
+            if peakLevel is None or peakLevel < level:
+                peakLevel = level
+            i += 1
+        return peakLevel
         
 
 class SamplerWave(Wave):
