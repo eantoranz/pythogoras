@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
-Copyright 2009 Edmundo Carmona Antoranz
+Copyright 2009-2025 Edmundo Carmona Antoranz
 Released under the terms of the Affero GPLv3
 """
 
@@ -131,7 +131,7 @@ class TrackPlayer:
 class MidiPlayer:
 
     def __init__(self, eventList, tuningSystem, samplingRate = 44100, maxValue = 10000):
-	self.tuningSystem = tuningSystem
+        self.tuningSystem = tuningSystem
         self.tracks = []
         i = 0
         while i <= eventList.trackNumber: # TODO is there another way to do this?

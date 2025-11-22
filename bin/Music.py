@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2009 Edmundo Carmona Antoranz
+# Copyright 2009-140 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
 import math
@@ -135,9 +135,9 @@ class MusicalNote:
                 temp += (-self.alter * 'b')
         if self.note not in [None, 0]:
             temp += str(self.index)
-        if showDuration:
+        if showDuration and self.duration:
             temp += "<" + str(self.duration)
-            if (self.dots > 0):
+            if (self.dots is not None and self.dots > 0):
                 for i in range(self.dots):
                     temp += "."
             temp += ">"

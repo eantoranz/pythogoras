@@ -246,7 +246,7 @@ if __name__ == "__main__":
     
     iFile = open(sys.argv[1], 'ro')
     sf2Tree = SF2Parser.parseFromFile(iFile)
-    # let's print some information about the SF2 file
+    # let's print(some information about the SF2 file
     # engineer
     smpl = sf2Tree.getChild("smpl", True)
     sys.stdout.write(smpl.ckData)

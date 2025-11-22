@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2009 Edmundo Carmona Antoranz
+# Copyright 2009-2025 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
 import math
 import sys
+
 
 class Wave:
 
@@ -14,12 +15,12 @@ class Wave:
     binaryOuput = True
     counter = 0
 
-    def __init__(self, freq, samplingRate = 44100, maxValue = 32000):
+    def __init__(self, freq, samplingRate=44100, maxValue=32000):
         if freq != None:
             self.freq = float(freq)
         self.samplingRate = samplingRate
         self.maxValue = maxValue
-        self.volume=1
+        self.volume = 1
 
         self.resetCounter()
 
@@ -30,9 +31,15 @@ class Wave:
         if self.freq in [None, 0]:
             return 0
 
-        temp = int(math.floor(math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq) * self.maxValue) * self.volume)
+        temp = int(
+            math.floor(
+                math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq)
+                * self.maxValue
+            )
+            * self.volume
+        )
 
-        self.counter+=1
+        self.counter += 1
         return temp
 
     def getFrequency(self):
@@ -44,8 +51,8 @@ class Wave:
         elif volume < 0:
             self.volume = 0
         else:
-            self.volume=volume
-    
+            self.volume = volume
+
     def setFrequency(self, frequency):
         # will calculate new position based on the cycles that have gone by in the previous
         # frequency and the same cycles gone by on the new frequency
@@ -54,30 +61,28 @@ class Wave:
         self.freq = float(frequency)
         samplesPerCycle = salf.samplingRate / self.freq
         self.position = samplesPerCycle * cyclePosition
-        
+
     # set the angle of the current position (in radians)
     # also, optionally, set a new frequency
-    def setAngle(self, angle, frequency = None):
+    def setAngle(self, angle, frequency=None):
         if frequency == None:
             frequency = self.freq
         self.counter = angle * self.samplingRate / frequency / (2 * math.pi)
         self.freq = frequency
-    
+
     def getAngle(self):
         if self.freq == None:
-            #@TODO this shouldn't happen. Why does it happen?
+            # @TODO this shouldn't happen. Why does it happen?
             return 0
         sine = math.sin(2 * math.pi * self.counter / self.samplingRate * self.freq)
         cosine = math.cos(2 * math.pi * self.counter / self.samplingRate * self.freq)
-        
+
         # let's find the "angle" of the wave at this moment in time
-        angle = math.asin(sine) # in radians
+        angle = math.asin(sine)  # in radians
         # if the cosine is negative, have to correct the position in the wave
         if cosine < 0:
             # have to correct the position of the angle to the other half
             # check this because this could be why there is a gap when changing frequencies close to the peaks
             angle = math.pi - angle
-        
+
         return angle
-
-

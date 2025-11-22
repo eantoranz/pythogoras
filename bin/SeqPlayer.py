@@ -34,7 +34,7 @@ class WavePlayer:
                 self.pcmBuffer = ""
                 self.alsaHandler = AlsaHandler(self.pcm)
             else:
-                print "Unknown OS: " + os.name
+                print("Unknown OS: " + os.name
 
     def setVolume(self, volume):
         if volume > 1:
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     channel = None
     frequencies = list()
     if argc == 1:
-        print "Have to provide frequencies to play during a second each"
+        print("Have to provide frequencies to play during a second each"
         sys.exit(1)
     for i in range(1, argc):
         frequencies.append(float(sys.argv[i]))

@@ -1,20 +1,23 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright 2009 Edmundo Carmona Antoranz
+# Copyright 2009-2025 Edmundo Carmona Antoranz
 
 # Released under the terms of the Affero GPLv3
 
-import sys
-from Wave import Wave
+import alsaaudio
+import math
 import os
+import sys
 from threading import Thread
 from time import *
 
+from Wave import Wave
+
 class WavePlayer:
 
-    def __init__(self, samplingRate = 44100, outputStream = None, debug = False):
+    def __init__(self, samplingRate=44100, outputStream=None, debug=False):
         self.samplingRate = samplingRate
-        self.volume=1
+        self.volume = 1
         self.debug = debug
         self.outputStream = outputStream
         self.pcm = None
@@ -22,29 +25,31 @@ class WavePlayer:
         if outputStream == None:
             if debug:
                 sys.stderr.write("Trying to open sound output\n")
-            if os.name == 'posix':
+            if os.name == "posix":
                 if debug:
                     sys.stderr.write("Trying to access alsa\n")
-                import alsaaudio
-                self.pcm = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK, alsaaudio.PCM_NORMAL)
-                self.pcm.setrate(samplingRate)
-                self.pcm.setperiodsize(samplingRate / 5)
-                self.pcm.setchannels(2)
-                self.pcm.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-                self.pcmBuffer = ""
+                self.pcm = alsaaudio.PCM(
+                    alsaaudio.PCM_PLAYBACK,
+                    alsaaudio.PCM_NORMAL,
+                    rate=samplingRate,
+                    periodsize=int(samplingRate / 5),
+                    channels=2,
+                    format=alsaaudio.PCM_FORMAT_S16_LE,
+                )
+                self.pcmBuffer = bytearray()
                 self.alsaHandler = AlsaHandler(self.pcm)
             else:
-                print "Unknown OS: " + os.name
+                print("Unknown OS: " + os.name)
 
     def setVolume(self, volume):
         if volume > 1:
-            self.volume=1
+            self.volume = 1
         elif volume < 0:
             self.volume = 0
         else:
-            self.volume=volume
+            self.volume = volume
 
-    def play(self, leftChannel, rightChannel = None):
+    def play(self, leftChannel, rightChannel=None):
         leftChannel *= int(self.volume)
         if rightChannel != None:
             rightChannel *= int(self.volume)
@@ -52,24 +57,29 @@ class WavePlayer:
             rightChannel = leftChannel
 
         if self.debug:
-            sys.stderr.write("Left: " + str(leftChannel) + " Right: " + str(rightChannel) + "\n")
+            sys.stderr.write(
+                "Left: " + str(leftChannel) + " Right: " + str(rightChannel) + "\n"
+            )
 
         if leftChannel < 0:
-            leftChannel = leftChannel ^ 0xffff + 1
+            leftChannel = leftChannel ^ 0xFFFF + 1
         if rightChannel < 0:
-            rightChannel = rightChannel ^ 0xffff + 1
+            rightChannel = rightChannel ^ 0xFFFF + 1
 
+        sample = bytearray()
+        sample += (leftChannel & 0xFF).to_bytes()
+        sample += ((leftChannel >> 8) & 0xFF).to_bytes()
+        sample += (rightChannel & 0xFF).to_bytes()
+        sample += ((rightChannel >> 8) & 0xFF).to_bytes()
         if self.outputStream == None:
             # PCM
-            self.pcmBuffer += "%(c1)c%(c2)c%(c3)c%(c4)c" % {'c1' : leftChannel & 0xff, 'c2' : leftChannel >> 8 & 0xff, 'c3' : rightChannel & 0xff, 'c4' : rightChannel >> 8 & 0xff }
-            if len(self.pcmBuffer)  >= self.samplingRate * 4 / 5:
-                aNow=time()
+            self.pcmBuffer += sample
+            if len(self.pcmBuffer) >= self.samplingRate * 4 / 5:
                 self.alsaHandler.write(self.pcmBuffer)
-                self.pcmBuffer = ""
+                self.pcmBuffer = bytearray()
         else:
-            self.outputStream.write("%(c1)c%(c2)c" % {'c1' : leftChannel & 0xff, 'c2' : leftChannel >> 8 & 0xff})
+            self.outputStream.write(sample)
 
-            self.outputStream.write("%(c1)c%(c2)c" % {'c1' : rightChannel & 0xff, 'c2' : rightChannel >> 8 & 0xff})
 
 class AlsaHandler:
 
@@ -79,11 +89,12 @@ class AlsaHandler:
 
     def write(self, data):
         if self.thread != None:
-          while self.thread.isAlive():
-            # Have to wait for it to finish
-            None
+            while self.thread.is_alive():
+                # Have to wait for it to finish
+                None
         self.thread = AlsaThread(self.pcm, data)
         self.thread.start()
+
 
 class AlsaThread(Thread):
 
@@ -95,23 +106,26 @@ class AlsaThread(Thread):
     def run(self):
         self.pcm.write(self.data)
 
+SAMPLING_RATE = 48000
+
 if __name__ == "__main__":
-    import math
-    import sys
+
     argc = len(sys.argv)
     leftChannel = None
     rightChannel = None
     if argc == 1:
-        print "Have to provide either a single frequency to play or a frequency for each channel (left channel first)"
+        print(
+            "Have to provide either a single frequency to play or a frequency for each channel (left channel first)"
+        )
         sys.exit(1)
     elif argc == 2:
         # Provided a single frequency for both channels
-        leftChannel = Wave(float(sys.argv[1]), 11025)
+        leftChannel = Wave(float(sys.argv[1]), SAMPLING_RATE)
     else:
-        leftChannel = Wave(float(sys.argv[1]), 11025)
-        rightChannel = Wave(float(sys.argv[2]), 11025)
-    
-    player = WavePlayer(11025)
+        leftChannel = Wave(float(sys.argv[1]), SAMPLING_RATE)
+        rightChannel = Wave(float(sys.argv[2]), SAMPLING_RATE)
+
+    player = WavePlayer(SAMPLING_RATE)
     while True:
         leftHeight = leftChannel.getNextValue()
         if rightChannel == None:

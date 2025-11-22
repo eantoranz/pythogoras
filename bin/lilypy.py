@@ -26,7 +26,7 @@ class LilypondToken:
 
     def toString(self):
         return "Token: " + str(self.word) + " Line " + str(self.line) + " Pos " + str(self.pos)
-    
+
     def __str__(self):
         return self.toString()
 
@@ -288,7 +288,7 @@ class LilypondStaff:
             # Rest
             note = None
         else:
-            raise Exception("Unexpected note definition: " + token.toString())
+            raise Exception(f"Unexpected note definition: {token}")
 
         alteration = 0
         charIndex = 1
@@ -687,28 +687,28 @@ if __name__ == "__main__":
     analyser.analyseFile(aFile)
     header = analyser.getHeader()
     if header == None:
-        print "Piece has no header"
+        print("Piece has no header")
     else:
-        print header.toString()
+        print(header.toString())
     lilypondVersion=analyser.getLilypondVersion()
     if lilypondVersion == None:
-        print "Lilypond version: not especified"
+        print("Lilypond version: not specified")
     else:
-        print "Lilypond version: " + lilypondVersion
+        print(f"Lilypond version: {lilypondVersion}")
 
     systems = analyser.systems
     if len(systems) > 0:
-        print "Systems: "
+        print("Systems: ")
         for aSystem in systems:
-            print "\tSystem"
+            print("\tSystem")
             for staff in aSystem.staffs:
-                print "\t\tStaff"
+                print("\t\tStaff")
                 for event in staff.events:
-                    print "\t\t\t" + event.toString()
+                    print("\t\t\t" + event.toString())
     staffs = analyser.staffs
     if len(staffs) > 0:
-        print "Staffs:"
+        print("Staffs:")
         for staff in analyser.staffs:
-            print "\tStaff"
+            print("\tStaff")
             for event in staff.events:
-                print "\t\t" + event.toString()
+                print("\t\t" + event.toString())
