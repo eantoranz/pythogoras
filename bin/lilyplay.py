@@ -6,12 +6,13 @@ Copyright 2009-2025 Edmundo Carmona Antoranz
 Released under the terms of the Affero GPLv3
 """
 
+import argparse
 import lilypy
+import math
+import sys
 from Music import *
 from Wave import Wave
 from WavePlayer import WavePlayer
-import sys
-import math
 
 class LilypondNotePlayer:
 
@@ -319,14 +320,14 @@ class LilypondPlayer:
         # Finished playing
         
 def main(argv):
-    import argparse
 
     parser = argparse.ArgumentParser(description='Synthesyze lilypond files')
     parser.add_argument('file', type=argparse.FileType('r'), nargs=1)
     parser.add_argument('-b', '--beats-per-minute', action='store', default=60, type=float, help="Beats per minute", metavar='BPM', dest='speed')
     parser.add_argument('-s', '--system', action='store', default='tempered', choices=['pyth', 'just', 'equal'], help="Intonation system", dest='system')
     parser.add_argument('-bf', '--base-frequency', action='store', type=float, help='Frequency of key note (index 4)', dest='baseFreq')
-    parser.add_argument('-out', action='store', choices=['alsa', '-'], help='Output to use to synthesyze. Default: alsa', default='alsa', dest='output')
+    parser.add_argument('-sr', '--sampling-rate', type=int, help='Sampling rate Frequency (Htz). Default: 44100.', default=44100)
+    parser.add_argument('-out', action='store', choices=['alsa', '-'], help='Output to use to synthesize. Default: alsa', default='alsa', dest='output')
     
     args = parser.parse_args(argv[1:])
     
@@ -361,7 +362,7 @@ def main(argv):
     analyser.analyseFile(inputFile[0])
     sys.stderr.write("Finished analyzing file\n")
 
-    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(11025, outputFile))
+    lilyPlayer = LilypondPlayer(speed, system, baseFreq, WavePlayer(args.sampling_rate, outputFile))
     systems = analyser.systems
     if len(systems) > 0:
         # Have to play the systems
