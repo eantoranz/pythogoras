@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright 2009-2025 Edmundo Carmona Antoranz
-# Released under the terms of the Affero GPLv3
+# Copyright (c) 2009-2025 Edmundo Carmona Antoranz
+# For licensing terms, check docs/LICENSING.txt
+
+from pythogoras.music.MusicalNote import MusicalNote
+from pythogoras.music.tuning.PythagoreanSystem import PythagoreanSystem
+from pythogoras.music.tuning.TemperedSystem import TemperedSystem
+from pythogoras.music.tuning.JustSystem import JustSystem
 
 import sys
-from WaveCommon import *
 
 note1 = MusicalNote(MusicalNote.NOTE_A, 0, 4)
 note2 = MusicalNote(MusicalNote.NOTE_A, 0, 4)

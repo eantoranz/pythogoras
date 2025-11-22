@@ -1,23 +1,37 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright 2009 Edmundo Carmona Antoranz
-# Released under the terms of the Affero GPLv3
+# Copyright 2009-2025 Edmundo Carmona Antoranz
+# For licensing terms, check docs/LICENSING.txt
 
 import sys
-from Music import *
+from pythogoras.music.MusicalNote import MusicalNote
+from pythogoras.music.tuning.JustSystem import JustSystem
+from pythogoras.music.tuning.PythagoreanSystem import PythagoreanSystem
+from pythogoras.music.tuning.TemperedSystem import TemperedSystem
+
 
 def main(argv):
     argc = len(argv)
-    if (argc == 1):
-        sys.stderr.write("Will display the frequencies between C4 and B4 with alterations\n")
-        sys.stderr.write("Pythagorean: specify a p and optionally the base frequency of A4\n")
+    if argc == 1:
+        sys.stderr.write(
+            "Will display the frequencies between C4 and B4 with alterations\n"
+        )
+        sys.stderr.write(
+            "Pythagorean: specify a p and optionally the base frequency of A4\n"
+        )
         sys.stderr.write("\tEx: ShowFrequencies.py p 442\n")
-        sys.stderr.write("Just system: specify a j and the key note to use. For alterations use b or #.\n")
-        sys.stderr.write("\tOptionally set the base freq of the base note of the key on index 4\n")
+        sys.stderr.write(
+            "Just system: specify a j and the key note to use. For alterations use b or #.\n"
+        )
+        sys.stderr.write(
+            "\tOptionally set the base freq of the base note of the key on index 4\n"
+        )
         sys.stderr.write("\tEx: ShowFrequencies.py j Bb\n")
         sys.stderr.write("\tEx: ShowFrequencies.py j A 442\n")
-        sys.stderr.write("If you want to use tempered system specify a t. Optionally the freq of A4\n")
+        sys.stderr.write(
+            "If you want to use tempered system specify a t. Optionally the freq of A4\n"
+        )
         sys.stderr.write("\tEx: ShowFrequencies.py t 441\n")
         sys.stderr.flush()
         sys.exit(1)
@@ -63,9 +77,9 @@ def main(argv):
             # Also we have an alteration
             alterChar = keyNoteStr[1]
             difference = 0
-            if alterChar == 'b':
+            if alterChar == "b":
                 difference = -1
-            elif alterChar == '#':
+            elif alterChar == "#":
                 difference = 1
             else:
                 sys.stderr.write("Invalid alteration char. Use b or #\n")
@@ -73,13 +87,15 @@ def main(argv):
             i = 1
             while i < len(keyNoteStr):
                 if keyNoteStr[i] != alterChar:
-                    sys.stderr.write("Changed alteration char at index " + str(i + 1) + "\n")
+                    sys.stderr.write(
+                        "Changed alteration char at index " + str(i + 1) + "\n"
+                    )
                     sys.exit(1)
                 alteration += difference
-                i+=1
+                i += 1
         # TODO Get the base frequency if provided by the user
         system = JustSystem(keyNote, alteration)
-    elif argv[1] == 't':
+    elif argv[1] == "t":
         # Tempered System
         if argc > 2:
             baseFreq = int(argv[2])
@@ -87,10 +103,23 @@ def main(argv):
         else:
             system = TemperedSystem.getInstance()
 
-    for note in [ MusicalNote.NOTE_C, MusicalNote.NOTE_D, MusicalNote.NOTE_E, MusicalNote.NOTE_F, MusicalNote.NOTE_G, MusicalNote.NOTE_A, MusicalNote.NOTE_B ]:
-        for alteration in [ -1, 0, 1 ]:
-            newNote=MusicalNote(note, alteration, 4)
-            sys.stdout.write(newNote.toString() + "\tFreq: " + str(system.getFrequency(newNote)) + "\n")
+    for note in [
+        MusicalNote.NOTE_C,
+        MusicalNote.NOTE_D,
+        MusicalNote.NOTE_E,
+        MusicalNote.NOTE_F,
+        MusicalNote.NOTE_G,
+        MusicalNote.NOTE_A,
+        MusicalNote.NOTE_B,
+    ]:
+        for alteration in [-1, 0, 1]:
+            newNote = MusicalNote(note, alteration, 4)
+            sys.stdout.write(
+                newNote.toString()
+                + "\tFreq: "
+                + str(system.getFrequency(newNote))
+                + "\n"
+            )
 
 
 if __name__ == "__main__":
