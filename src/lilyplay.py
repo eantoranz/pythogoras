@@ -10,11 +10,13 @@ import argparse
 import lilypy
 import math
 import sys
+
 from pythogoras.music.MusicalChord import MusicalChord
 from pythogoras.music.MusicalKey import MusicalKey
 from pythogoras.music.MusicalNote import MusicalNote
 from pythogoras.music.MusicalPolyphony import MusicalPolyphony
 from pythogoras.music.tuning.JustSystem import JustSystem
+from pythogoras.music.tuning.PythagoreanSystem import PythagoreanSystem
 from pythogoras.music.tuning.TemperedSystem import TemperedSystem
 from pythogoras.music.tuning.TuningSystem import TuningSystem
 from Wave import Wave
