@@ -1,25 +1,27 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
-Copyright 2009 Edmundo Carmona Antoranz
+Copyright 2009-2025 Edmundo Carmona Antoranz
 Released under the terms of the Affero GPLv3
 """
 
 from midi import *
-from Music import *
-from Wave import Wave
-from WavePlayer import WavePlayer
 import sys
 import math
+from pythogoras.music.MusicalNote import MusicalNote
+from Wave import Wave
+from WavePlayer import WavePlayer
+
 
 class EventListNode:
     """
     List of events taking place at a moment in time
     """
+
     def __init__(self, time):
         self.time = time
-        self.events=[]
+        self.events = []
         self.nextNode = None
 
     def addEvent(self, event):
@@ -30,13 +32,15 @@ class EventListNode:
             return None
         return self.nextNode.time - self.time
 
+
 class EventList:
     """
     List of events ordered by time
     """
+
     def __init__(self):
         self.firstNode = None
-        self.trackNumber = 0 # number of tracks
+        self.trackNumber = 0  # number of tracks
 
     def addEvent(self, event):
         if event.type == "DeltaTime":
@@ -81,12 +85,13 @@ class EventList:
                 sys.stderr.write("\t" + str(event) + "\n")
             node = node.nextNode
 
+
 class TrackPlayer:
     """
     Will play a note that's provided to it
     """
 
-    def __init__(self, system, samplingRate = 44100):
+    def __init__(self, system, samplingRate=44100):
         self.system = system
         self.wave = None
         self.samplingRate = samplingRate
@@ -100,16 +105,16 @@ class TrackPlayer:
             self.wave = Wave(self.system.getFrequency(musicalNote), self.samplingRate)
             self.samplesToMute = None
 
-    def mute(self, samplesToMute = None):
+    def mute(self, samplesToMute=None):
         if samplesToMute == None:
             # mute inmediately
-            self.volume=0
+            self.volume = 0
             if self.wave != None:
                 self.wave.setVolume(0)
         else:
             self.samplesToMute = samplesToMute
             # What is the rate for each volume decrease to apply?
-            self.volume=1
+            self.volume = 1
             self.decrementRate = math.exp(math.log(0.01) / samplesToMute)
 
     def getNextValue(self):
@@ -118,7 +123,7 @@ class TrackPlayer:
         if self.samplesToMute != None:
             self.samplesToMute -= 1
             # The volume?
-            self.volume*=self.decrementRate
+            self.volume *= self.decrementRate
             self.wave.setVolume(self.volume)
         return self.wave.getNextValue()
 
@@ -128,13 +133,14 @@ class TrackPlayer:
         else:
             return self.wave.getFrequency()
 
+
 class MidiPlayer:
 
-    def __init__(self, eventList, tuningSystem, samplingRate = 44100, maxValue = 10000):
-	self.tuningSystem = tuningSystem
+    def __init__(self, eventList, tuningSystem, samplingRate=44100, maxValue=10000):
+        self.tuningSystem = tuningSystem
         self.tracks = []
         i = 0
-        while i <= eventList.trackNumber: # TODO is there another way to do this?
+        while i <= eventList.trackNumber:  # TODO is there another way to do this?
             self.tracks.append(TrackPlayer(tuningSystem, samplingRate))
             i += 1
         self.eventList = eventList
@@ -152,7 +158,7 @@ class MidiPlayer:
         if alter == 0:
             return MusicalNote(MusicalNote.NOTE_C, 0, index)
         elif alter == 1:
-           return MusicalNote(MusicalNote.NOTE_C, 1, index)
+            return MusicalNote(MusicalNote.NOTE_C, 1, index)
         elif alter == 2:
             return MusicalNote(MusicalNote.NOTE_D, 0, index)
         elif alter == 3:
@@ -176,43 +182,63 @@ class MidiPlayer:
 
     def play(self):
         wavePlayer = WavePlayer(self.samplingRate)
-        midiTicksPerSecond = 400 # don't know how to calculate this at the time
+        midiTicksPerSecond = 400  # don't know how to calculate this at the time
 
         currentNode = self.eventList.firstNode
-        soundingTracks = 0 # Number of tracks that are sounding
+        soundingTracks = 0  # Number of tracks that are sounding
         totalCounter = 0
         while currentNode != None and currentNode.nextNode != None:
             eventDuration = currentNode.getDuration()
             muteSent = False
 
             # what does each track play for this event?
-            sys.stderr.write("Tick " + str(currentNode.time) + " (" + str(float(totalCounter) / self.samplingRate) + " seg)\n")
+            sys.stderr.write(
+                "Tick "
+                + str(currentNode.time)
+                + " ("
+                + str(float(totalCounter) / self.samplingRate)
+                + " seg)\n"
+            )
             for event in currentNode.events:
                 if event.type == "NOTE_ON":
                     # have to play something on a track
                     if event.velocity == 0:
                         # the note has to be muted
-                        sys.stderr.write("\tMuting " + str(self.tracks[event.track.index].getFrequency()) + " Htz\n")
+                        sys.stderr.write(
+                            "\tMuting "
+                            + str(self.tracks[event.track.index].getFrequency())
+                            + " Htz\n"
+                        )
                         self.tracks[event.track.index].play(None)
-                        soundingTracks-=1
+                        soundingTracks -= 1
                     else:
                         # this is the note to play on this track
                         self.tracks[event.track.index].play(self.getNote(event))
-                        sys.stderr.write("\tStarting " + str(self.tracks[event.track.index].getFrequency()) + " Htz\n")
-                        soundingTracks+=1
+                        sys.stderr.write(
+                            "\tStarting "
+                            + str(self.tracks[event.track.index].getFrequency())
+                            + " Htz\n"
+                        )
+                        soundingTracks += 1
 
             # Let's play
-            limit = int(currentNode.getDuration() * self.samplingRate / midiTicksPerSecond)
+            limit = int(
+                currentNode.getDuration() * self.samplingRate / midiTicksPerSecond
+            )
             sampleCounter = 0
             while sampleCounter < limit:
-                if (limit - sampleCounter) * 20 / self.samplingRate < 1 and not muteSent:
+                if (
+                    limit - sampleCounter
+                ) * 20 / self.samplingRate < 1 and not muteSent:
                     # Have to send a mute signal to the tracks that will be muted
                     muteSent = True
                     if currentNode.nextNode != None:
                         for event in currentNode.nextNode.events:
-                            if event.type == "NOTE_ON" and event.velocity==0:
+                            if event.type == "NOTE_ON" and event.velocity == 0:
                                 # Have to mute this track
-                                self.tracks[event.track.index].mute(limit - sampleCounter);
+                                self.tracks[event.track.index].mute(
+                                    limit - sampleCounter
+                                )
 
                 if soundingTracks == 0:
                     playValue = 0
@@ -221,27 +247,35 @@ class MidiPlayer:
                     for track in self.tracks:
                         accumulator += track.getNextValue()
                     playValue = int(accumulator / soundingTracks)
-                
+
                 wavePlayer.play(playValue)
                 sampleCounter += 1
 
             currentNode = currentNode.nextNode
             totalCounter += sampleCounter
-        sys.stdout.flush()        
+        sys.stdout.flush()
         sys.stderr.write("Finished writing output\n")
 
 
 def main(argv):
     argc = len(argv)
-    if (argc == 1):
-        sys.stderr.write("In order to play a file, you can provide the system you want to use to play it\n")
-        sys.stderr.write("Pythagorean: specify a p and optionally the base frequency of A4\n")
+    if argc == 1:
+        sys.stderr.write(
+            "In order to play a file, you can provide the system you want to use to play it\n"
+        )
+        sys.stderr.write(
+            "Pythagorean: specify a p and optionally the base frequency of A4\n"
+        )
         sys.stderr.write("\tEx: playmidi.py p 442 midi-file.mid\n")
-        sys.stderr.write("Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).\n")
+        sys.stderr.write(
+            "Just system: specify a j and the key to use (only major keys, so if it's B minor set it to F).\n"
+        )
         sys.stderr.write("\tOptionally set the base freq of the base note of the key\n")
         sys.stderr.write("\tEx: playmidi.py j Bb midi-file.mid\n")
         sys.stderr.write("\tEx: playmidi.py j A 442 midi-file.mid\n")
-        sys.stderr.write("If you want to use tempered system, don't specify anything. Optionally the freq of A4\n")
+        sys.stderr.write(
+            "If you want to use tempered system, don't specify anything. Optionally the freq of A4\n"
+        )
         sys.stderr.write("\tEx: playmidi.py 441 midi-file.mid\n")
         sys.stderr.flush()
         sys.exit(1)
@@ -289,9 +323,9 @@ def main(argv):
             # Also we have an alteration
             alterChar = keyNoteStr[1]
             difference = 0
-            if alterChar == 'b':
+            if alterChar == "b":
                 difference = -1
-            elif alterChar == '#':
+            elif alterChar == "#":
                 difference = 1
             else:
                 sys.stderr.write("Invalid alteration char. Use b or #\n")
@@ -299,10 +333,12 @@ def main(argv):
             i = 1
             while i < len(keyNoteStr):
                 if keyNoteStr[i] != alterChar:
-                    sys.stderr.write("Changed alteration char at index " + str(i + 1) + "\n")
+                    sys.stderr.write(
+                        "Changed alteration char at index " + str(i + 1) + "\n"
+                    )
                     sys.exit(1)
                 alteration += difference
-                i+=1
+                i += 1
         system = JustSystem(keyNote, alteration)
         fileName = argv[3]
     else:
@@ -319,7 +355,7 @@ def main(argv):
         sys.stderr.write("Didn't provide any file name to play\n")
         sys.stderr.flush()
         sys.exit(1)
-    
+
     sys.stderr.write("reading file " + fileName + "\n")
     midiFile = MidiFile()
     midiFile.open(fileName)
@@ -330,7 +366,9 @@ def main(argv):
     index = 0
     for track in midiFile.tracks:
         index += 1
-        sys.stderr.write("Track " + str(index) + " has " + str(len(track.events)) + " events\n")
+        sys.stderr.write(
+            "Track " + str(index) + " has " + str(len(track.events)) + " events\n"
+        )
 
     sys.stderr.write("Let's process all the events (this can take a while)...")
     eventList = EventList()
@@ -348,6 +386,7 @@ def main(argv):
     midiPlayer = MidiPlayer(eventList, system, 11025)
     midiPlayer.play()
     sys.stderr.write("Finished playing\n")
+
 
 if __name__ == "__main__":
     main(sys.argv)

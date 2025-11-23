@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -15,13 +15,13 @@ http://crystal.apana.org.au/ghansper/midi_introduction/midi_file_form...
 http://www.argonet.co.uk/users/lenny/midi/mfile.html
 """
 
-import sys, string, types, exceptions
+import sys, string, types
 
 debugflag = 0
 
 def showstr(str, n=16):
     for x in str[:n]:
-        print ('%02x' % ord(x)),
+        print(('%02x' % ord(x)),
     print
 
 def getNumber(str, length):
@@ -60,7 +60,7 @@ def putVariableLengthNumber(x):
     lst[-1] = chr(ord(lst[-1]) & 0x7f)
     return string.join(lst, "")
 
-class EnumException(exceptions.Exception):
+class EnumException(Exception):
     pass
 
 class Enumeration:
@@ -74,13 +74,13 @@ class Enumeration:
             if type(x) == types.TupleType:
                 x, i = x
             if type(x) != types.StringType:
-                raise EnumException, "enum name is not a string: " + x
+                raise EnumException("enum name is not a string: " + x)
             if type(i) != types.IntType:
-                raise EnumException, "enum value is not an integer: " + i
+                raise EnumException("enum value is not an integer: " + i)
             if x in uniqueNames:
-                raise EnumException, "enum name is not unique: " + x
+                raise EnumException("enum name is not unique: " + x)
             if i in uniqueValues:
-                raise EnumException, "enum value is not unique for " + x
+                raise EnumException("enum value is not unique for " + x)
             uniqueNames.append(x)
             uniqueValues.append(i)
             lookup[x] = i
@@ -213,15 +213,15 @@ class MidiEvent:
 
         elif x == 0xFF:
             if not metaEvents.has_value(z):
-                print "Unknown meta event: FF %02X" % z
+                print("Unknown meta event: FF %02X" % z)
                 sys.stdout.flush()
-                raise "Unknown midi event type"
+                raise Exception("Unknown midi event type")
             self.type = metaEvents.whatis(z)
             length, str = getVariableLengthNumber(str[2:])
             self.data = str[:length]
             return str[length:]
 
-        raise "Unknown midi event type"
+        raise Exception("Unknown midi event type")
 
     def write(self):
         sysex_event_dict = {"F0_SYSEX_EVENT": 0xF0,
@@ -254,7 +254,7 @@ class MidiEvent:
             return str + self.data
 
         else:
-            raise "unknown midi event type: " + self.type
+            raise Exception("unknown midi event type: " + self.type)
 
 """
 register_note() is a hook that can be overloaded from a script that
@@ -349,10 +349,9 @@ class MidiTrack:
         return "MTrk" + putNumber(len(str), 4) + str
 
     def __repr__(self):
-        r = "<MidiTrack %d -- %d events\n" % (self.index,
-len(self.events))
+        r = "<MidiTrack %d -- %d events\n" % (self.index, len(self.events))
         for e in self.events:
-            r = r + "    " + `e` + "\n"
+            r = r + "    " + e + "\n"
         return r + "  >"
 
 class MidiFile:
@@ -376,7 +375,7 @@ class MidiFile:
     def __repr__(self):
         r = "<MidiFile %d tracks\n" % len(self.tracks)
         for t in self.tracks:
-            r = r + "  " + `t` + "\n"
+            r = r + "  " + t + "\n"
         return r + ">"
 
     def close(self):
@@ -445,7 +444,7 @@ def main(argv):
     m.close()
 
     if printflag:
-        print m
+        print(m)
     else:
         m.open(outfile, "wb")
         m.write()

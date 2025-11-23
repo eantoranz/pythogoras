@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright 2009 Edmundo Carmona Antoranz
+# Copyright 2009-2025 Edmundo Carmona Antoranz
 # Released under the terms of the Affero GPLv3
 
 import Wave

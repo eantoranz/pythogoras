@@ -27,7 +27,7 @@
         
         fis4. gis16 a d,8 d32 e fis16 ~ fis e e d
         
-        %second end
+        % second end
         cis b b32 cis d16 ~ d8 cis16 b a2
         
         % second part
