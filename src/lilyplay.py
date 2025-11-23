@@ -7,10 +7,10 @@ For licensing terms, check docs/LICENSING.txt
 """
 
 import argparse
-import lilypy
 import math
 import sys
 
+from pythogoras import lilypy
 from pythogoras.music.MusicalChord import MusicalChord
 from pythogoras.music.MusicalKey import MusicalKey
 from pythogoras.music.MusicalNote import MusicalNote
