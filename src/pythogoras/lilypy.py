@@ -6,8 +6,10 @@
 
 import sys
 
+from pythogoras.music.MusicalChord import MusicalChord
 from pythogoras.music.MusicalKey import MusicalKey
 from pythogoras.music.MusicalNote import MusicalNote
+from pythogoras.music.MusicalPolyphony import MusicalPolyphony
 
 
 class LilypondTie:

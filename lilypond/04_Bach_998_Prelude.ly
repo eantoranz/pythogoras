@@ -88,9 +88,10 @@
 	< ces' ees, > aes g aes ees des ees ces bes ces aes g
 	
 	aes fes ees fes aes ces fes ces bes ces fes aes
-	
+
+	% trick to simulate coda on the upper voice
 	<<
-		{ bes4 a4 } \\ % trick to simulate coda
+		{ bes4 a4 } \\
 		{ f2 } \\
 		{ c2 }
 	>> r16 g' bes a g f bes8 f d bes f' aes
